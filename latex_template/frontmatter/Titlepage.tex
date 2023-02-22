@@ -1,0 +1,62 @@
+% Titelseite gefolgt von einer leeren seite 
+
+
+%Hinweise zum Deckblatt:
+% Aussagekräftige Titel und Untertitel
+%Projektgruppe (Namen), Nennung der Verantwortlichen
+%Institution (gegebenenfalls mit Logo) 
+%Datum, Semesterbezeichnung
+%Grafik (optional) – wenn, dann aussagekräftig!
+
+% Kann auch als includepdf mit einem andersweitig erstelten Titelblatt realisiert werden
+
+
+
+
+\begin{titlepage}
+\begin{center}
+    \vspace*{1cm}
+    {\huge \bfseries Titel der Arbeit \\ }
+    \vspace{2cm}
+    {\large 
+	Name\\
+
+	~\\
+	Mechanical Engineering Bachelor\\
+	\vspace{3.5cm}
+	Fokusprojekt HS 2015; FS 2016\\
+	~\\
+	Name des Institutes\\
+	ETH Zürich\\
+    }
+
+\vspace{\stretch{1}}
+
+
+
+{\large
+	Supervisors: \\[\baselineskip]
+	Name\\
+	Name\\[1cm]
+
+
+	
+	Professor:\\[\baselineskip]
+	Prof. Dr. Name
+}
+\end{center}
+
+\vspace*{2cm} % a bit of space at the bottom of the page
+
+\end{titlepage}
+
+
+%\clearpage\null
+
+
+% Einfügen einer leeren Seite nach dem Titelblatt
+\begin{titlepage}
+\thispagestyle{empty}
+\newpage
+\mbox{}
+\end{titlepage}

@@ -1,0 +1,104 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%Latexvorlage by Pascal Enderli, Zürich
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Diese Vorlage enthät alle nötigen tools um ein grosses Projekt (Bachelorarbeit, Masterarbeit) zu verfassen.
+%% Unter anderem ist enthalten:
+%% -struktur einer wissenschaftlichen arbeit
+%% -abbildungs-,tabellen-,literatur-,akronym- und symbolverzeichnis
+%% -Makefile für offlinekompilierung (Linuxuser) ausführen mit ./make.sh im obersten ordner
+%% -einige befehle und hinweise für die verwendung von referenzen aller art im file:
+%% ./mainmatter/introduction.tex und ./backmatter/literature.bib
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Bemerkungen:
+%% Das Skript darf natürlich nach euren wünschen angepasst und wiederveröffentlicht werden
+%% Bei der Erstellung des Literaturverzeichnisses habe ich biber verwendet (weil utf-8 kompatibel),
+%% welches vor dem kompilieren nachinstalliert werden muss falls noch nicht vorhanden (unter linux: sudo apt-get install biber )
+%% alternativ kann man das projekt auf sharelatex.com hochladen und bearbeiten
+%% (bitte sicher stellen dass das file ./frontmatter/glossaries.glo korrekt in sharelatex importiert wurde)
+%% Dieses Skript verwendet KOMA-Skript 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[
+parskip=full,               %ganze leere linie vor neuen absatz <false(einzug),half halbe linie abstand>
+headings=small,             %kleinere schrift bei den kopfzeilen
+headsepline=0.3pt,          %separierungslinie für kopfzeile <dicke:länge>
+footsepline=false,          %separierungslinie für fusszeile <dicke:länge>
+plainheadsepline=true,      %separierungslinie für kopfzeile auch bei seite mit neuem kapitel
+plainfootsepline=false,     %separierungslinie für fusszeile auch bei seite mit neuem kapitel
+11pt,                       %schriftgrösse <10pt, 11pt, 12pt>
+oneside,                    %modus einseitige seiten <twoside>
+a4paper                     %a4 format
+]{scrbook}                  %komaskript klasse scrbook
+
+
+\usepackage{header}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%auswählen welche files kompiliert werden sollen (Auskommentieren)
+
+\includeonly{
+./frontmatter/Titlepage,            
+./frontmatter/Declaration,
+./frontmatter/Abstract,           
+./mainmatter/Demo,  
+./mainmatter/Introduction,
+./mainmatter/Theory,
+./mainmatter/Methods,
+./mainmatter/Results,
+./mainmatter/Discussion,
+./mainmatter/Conclusion,
+./backmatter/Appendix   
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%erzeugen des Dokumentes
+
+%Frontmatter
+\begin{document}
+\sloppy
+\include{./frontmatter/Titlepage}
+\include{./frontmatter/Abstract}
+\cleardoublepage                                        %alle gleitobj. ausgeben und wechsel auf rechte seite
+\tableofcontents
+\cleardoublepage
+\printglossary[title=Nomenclature,toctitle=Nomenclature,style={mystyle}]
+\cleardoublepage
+\printglossary[type=\acronymtype,title=Acronyms,toctitle=Acronyms]
+
+%ABBILDUNGSVERZEICHNIS
+\cleardoublepage                                       
+\phantomsection                                        %referenziert hyperrefs an diese stelle
+\addcontentsline{toc}{chapter}{List of Figures}        %manueller Eintrac im table of content (TOC)
+\listoffigures
+
+%TABELLENVERZEICHNIS
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{List of Tables}
+\listoftables
+
+%Mainmatter                                             \chapter \section \subsection \subsubsection 
+\mainmatter	                                            %arabische Seitenzahlen
+\include{./mainmatter/Demo}
+\include{./mainmatter/Introduction}
+\include{./mainmatter/Theory}
+\include{./mainmatter/Methods}
+\include{./mainmatter/Results}
+\include{./mainmatter/Discussion}
+\include{./mainmatter/Conclusion}
+
+
+%Backmatter
+\cleardoublepage
+\printbibliography[                                     %Literaturverzeichnis
+heading=bibintoc,                                       %Literaturverzeichnis in Inhaltsverzeichnis auflisten
+title={Bibliography}]                                   %Titel des Literaturverzeichnisses
+\renewcommand{\chaptermark}[1]{         		        %Kopfzeile wird von Kapitel zu Anhang umbenannt
+\markboth{Appendix\ \thechapter: #1}{}}                 
+\begin{appendices}                                      %umfangreichere variante als \appendix
+\clearpage
+\include{./backmatter/Appendix}
+\end{appendices}
+
+
+\end{document}

@@ -1,0 +1,71 @@
+%nur diejenigen einträge die gebraucht werden, werden ausgegeben
+% auf nomenklaturen und akronyme zugreifen mit \gls{label}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define New Golssary Style (Untergruppen)
+
+\newglossarystyle{mystyle}{%
+\setglossarystyle{longheader}% base this style on the list style
+\renewcommand*{\glsgroupheading}[1]{\bfseries{\glsgetgrouptitle{##1}} \\ }
+}
+
+%Key Letter <A,B,C> bei sort=.. vorne an das sort Wort für entsprechende Gruppe !
+\newcommand*{\Agroupname}{Latin Letters}   
+\newcommand*{\Bgroupname}{Greek Letters}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%Nomenklaturen
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Latin Letters
+
+\newglossaryentry{p}
+{
+  name={\ensuremath{p}},
+  description={pressure},
+  sort=Apressure                    %Latin Letter entries start with a A
+}
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Greek Letters
+\newglossaryentry{pi}
+{
+  name={\ensuremath{\pi}},
+  description={The ratio of a circle's circumference to its diameter},
+  sort=Bpi                      
+}
+
+
+\newglossaryentry{rho}
+{
+  name={\ensuremath{\rho}},
+  description={Density of air},
+  sort=Brho                         %Greek Letter entries start with a B
+}
+
+
+
+
+
+
+
+
+
+%Akronyme
+\newacronym{eth}{ETHZ}{Eidgenössische Technische Hoschschule Zürich}
+\newacronym{rpm}{RPM}{Revolutions per minute}
+\newacronym{cad}{CAD}{Computer Aided Design}
+\newacronym{fem}{FEM}{Finite Element Method}
+\newacronym{chf}{CHF}{Swiss francs}
+\newacronym{pvc}{PVC}{Polyvinyl chloride}
+

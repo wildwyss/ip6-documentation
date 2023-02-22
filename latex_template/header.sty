@@ -1,0 +1,120 @@
+\ProvidesPackage{header}                                                    %Dies ist ein customised Style header
+
+\usepackage[english]{babel} 		                                        % Umlaute; Sprache: für deutsch ngerman statt english
+\usepackage[utf8]{inputenc}                                                 % Texcodierung
+\usepackage[T1]{fontenc} 		                                            % Silbentrennung
+\usepackage{mathtools}                                                      % \mathclap
+\usepackage[normalem]{ulem}                                                           % unterstreichen \uline etc.
+\usepackage{cancel} 
+\usepackage{tabu}                                                           % Tabellen formatierung
+\usepackage{array,dcolumn}	                                                %Tabellen,mit Zahlen am Komma ausrichten
+\usepackage{calc}			                                                %operationen mit Längen und Massen
+\usepackage{amssymb,amsmath,amsfonts,dsfont,fourier}                        %mathematiksymbole
+\usepackage{scrhack}
+\clubpenalty = 5000		                                                    % keine einzelne zeile anfangs seite; max 10000
+\widowpenalty = 5000 		                                                % keine einzelne zeile ende seite; max 10000
+\usepackage[toc,page]{appendix}                                             % erweiterte anhang umgebung
+
+\usepackage{siunitx}                                                        %SI-Einheiten \SI{value}{unit} halber leerschlag
+
+\usepackage{listings} 									                    %Einfügen von Programmcode
+\lstset{numbers=left, numberstyle=\tiny, numbersep=5pt} 			        %mit Zeilennummerierung links
+
+\usepackage{paralist}                                                       %Kompakte Listen
+\let\itemize\compactitem
+\let\enditemize\endcompactitem
+\let\enumerate\compactenum
+\let\endenumerate\endcompactenum
+\let\description\compactdesc
+\let\enddescription\endcompactdesc
+
+\usepackage[backend=biber]{biblatex}                                        %literaturverzeichnis
+\addbibresource{./backmatter/literature.bib}
+
+%zitieren
+\usepackage[                                                                %steuert anführungszeichen << oder " etc
+babel,
+autostyle=true,
+german=quotes,
+thresholdtype=words,                                                        %blockcquote soll im displaymode sein
+threshold=0                                                                 %blockcquote soll im displaymode sein
+]{csquotes}
+
+\usepackage{chngcntr}                                                       %vortlaufende Fussnotennummerierung
+\counterwithout{footnote}{chapter}                                          %vortlaufende Fussnotennummerierung
+
+
+\usepackage{float}                                                          %bildposition erzwingen
+\usepackage{wrapfig}                                                        %Bilder umfliessen
+
+\usepackage[pdftex]{graphicx}                                               %import graphics
+\usepackage{epstopdf}                                                       %import eps graphics
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+\usepackage[margin=10pt,font=small,labelfont=bf,format=plain]{caption}		            %Package für kleinere Schrift unter den Bildern
+\usepackage{subcaption}
+
+\usepackage[left=25 mm,right=25 mm,top=30 mm,bottom=30 mm]{geometry}
+
+
+%header &footer (Linien werden in den dokumentklassenoptionen definiert)
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}{}}              %convert \rightmark to lower case 
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter.\ #1}{}} %convert \leftmark to lower case 
+
+\usepackage{scrlayer-scrpage}												%header
+\clearscrheadfoot
+
+\lehead[\rightmark]{\rightmark}												%Left   Even Head [header pei seite mit titel]{header}
+\lohead[\leftmark]{\leftmark}												%Left    Odd Head [header pei seite mit titel]{header}
+\cehead[]{}																	%Center Even Head [header pei seite mit titel]{header}
+\cohead[]{}																	%Center  Odd Head [header pei seite mit titel]{header}
+\rehead[]{}																	%Right  Even Head [header pei seite mit titel]{header}
+\rohead[]{}																	%Right  Even Head [header pei seite mit titel]{header}
+
+\lefoot[]{}																	%Left   Even Foot [footpei seite mit titel]{foot}
+\lofoot[]{}																	%Left    Odd Foot [footpei seite mit titel]{foot}
+\cefoot[]{}																	%Center Even Foot [footpei seite mit titel]{foot}
+\cofoot[]{}																	%Center  Odd Foot [footpei seite mit titel]{foot}
+\refoot[\thepage]{\thepage}													%Right  Even Foot [footpei seite mit titel]{foot}
+\rofoot[\thepage]{\thepage}													%Right  Even Foot [footpei seite mit titel]{foot}
+
+\pagestyle{scrheadings}														%alternative plain.scrheadings (variante [footpei seite mit titel] als std auswählen)
+\setkomafont{pageheadfoot}{\small}											%schrift in header & footer anpassen
+%\setkomafont{pagehead}{\bfseries}											%schrift in header anpassen
+%\setkomafont{pagefoot}{\bfseries}											%schrift in footer anpassen
+
+
+\usepackage[usenames,dvipsnames]{xcolor}                                    % verwendung von Farben
+\definecolor{black}{rgb}{0,0,0}		                                        %Farb Definition
+\definecolor{red}{rgb}{0.8,0,0}	
+\definecolor{green}{rgb}{0.07,0.53,0.03}	
+\definecolor{blue}{rgb}{0,0,1}	
+
+
+\usepackage[ocgcolorlinks,                                                  %Farebe der Links definieren für abgabe: Black
+    linkcolor=red,
+    citecolor=green,
+    filecolor=blue,
+    urlcolor=cyan]
+    {hyperref}
+    
+\newcommand*{\Appendixautorefname}{Appendix}                                % referenz auf anhang mit keyword Appendix    Kann auf Anhang geändert werden!
+\usepackage{todonotes}                                                      %bild platzhalter
+%pdfborderstyle={/S/U/W 1},      
+                                       
+
+%blockcqote (displaymode) soll auch anführungszeichen haben
+\let\oldblockcquote=\blockcquote        
+\renewcommand{\blockcquote}[2]
+{
+\oldblockcquote{#1}{\textooquote #2\textcoquote}
+}
+
+
+\usepackage[xindy={language=english,codepage=duden-utf8},toc,acronym,nonumberlist]{glossaries}
+\input{./frontmatter/glossaries.nom}
+\makeglossaries
+
+
+\usepackage{pdfpages}                                                       %pdf einfügen
+
+\frontmatter	                                                            %römische Seitenzahlen für frontmatter
