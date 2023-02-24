@@ -13,4 +13,27 @@ Inspired from: https://rxjs.dev/api/index/function/pipe
 		3. Iterator copy is one of the biggest challenges
 		4. Each function can copy itself => advantages: easier to read, to extend, leaner
 		5. We need an additional function like a pipe to concat multiple functions
+- Pipe implemented to concat several functions on the iterator
+		- each function returns a copy of the iterator
+		- each function takes alongside its parameters an iterator
 
+## Iterator Collection
+- Added different Iterators (empty, Array, Tuple)
+- Array and Tuple Iterator use the map function to iterate over the elements
+- The implementation of TupleIterator uses a function to grab the tuple length
+
+This is how the tuple works:
+```javascript
+let t = TupleCtor(3)([]);
+// returns: value => TupleCtor(2)(...[],values)
+t = t(1);
+// returns: value => TupleCtor(1)([...[], 1, value])
+t = t(2);
+// returns: value => TupleCtor(0)([...[], 1, 2, values])
+t = t(3);
+// returns: selector => selector([...[], 1, 2])
+
+const one = values => values[0];
+const element = t(one);
+// returns: 1
+```
