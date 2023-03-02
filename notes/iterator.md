@@ -6,6 +6,7 @@ Inspired from: https://rxjs.dev/api/index/function/pipe
 - In the beginning, we had trouble with how we can implement copy functionality
 - Functions like map or filter are no longer on the iterator object
 - Each iterator yields objects containing a next and copy attribute
+- Follows strictly the open close principle
  - copy is only a copy of the inner iterator and that copy is wrapped by the functionality of the particular function
 - Steps to our solution:
 		1. We need an inner iterator 
@@ -37,3 +38,9 @@ const one = values => values[0];
 const element = t(one);
 // returns: 1
 ```
+- drop and takes must copy the iterator coming from propagated functions dropWhile and takeWhile
+		- since take and drop have a state, it is not possible to return takeWhile and dropWhile directly
+		- because the copy of take and drop has to copy the state as well
+- uncons returns a pair including the first element of the iterator and the rest of iterator itself
+		- uncons can not be used in a pipe, use drop instead
+
