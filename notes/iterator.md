@@ -17,6 +17,7 @@ Inspired from: https://rxjs.dev/api/index/function/pipe
 - Pipe implemented to concat several functions on the iterator
 		- each function returns a copy of the iterator
 		- each function takes alongside its parameters an iterator
+    - Verbindung von pipe zu anderen sprachen (java builder pattern) erläutern & Pipe in Terminal
 
 ## Iterator Collection
 - Added different Iterators (empty, Array, Tuple)
@@ -43,4 +44,5 @@ const element = t(one);
 		- because the copy of take and drop has to copy the state as well
 - uncons returns a pair including the first element of the iterator and the rest of iterator itself
 		- uncons can not be used in a pipe, use drop instead
-
+- tests: each iterator operation needs to operate on a copy. This is tested now.
+  - the copy of each operation works correctly => is tested now
