@@ -45,8 +45,18 @@ const element = t(one);
 - uncons returns a pair including the first element of the iterator and the rest of iterator itself
 		- uncons can not be used in a pipe, use drop instead
     
-### testing iterator operation
-To ensure that a iterator operation works correctly, 3 things must be tested:
+## testing iterator operation
 - test the functionality
 - each iterator operation needs to operate on a copy (test purity). This is tested now.
 - the copy of each operation works correctly => is tested now
+
+
+## Monoid/mconcat
+`mconcat` is a function in many functional programming languages, 
+including Haskell and Scala, that combines a list of monoids. 
+A monoid is an algebraic structure that defines a set and a 
+binary operation on that set that is associative and has a neutral element.
+
+- implement mconcat based on ConcatIterator
+- mconcat reduces a List of iterators to a single iterator
+- mconcat implemented in Haskell: `mconcat as = foldr (<>) mempty as`
