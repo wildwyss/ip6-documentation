@@ -23,6 +23,7 @@ Inspired from: https://rxjs.dev/api/index/function/pipe
 - Added different Iterators (empty, Array, Tuple)
 - Array and Tuple Iterator use the map function to iterate over the elements
 - The implementation of TupleIterator uses a function to grab the tuple length
+- Added StackIterator using pop and stackEquals
 
 This is how the tuple works:
 ```javascript
