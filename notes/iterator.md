@@ -44,5 +44,9 @@ const element = t(one);
 		- because the copy of take and drop has to copy the state as well
 - uncons returns a pair including the first element of the iterator and the rest of iterator itself
 		- uncons can not be used in a pipe, use drop instead
-- tests: each iterator operation needs to operate on a copy. This is tested now.
-  - the copy of each operation works correctly => is tested now
+    
+### testing iterator operation
+To ensure that a iterator operation works correctly, 3 things must be tested:
+- test the functionality
+- each iterator operation needs to operate on a copy (test purity). This is tested now.
+- the copy of each operation works correctly => is tested now
