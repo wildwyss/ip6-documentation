@@ -61,3 +61,5 @@ binary operation on that set that is associative and has a neutral element.
 - implement mconcat based on ConcatIterator
 - mconcat reduces a List of iterators to a single iterator
 - mconcat implemented in Haskell: `mconcat as = foldr (<>) mempty as`
+
+- implement cycle, it copies the iterator every iteration
