@@ -23,6 +23,7 @@ Inspired from: https://rxjs.dev/api/index/function/pipe
 - Added different Iterators (empty, Array, Tuple)
 - Array and Tuple Iterator use the map function to iterate over the elements
 - The implementation of TupleIterator uses a function to grab the tuple length
+- Added StackIterator using pop and stackEquals
 
 This is how the tuple works:
 ```javascript
@@ -60,6 +61,7 @@ binary operation on that set that is associative and has a neutral element.
 - implement mconcat based on ConcatIterator
 - mconcat reduces a List of iterators to a single iterator
 - mconcat implemented in Haskell: `mconcat as = foldr (<>) mempty as`
+- implement cycle, it copies the iterator every iteration
 
 ## performance of multiple operations
 - copy is very expensive
