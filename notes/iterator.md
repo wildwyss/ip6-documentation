@@ -18,6 +18,7 @@ Inspired from: https://rxjs.dev/api/index/function/pipe
 		- each function returns a copy of the iterator
 		- each function takes alongside its parameters an iterator
     - Verbindung von pipe zu anderen sprachen (java builder pattern) erläutern & Pipe in Terminal
+    - first we impletended pipe as property on the iterator type. Afte some weeks we figured out, that it would be more consistent to have it as a global funciton which takes an iterator and all transformations
 
 ## Iterator Collection
 - Added different Iterators (empty, Array, Tuple)
