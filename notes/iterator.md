@@ -60,3 +60,11 @@ binary operation on that set that is associative and has a neutral element.
 - implement mconcat based on ConcatIterator
 - mconcat reduces a List of iterators to a single iterator
 - mconcat implemented in Haskell: `mconcat as = foldr (<>) mempty as`
+
+## performance of multiple operations
+- copy is very expensive
+  - each time copy is called, the whole subiterators are copied
+    - this leads to massive performance problems
+    - with 2000 times cons, performance problems are occuring
+    - with around 7000 times cons, a stack overflow exception occurs at copy()
+
