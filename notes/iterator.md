@@ -18,6 +18,7 @@ Inspired from: https://rxjs.dev/api/index/function/pipe
 		- each function returns a copy of the iterator
 		- each function takes alongside its parameters an iterator
     - Verbindung von pipe zu anderen sprachen (java builder pattern) erläutern & Pipe in Terminal
+    - first we impletended pipe as property on the iterator type. Afte some weeks we figured out, that it would be more consistent to have it as a global funciton which takes an iterator and all transformations
 
 ## Iterator Collection
 - Added different Iterators (empty, Array, Tuple)
@@ -66,6 +67,14 @@ binary operation on that set that is associative and has a neutral element.
 - mconcat implemented in Haskell: `mconcat as = foldr (<>) mempty as`
 
 - implement cycle, it copies the iterator every iteration
+
+## performance of multiple operations
+- copy is very expensive
+  - each time copy is called, the whole subiterators are copied
+    - this leads to massive performance problems
+    - with 2000 times cons, performance problems are occuring
+    - with around 7000 times cons, a stack overflow exception occurs at copy()
+
 
 ## Iterator builder
 - performance optimized way to build iterators
