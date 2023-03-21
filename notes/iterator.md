@@ -46,10 +46,13 @@ const element = t(one);
 - uncons returns a pair including the first element of the iterator and the rest of iterator itself
 		- uncons can not be used in a pipe, use drop instead
     
-## testing iterator operation
+## Testing iterator operation
 - test the functionality
 - each iterator operation needs to operate on a copy (test purity). This is tested now.
 - the copy of each operation works correctly => is tested now
+- test cases are organized in a table, this is a preferred way to achieve high test quality and coverage
+		- consider the interpreter pattern
+
 
 
 ## Monoid/mconcat
@@ -63,3 +66,15 @@ binary operation on that set that is associative and has a neutral element.
 - mconcat implemented in Haskell: `mconcat as = foldr (<>) mempty as`
 
 - implement cycle, it copies the iterator every iteration
+
+## Iterator builder
+- performance optimized way to build iterators
+- no copy is made during the build process
+- build phases: 
+		- 1 -> collect all elements, 2 -> build the iterator, no elements can be added
+		- first approach was to return an empty iterator
+		- changed to throw an error when building the iterator twice or adding elements
+		- elements are processed in a lazy manner, therefore next will only be called by processing the elements
+- iterators and elements can be passed to the builder 
+- before iterators are processed, they will be copied
+- performance test: extremely better performance than building iterators with multiple cons
