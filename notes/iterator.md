@@ -19,6 +19,8 @@ Inspired from: https://rxjs.dev/api/index/function/pipe
 		- each function takes alongside its parameters an iterator
     - Verbindung von pipe zu anderen sprachen (java builder pattern) erläutern & Pipe in Terminal
     - first we impletended pipe as property on the iterator type. Afte some weeks we figured out, that it would be more consistent to have it as a global funciton which takes an iterator and all transformations
+      - this also brings the advantage, that pipe does not need to be tested on every iterator operations
+      - and less code of course
 
 ## Iterator Collection
 - Added different Iterators (empty, Array, Tuple)
@@ -87,3 +89,18 @@ binary operation on that set that is associative and has a neutral element.
 - iterators and elements can be passed to the builder 
 - before iterators are processed, they will be copied
 - performance test: extremely better performance than building iterators with multiple cons
+- Komplexitätsklassen angeben: IteratorBilder O(n), cons eher O(n^2)
+- Tests: der perfomancetest macht schon sinn, da man auch sieht, wenn sich etwas an der Umgebung ändert.
+  - Übrigens heisst das Pattern eine Funktion an eine andere zu geben damit sie in einem bestimmten Kontext ausgeführt wird, heisst "Method around". (in unserem Fall measure mit workload) => auch unbedingt im Bericht erwähnen
+    - Measure ist eine Implementaiton eines Protokolls: zuerst wird gemessen, dann wird der workload ausgeführt, dann wird wieder gemessen
+      
+
+## The power of the dot
+- Umgesetzt über modul imports. Verweise auf das Gitbook von Herrn König
+- Zusätzlich kann man auch selbst
+- Alternative: Neues Pattern NamespaceObject => Unbedingt in Doku
+  - Abhängig von der Art wie javascript arbeitet
+  - man exportiert ein Objekt, das alle Funktionen enthält. Das Objekt hält ein Interface ein.
+- Dritte Alternative Konstruktorfunktionen
+=> See Notion Task : https://www.notion.so/andriwild/The-Power-of-the-Dot-eac0856341414e248b10cb6031d4effb?pvs=4
+
