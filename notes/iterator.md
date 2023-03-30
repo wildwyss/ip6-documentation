@@ -104,3 +104,30 @@ binary operation on that set that is associative and has a neutral element.
 - Dritte Alternative Konstruktorfunktionen
 => See Notion Task : https://www.notion.so/andriwild/The-Power-of-the-Dot-eac0856341414e248b10cb6031d4effb?pvs=4
 
+
+## copy of iterators that are partially used 
+e.g.: 
+```javascript
+  const it = take(5)(Range(100);
+  for (const _ of it) break;
+  const copy = it.copy(); //<--- take, drop, cycle, cons hatten alle innere States die hier probleme machen
+  ...it; // 1,2,3,4,5
+  ...copy; // 1,2,3,4,5
+```
+### take, drop
+take und drop funktionierten gleich:
+- drop wrappt dropWhile und returnten jeweils next von dropWhile.
+  - dropWhile legte eine Kopie des inneren Iterators an, auf dieser Kopie wurde next aufgerufen
+  - Wurde nun drop kopiert, nachdem next schon einmal aufgerufen wurde, wurde der ursprüngliche Iterator als inner kopiert (und nicht der von dropWhile)
+    - Nur dropWhile zu returnen würde aber ebenfalls nicht gehen, da dann mehrere Iteratoren auf den gleichen Counter verweisen würden.
+
+### cons
+- Hatte einen Boolean returned, der sagte, ob das Element schon returned wurde. dieser wurde beim koieren jedoch nicht mitkopiert.
+- Die Lösung war hier, das mit cons hinzugefügte Element auf undefined zu setzen, sobald es zurückgegeben wurde. 
+  Bei einer Kopie, wird das sowieso mitübergeben. Statt auf einen Boolean zu prüfen, wird jetzt geprüft, ob das Element undefined ist. 
+
+### cycle 
+- wird bei einem Cycle ein einzelnes Element prozessiert und nachher der cycle Iterator kopiert, 
+  muss diese Kopie dort beginnen, wo der letzte aufgehört hat, man muss also den momentanen Stand mitkopieren.
+  - Zusätzlich ist die Kopie ebenfalls auf den ursprüngliche Iterator angewiesen. Denn wird der momentane Stand fertig iteriert,
+    muss cylce wieder mit den ursprünglichen Iterator prozssieren
