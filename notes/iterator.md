@@ -131,3 +131,8 @@ take und drop funktionierten gleich:
   muss diese Kopie dort beginnen, wo der letzte aufgehört hat, man muss also den momentanen Stand mitkopieren.
   - Zusätzlich ist die Kopie ebenfalls auf den ursprüngliche Iterator angewiesen. Denn wird der momentane Stand fertig iteriert,
     muss cylce wieder mit den ursprünglichen Iterator prozssieren
+
+=> Diese Dinge haben wir per Zufall bei take bemerkt, als wir den endlosen Fibonacci-Iterator bauten. 
+  Den Test dazu haben wir dann in die Table eingebaut und fanden dadurch dasselbe verhalten durch Testtable gefunden
+
+WICHTIG: Test table in den Bericht
