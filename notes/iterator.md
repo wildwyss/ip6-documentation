@@ -72,6 +72,8 @@ Generiert eine bestimmte Anzahl gleichmässig verteilter Winkel zwischen 0 & 360
 - test cases are organized in a table, this is a preferred way to achieve high test quality and coverage
 		- consider the interpreter pattern
 
+WICHTIG: Test table in den Bericht
+=> Unsere Testsuite dokumentieren, vor allem auch `assertThrows`
 
 
 ## Monoid/mconcat
@@ -110,6 +112,11 @@ binary operation on that set that is associative and has a neutral element.
   - Übrigens heisst das Pattern eine Funktion an eine andere zu geben damit sie in einem bestimmten Kontext ausgeführt wird, heisst "Method around". (in unserem Fall measure mit workload) => auch unbedingt im Bericht erwähnen
     - Measure ist eine Implementaiton eines Protokolls: zuerst wird gemessen, dann wird der workload ausgeführt, dann wird wieder gemessen
       
+recursive calls in Javascript:
+- Zuerst haben wir eine Version implementiert mit einem rekursiven Call. => Dieser bricht, wenn viele Iteratoren drin sind (call stack exceeded).
+  - Danach haben wir es gerefactored zu einer Tailrecursion, welche einfach durch einen Loop ersetzt werden kann.
+=> Da sie nicht optimiert werden können (tail recursive optimization), machen Loops oft mehr Sinn
+   Das ist eetwas, dass nicht direkt aus der funktionalen Programmierung in Sprachen wie Javascript übernommen werden kann
 
 ## The power of the dot
 - Umgesetzt über modul imports. Verweise auf das Gitbook von Herrn König
@@ -119,7 +126,6 @@ binary operation on that set that is associative and has a neutral element.
   - man exportiert ein Objekt, das alle Funktionen enthält. Das Objekt hält ein Interface ein.
 - Dritte Alternative Konstruktorfunktionen
 => See Notion Task : https://www.notion.so/andriwild/The-Power-of-the-Dot-eac0856341414e248b10cb6031d4effb?pvs=4
-
 
 ## copy of iterators that are partially used 
 e.g.: 
@@ -151,5 +157,4 @@ take und drop funktionierten gleich:
 => Diese Dinge haben wir per Zufall bei take bemerkt, als wir den endlosen Fibonacci-Iterator bauten. 
   Den Test dazu haben wir dann in die Table eingebaut und fanden dadurch dasselbe verhalten durch Testtable gefunden
 
-WICHTIG: Test table in den Bericht
 
