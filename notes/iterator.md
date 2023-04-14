@@ -49,6 +49,20 @@ const element = t(one);
 - uncons returns a pair including the first element of the iterator and the rest of iterator itself
 		- uncons can not be used in a pipe, use drop instead
     
+### SquareNumberIterator
+- Nutzt die Idee aus, dass durch aufsummieren der ungeraden Zahlen, Quadrahtzahlen entstehen.
+- Er iteriert über alle ungeraden Zahlen und gibt mit jeder Iteration die bisherige Summe + die nächste ungerade Zahl aus.
+
+### PrimeNumberIterator
+Baut auf der Idee des "sieb des eratosthenes" auf.
+Er startete mit der Zahl 2 und machte sich einen Stock mit der Länge zwei. dann Strich er jede Zahl durch, die er durch aneinanderreihung der Stöcke erreichen kann. 
+Dann nahm er die nächste nicht durchgestrichtene Zahl und machte sich wiederum einen Stock dieser länge und strich alle Vielfachen davon durch. -> usw
+- itertiert über unendlichen Range der bei 2 startet
+- consed alle gefundenen Primzahlen in einen Iterator 
+- bei jedem Aufruf von next wird überprüft ob die  momentane Zahl durch mindestens eine gefundene Primzahl geteilt wird.
+  - Falls ja: keine Primzahl, es wird mit der nächsten Zahl weiter gemacht
+  - Falls nein: die nächste Primzahl wurde gefunden, wird geconsed und zurückgegeben
+
 ## Testing iterator operation
 - test the functionality
 - each iterator operation needs to operate on a copy (test purity). This is tested now.
@@ -136,3 +150,4 @@ take und drop funktionierten gleich:
   Den Test dazu haben wir dann in die Table eingebaut und fanden dadurch dasselbe verhalten durch Testtable gefunden
 
 WICHTIG: Test table in den Bericht
+
