@@ -62,6 +62,8 @@ Dann nahm er die nächste nicht durchgestrichtene Zahl und machte sich wiederum 
 - bei jedem Aufruf von next wird überprüft ob die  momentane Zahl durch mindestens eine gefundene Primzahl geteilt wird.
   - Falls ja: keine Primzahl, es wird mit der nächsten Zahl weiter gemacht
   - Falls nein: die nächste Primzahl wurde gefunden, wird geconsed und zurückgegeben
+### AngleIterator
+Generiert eine bestimmte Anzahl gleichmässig verteilter Winkel zwischen 0 & 360 grad. Wird er gecycled, kann man so endlos viele Winkel generieren
 
 ## Testing iterator operation
 - test the functionality
