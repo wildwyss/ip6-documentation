@@ -158,3 +158,17 @@ take und drop funktionierten gleich:
   Den Test dazu haben wir dann in die Table eingebaut und fanden dadurch dasselbe verhalten durch Testtable gefunden
 
 
+## Module Oranisation
+- Ziel: 
+		- verhindern von cycling dependencies 
+		- gute Code organisation / strukturierung
+- Lösung:
+		- Alle Code Files in Folders, benannt nach dem Inhalt (Ctor, opertators, terminalOperator, etc.)
+		- Jede Funktion oder Konstruktor ist in einem eigenen File, welches gleichnamig zur beinhaltenden Funktion ist 
+		- Jeder Ordner hat ein File, welches alle Funktionen in diesem Ordner exportiert (single point of export)
+		- Die ganze Code Basis wird auch über ein einziges File exportiert. Alle "export"-files aus den 
+				verschiedenen Unterordnern werden in diesem File gemeinsam exportiert (single point of export)
+		- Ein File, welches alles exportiert hat einige Vorteile:
+				- siehe Abschnitt "The Power of the Dot"
+				- interne Umstrukturierungen haben keinen Einfluss auf die public API
+
