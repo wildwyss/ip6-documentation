@@ -1,6 +1,6 @@
 # Git Commit Convention
 ---
-##Resources:
+##Resources: 
 
 [Commit Message Guideline](https://www.conventionalcommits.org/en/v1.0.0/#summary)23.02.2023
 
