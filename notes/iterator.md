@@ -62,6 +62,17 @@ Dann nahm er die nächste nicht durchgestrichtene Zahl und machte sich wiederum 
 - bei jedem Aufruf von next wird überprüft ob die  momentane Zahl durch mindestens eine gefundene Primzahl geteilt wird.
   - Falls ja: keine Primzahl, es wird mit der nächsten Zahl weiter gemacht
   - Falls nein: die nächste Primzahl wurde gefunden, wird geconsed und zurückgegeben
+#### Probleme
+1. states der verschiedenen Stab-Längen Iteratoren müssen übereinstimmen, auf allen Iteratoren muss zum gleichen Zeitpunkt next aufgerufen werden
+2. Zu Beginn haben wir immer die letzt zurückgegebene Primenumber als state für die Copy übergeben. 
+		- Führte zu inkonsistenten zwischen den Iteratoren, da die Rods Iteratoren schon die nächste Zahl erwartet, aber nochmals die letzte zurückgegeben erhalten haben
+		- Resultat: Infinite Iterator war eine Position nach hinten verschoben
+		- Zusätzlich wurde die letzt zurückgebene Zahl zwei Mal prozessiert
+#### Lösung
+- Die nächste Primzahl wird jeweils immer vorberechnet.
+		- Somit wird bei einer Kopie die nächste Primzahl übergeben
+
+
 ### AngleIterator
 Generiert eine bestimmte Anzahl gleichmässig verteilter Winkel zwischen 0 & 360 grad. Wird er gecycled, kann man so endlos viele Winkel generieren
 
@@ -156,6 +167,8 @@ take und drop funktionierten gleich:
 
 => Diese Dinge haben wir per Zufall bei take bemerkt, als wir den endlosen Fibonacci-Iterator bauten. 
   Den Test dazu haben wir dann in die Table eingebaut und fanden dadurch dasselbe verhalten durch Testtable gefunden
+
+### PrimeNumberIterator
 
 
 ## Module Oranisation
