@@ -147,6 +147,7 @@ e.g.:
   ...it; // 1,2,3,4,5
   ...copy; // 1,2,3,4,5
 ```
+
 ### take, drop
 take und drop funktionierten gleich:
 - drop wrappt dropWhile und returnten jeweils next von dropWhile.
@@ -168,10 +169,38 @@ take und drop funktionierten gleich:
 => Diese Dinge haben wir per Zufall bei take bemerkt, als wir den endlosen Fibonacci-Iterator bauten. 
   Den Test dazu haben wir dann in die Table eingebaut und fanden dadurch dasselbe verhalten durch Testtable gefunden
 
+## Iterator of Iterators
+### laziness
+- Da Iteratoren jedes Element lazy kosumieren/berechnen, kann das zu unerwartetem Verhalten führen wenn man einen Iterator über Iteratoren hat
+- Wenn die Subiteratoren kopiert werden (zB innerhalb eines maps()), geschieht das ebenfalls lazy.
+  - Wird also der ursprüngliche Iterator prozessiert, bevor die Kopie prozessiert wird, wird bei einem copy() zu einem späteren Zeitpunkt der fertige Subiterator kopiert
+  Das folgende Beispiel veranschaulicht das gut:
+
+```javascript
+iteratorSuite.add("map problems", assert => {
+  const createSimpleIti = nr => Iterator(1, i => i + 1, i => i > nr);
+  const iti1 = createSimpleIti(2);
+  const iti2 = createSimpleIti(3);
+
+  const arr = ArrayIterator([iti1,iti2]);
+  // create a lazy copy of the subiterators
+  const copy = map(i => {
+    console.log("lazy");
+    return i.copy(); // this copy will be made as soon as the outer iterator is being processed
+  })(arr);
+
+  let i = 0;
+  // first consume the original iterator
+  for (const a of arr){ console.log("orig", "Iteration: ", i++, ...a); }
+  // then consume the copy. The subiterators will be copied now. Since the origin iterator has already been processed, the finished Iterators are copied
+  for (const a of copy){ console.log("copy", "Iteration: ", i++, ...a); }
+});
+
+```
 ### PrimeNumberIterator
 
 
-## Module Oranisation
+## Module Organisation
 - Ziel: 
 		- verhindern von cycling dependencies 
 		- gute Code organisation / strukturierung
