@@ -58,20 +58,22 @@ Baut auf der Idee des "sieb des eratosthenes" auf.
 Er startete mit der Zahl 2 und machte sich einen Stock mit der Länge zwei. dann Strich er jede Zahl durch, die er durch aneinanderreihung der Stöcke erreichen kann. 
 Dann nahm er die nächste nicht durchgestrichtene Zahl und machte sich wiederum einen Stock dieser länge und strich alle Vielfachen davon durch. -> usw
 - itertiert über unendlichen Range der bei 2 startet
-- consed alle gefundenen Primzahlen in einen Iterator 
-- bei jedem Aufruf von next wird überprüft ob die  momentane Zahl durch mindestens eine gefundene Primzahl geteilt wird.
-  - Falls ja: keine Primzahl, es wird mit der nächsten Zahl weiter gemacht
-  - Falls nein: die nächste Primzahl wurde gefunden, wird geconsed und zurückgegeben
-#### Probleme
-1. states der verschiedenen Stab-Längen Iteratoren müssen übereinstimmen, auf allen Iteratoren muss zum gleichen Zeitpunkt next aufgerufen werden
-2. Zu Beginn haben wir immer die letzt zurückgegebene Primenumber als state für die Copy übergeben. 
-		- Führte zu inkonsistenten zwischen den Iteratoren, da die Rods Iteratoren schon die nächste Zahl erwartet, aber nochmals die letzte zurückgegeben erhalten haben
-		- Resultat: Infinite Iterator war eine Position nach hinten verschoben
-		- Zusätzlich wurde die letzt zurückgebene Zahl zwei Mal prozessiert
-#### Lösung
-- Die nächste Primzahl wird jeweils immer vorberechnet.
-		- Somit wird bei einer Kopie die nächste Primzahl übergeben
+- zipped alle gefundenen Primzahlen in einen Iterator 
+  => bsp nach 3 werden iteratoren [Nothing, Just(2), ...] & [Nothing, Nothing, Just(3), ...] gezippt zu [Nothing, Just(2), Just(3), ...] 
+- bei jedem Aufruf von next wird der gezippte Primahl-Iterator ebenfalls nach vorne bewegt. ist Nothing drin, haben wir eine neue Primzahl, ist Just drin ist es keine
 
+#### Probleme
+1. states des unendlichen Zahleniterator muss mit dem State des Primenumber Iterator übereinstimmen.
+2. Bei einer Kopie muss der aktuelle State mitkopiert werden, deshalb wird die zuletzt returnte Primzahl ebenfalls gemerkt.
+
+#### andere ausprobierte Ansätze
+- Modulo: Einfachster, logischer Ansatz, Haben wir verworfen, da wir auf unseren Abstraktionen möchten => Deshalb Sieb des eratosthenes
+- Iterator über Iteratoren
+  - Statt die Iteratoren zu zippen, haben wir uns alle Primzahlen Iteratoren gemerkt in einem Iterator und haben in jede Iteration auf alle Iteratoren, next aufgerufen. Mit Catmaybes haben wir dann alle Nothings rausgeworfen. 
+    War die Liste leer, haben wir eine neue Primzahl gefunden.
+- Iterator der für jede gefundene Primzahl folgendes Tupel beinhaltet: 1. Primzahl, 2. wann sie das nächste Mal auftreten wird (zB für Zahl 3, wenn wir momentan an Position 4 sind wäre es, (3,6))
+  - in jeder Iteration wird jede Primzahl überprüft, ob sie die aktuelle Zahl teilt. Falls es eine gibt, ist es keine Primzahl. 
+  - Alle Tupel die getroffen oder überschritten wurden, werden auf den nächsten Wert erhöht. (=> es werden also nicht immer alle Tupel aktualisiert).
 
 ### AngleIterator
 Generiert eine bestimmte Anzahl gleichmässig verteilter Winkel zwischen 0 & 360 grad. Wird er gecycled, kann man so endlos viele Winkel generieren
