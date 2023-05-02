@@ -62,6 +62,8 @@ Dann nahm er die nächste nicht durchgestrichtene Zahl und machte sich wiederum 
   => bsp nach 3 werden iteratoren [Nothing, Just(2), ...] & [Nothing, Nothing, Just(3), ...] gezippt zu [Nothing, Just(2), Just(3), ...] 
 - bei jedem Aufruf von next wird der gezippte Primahl-Iterator ebenfalls nach vorne bewegt. ist Nothing drin, haben wir eine neue Primzahl, ist Just drin ist es keine
 
+=> Dieser Ansatz führt weg vom operational reasoning zum equational reasoning
+
 #### Probleme
 1. states des unendlichen Zahleniterator muss mit dem State des Primenumber Iterator übereinstimmen.
 2. Bei einer Kopie muss der aktuelle State mitkopiert werden, deshalb wird die zuletzt returnte Primzahl ebenfalls gemerkt.
