@@ -79,6 +79,10 @@ Dann nahm er die nächste nicht durchgestrichtene Zahl und machte sich wiederum 
 
 ### AngleIterator
 Generiert eine bestimmte Anzahl gleichmässig verteilter Winkel zwischen 0 & 360 grad. Wird er gecycled, kann man so endlos viele Winkel generieren
+### PureIterator
+=> Lifts a value.
+
+### replicate
 
 ## Testing iterator operation
 - test the functionality
@@ -90,6 +94,26 @@ Generiert eine bestimmte Anzahl gleichmässig verteilter Winkel zwischen 0 & 360
 WICHTIG: Test table in den Bericht
 => Unsere Testsuite dokumentieren, vor allem auch `assertThrows`
 
+
+### using the closure scope in the testing table
+* braucht eine Iteratorconfig einen State kann dieser einfach in closure scope einer IIFE gehalten werden
+```javascript
+const eq$Config = (() => {
+  // eq$ takes two iterators which both shouldn't be modified when eq runs.
+  // To keep this we keep two iterators in our closure scope, to ensure that neither is modified by pure.
+  const firstIterator = newIterator(UPPER_ITERATOR_BOUNDARY);
+  const secondIterator = newIterator(UPPER_ITERATOR_BOUNDARY);
+  return createTestConfig({
+    name:      "eq$",
+    iterator:  () => firstIterator,
+    operation: eq$,
+    param:     secondIterator,
+    evalFn:    expected => actual => expected === actual,
+    expected:  true
+  });
+})();
+
+```
 
 ## Monoid/mconcat
 `mconcat` is a function in many functional programming languages, 
