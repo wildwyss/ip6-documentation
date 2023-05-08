@@ -1,3 +1,5 @@
+import Data.Tree (Tree(rootLabel))
+import Prelude hiding (repeat)
 main :: IO ()
 main = do
   print "helo"
@@ -24,9 +26,9 @@ cons = (:)
 append = (<>)
 nil = []
 
-lTree = cons 1 
+lTree = cons 1
         (append (cons 2 nil)
-                (append (cons 3 
+                (append (cons 3
                         (append (cons 4 nil) nil))
                        nil))
 
@@ -45,4 +47,35 @@ foldTree f g acc (Node label subtrees) = f label (foldTree' subtrees) where
   foldTree' (subtree:rest) = g (foldTree f g acc subtree) (foldTree' rest)
   foldTree' [] = acc
 
+-- square root
+next :: Double -> Double -> Double
+next n x = (x + n/x)/2
 
+repeat :: (a -> a) -> a -> [a]
+repeat f a = cons a (repeat f (f a))
+
+within :: Double -> [Double] -> Double
+within eps (a:b:cs) | abs (a-b) <= eps = b
+                    | otherwise       = within eps (b:cs)
+
+sqrt :: Double -> Double -> Double -> Double
+sqrt a0 eps n = within eps (repeat (next n) a0)
+
+-- differentiation
+
+easydiff :: Fractional a => (a -> a) -> a -> a -> a
+easydiff f x h = (f (x + h) - f x)/h
+
+halve :: Fractional a => a -> a
+halve x = x/2
+
+differentiate :: Fractional a => a -> (a -> a) -> a -> [a]
+differentiate h0 f x = map (easydiff f x) (repeat halve h0)
+
+easyintegrate :: Fractional a => (a -> a) -> a -> a -> a
+easyintegrate f a b = (f a + f b) * (b - a)/2
+
+integrate :: Fractional a => (a -> a) -> a -> a -> [a]
+integrate f a b = cons (easyintegrate f a b)
+                       (zipWith (+) (integrate f a mid) (integrate f mid b))
+                        where mid = (a + b)/2
