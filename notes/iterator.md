@@ -115,17 +115,27 @@ const eq$Config = (() => {
 
 ```
 
-## Monoid/mconcat
+## mconcat
 `mconcat` is a function in many functional programming languages, 
 including Haskell and Scala, that combines a list of monoids. 
 A monoid is an algebraic structure that defines a set and a 
 binary operation on that set that is associative and has a neutral element.
 
-- implement mconcat based on ConcatIterator
-- mconcat reduces a List of iterators to a single iterator
-- mconcat implemented in Haskell: `mconcat as = foldr (<>) mempty as`
-
-- implement cycle, it copies the iterator every iteration
+- mconcat nimmt einen "Iterator of Iterators". 
+- sowohl die äusseren wie auch die inneren Iteratoren können unedlich lange sein. Gerade beim äussern passiert das relativ schnell mal:
+  ```javascript 
+  const r = map(x => Range(x))(Range(Number.MAX_VALUE)); // r enthält unendliche viele Ranges 
+  const values = [...take(100)(mconcat(r))];
+  ```
+  - da aber der äussere Itrerator unendlich viele Iteratoren beinhaltet, können nicht vorgängig alle inneren Iteratoren kopiert werden.
+  - das führt dazu, dass innere Iteratoren auf die eine Referenz gehalten wird, aufgebraucht werden können bevor sie von mconcat kopiert werden.
+    Konkret ist folgendes Verhalten denkbar:
+    ```javascript 
+    const ranges = [Range(5), Range(5), Range(5)];
+    const r = mconcat(ArrayIterator(ranges)];
+    console.log(...ranges[0]); // braucht den 1. Iterator auf 
+    const values = [...mconcat(r)]; // erst jetzt wird mconcat konsumiert und somit erst jetzt auch die Subiteratoren kopiert.
+    ```
 
 ## performance of multiple operations
 - copy is very expensive
