@@ -252,3 +252,120 @@ iteratorSuite.add("map problems", assert => {
 				- siehe Abschnitt "The Power of the Dot"
 				- interne Umstrukturierungen haben keinen Einfluss auf die public API
 
+
+
+## Algebraische Strukturen 
+### Typsystem am Beispiel der Monade
+- Wir probierten sie über verschiedene Wege im Typsystem abzubilden
+- Der erste Ansatz war die Verwendung von Intersectiontypes:
+```javascript
+  /**
+   * @template _T_
+   * @typedef { IteratorType<_T_> & MonadType<_T_> } IteratorMonadType
+   */
+  
+   /**
+    * Defines a Monad.
+    * @typedef   MonadType
+    * @template  _T_
+    * @property  { <_U_>
+    *                 (bindFn: (_T_) => MonadType<_U_>)
+    *              => MonadType<_U_>
+    *            } and
+    */
+  ```
+  - das Problem an diesen Ansatz war, dass unsere `and` Methode "nur" einen Monadentypen zurückgibt. Vorher bekannte Typinformationen gingen somit verloren
+    - Die Info, dass ein Objekt ein Iterator ist, ist somit nicht mehr vorhanden
+  - Durch Typecasts nach Aufrufen von `and` würde dieses Problem beheben
+- der nächste Ansatz sollte das vorherige Probelme beheben und basiert auf [Template Constraints](https://github.com/microsoft/TypeScript/issues/41768)
+  - In java könnte das folgendermassen gelöst werden
+  ```javascript
+  /**
+   * @template _T_
+   * @typedef { IteratorType<_T_> & MonadType<IteratorType, _T_> } IteratorMonadType
+   */
+  
+  /**
+   * Defines a Monad.
+   * @typedef   MonadType
+   * @template  { MonadType } _M_
+   * @template  _T_
+   * @property  { <_U_>
+   *                 (bindFn: (_T_) => _M_<_U_>)
+   *              => _M_<_U_>
+   *            } and
+   */
+  ```
+  - Der ursprüngliche Typ wird an den Monadentyp übergeben und dort mit einem Template constraint durch den Monadentypen selbst ergänzt
+  - In java könnte das mit dem folgenden Ansatz gelöst werden:
+    ```
+    public interface Monad<T extends Monad<T>> {
+      public T and();
+    }
+
+    class Iterator implements Monad<Iterator> {
+      public int next() {
+        return 5;
+      }
+    
+      @Override
+      public Iterator and() {
+        return null;
+      }
+    }
+    public class Main {
+      public static void main(String[] args) {
+        var iti = new Iterator();
+    
+        iti.and().and().and().next();
+        System.out.println("Hello world!");
+      }
+    }
+    ```
+    - Das Problem hierbei war jedoch, dass das Typsystem von IntelliJ diesen Ansatz zu wenig unterstützte. Der Hover hat zwar den richtigen Typ (Monad inkl iteratorentyp) angezeigt, aber der Punkt gab keine Vorschläge
+  - der dritte und in unseren Augen beste Ansatz ist, dass man die Funktionen die Monaden oder Funktoren zur Verfügung stellen ebenfalls direkt an den Typ hängt
+  ```javascript
+  /**
+   *
+   * @typedef IteratorType
+   * @template _T_
+   * @property { () => { next: () => IteratorResult<_T_, _T_> } } [Symbol.iterator] - returns the iterator for this object.
+   * @property { () => IteratorType<_T_> }                        copy - creates a copy of this {@link IteratorType}
+   * @property { <_U_>(bindFn: (_T_) => IteratorType<_U_>) => IteratorType<_U_> } and
+   */
+  ```
+    - der Nachteil an dieser Variante ist allerdings, dass die Typen der Funktion die der Monad bereitstellt immer wieder neu definiert werden müssen.
+    - Diesen Typ auszulagern, hat wegen der Templates leider nicht geklappt
+      ```javascript
+      // klappt leider nicht, da _M_ nicht richtig erkannt wird
+      /**
+       * @callback AndCallback
+       * @template _M_, _T_, _U_
+       * @param {(_T_) => _M_<_U_>} bindFn
+       * @returns { _M_<_U_> }
+       */
+      ```
+    - Auch in dieser Variante lassen sich Funktionen definieren, die Monaden als Typen erwarten. Dies geschieht über die strukturelle Typisierung, die das JS Typesystem zur Verfügung stellt:
+      man muss also bloss eine Funktion definieren, die als Parameter etwas dass die Struktur von MonadType einhält.
+    ```javascript
+    /**
+     * Defines a Monad.
+     * @typedef   MonadType
+     * @template  _T_
+     * @property  { <_U_>
+     *                 (bindFn: (_T_) => MonadType<_U_>)
+     *              => MonadType<_U_>
+     *            } and
+     */
+
+    /**
+     * Funktion die eine Monade entgegen nimmt:
+     * @template _T_
+     * @param { MonadType<_T_> }  monad -
+     * @param { <_U_>(_T_) => MonadType<_U_> } f -
+     */
+    const runOnMonad = monad => f => monad.and(f);
+
+    const iterator = Range(3)
+    runOnMonad(range, Range); // Erstellt Range mit Werten: [0,0,1,0,1,2,0,1,2,3]
+    ```
