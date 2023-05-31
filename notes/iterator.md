@@ -22,6 +22,16 @@ Inspired from: https://rxjs.dev/api/index/function/pipe
       - this also brings the advantage, that pipe does not need to be tested on every iterator operations
       - and less code of course
 
+### Vorteile wenn der Receiver am Ende steht
+* Bei der alten Version steht der eigentliche Receiver einer Operation jeweils vor dem Punkt
+* Da der Receiver jetzt der letzte Parameter der Funktion ist, lässt sich durch Eta-Reduktion sehr einfach neue Funktionen bauen:
+
+```javascript
+const double    = map (x => 2*x);
+const quadruple = pipe(double, double); // Pipe dient dazu funktionen zu komposieren
+console.log(quadruple(Range(4))); // [0,4,8,12,16]
+```
+
 ## Iterator Collection
 - Added different Iterators (empty, Array, Tuple)
 - Array and Tuple Iterator use the map function to iterate over the elements
@@ -114,6 +124,12 @@ const eq$Config = (() => {
 })();
 
 ```
+### Exclude Tests
+* über die Testingtable können nun Tests excluded werden
+* Defaultmässig sind alle Tests drin, man muss spezifische Tests definieren wenn man sie nicht möchte. => das bringt den Vorteil, dass neue Tests automatisch überall drin sind.
+### Testing-Struktur
+* Jede Operation auf dem Iterator hat ein eigenes Testingfile
+* Die gemeinsamkeiten wurden in ein gemeinsames Modul `TestUtil` herausgezogen.
 
 ## mconcat
 `mconcat` is a function in many functional programming languages, 
@@ -369,3 +385,32 @@ iteratorSuite.add("map problems", assert => {
     const iterator = Range(3)
     runOnMonad(range, Range); // Erstellt Range mit Werten: [0,0,1,0,1,2,0,1,2,3]
     ```
+
+# Umbau Iterator
+* Der Aufbau des "komplexen" Iterator Protokolls macht Sinn, da jeder Iterator so einen eigenen Closure Scope hat, wo er seinen State ablegen kann.
+* Dies wird jetzt ausgenutzt um Copy los zu werden
+Bsp:
+```javascript
+const array   = [1,2,3];
+const arrayIt = array[Symbol.iterator](); // iterator ist eine Closure
+
+arrayIt.next(); // { done: false, value: 1 }
+arrayIt.next(); // { done: false, value: 2 }
+arrayIt.next(); // { done: false, value: 3 }
+arrayIt.next(); // { done: true, value: 3 } Der Iterator ist an dieser Stelle fertig
+
+// man kann aber wieder über den array iterieren, da ein neuer Iterator geholt wird:
+for (const el of array) {
+  // iterates over 1, 2, 3
+}
+
+
+```
+# JINQ
+=> Wurde als fluent api umgesetzt
+ 
+# Stdlib
+## pair
+* Pair iterierbar gemacht
+=> Dabei wurde ausgenutzt, dass der Array iterierbar ist
+
