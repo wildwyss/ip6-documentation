@@ -414,3 +414,32 @@ for (const el of array) {
 * Pair iterierbar gemacht
 => Dabei wurde ausgenutzt, dass der Array iterierbar ist
 
+# Property based testing
+* test against invariants
+* Verschiedene Listentypen: leere Liste, Liste mit einem Element, Liste mit mehreren Elemeenten
+=> So kann man schwierig zu findende Fehler entdecken
+So wurde bsp ein Fehler entdeckt auf `cycle` mit leeren Listen:
+
+``` javascript
+ const cycle = iterable => {
+
+  const cycleIterator = () => {
+    let inner = iteratorOf(iterable);
+
+    const next = () => {
+      const result = inner.next();
+      // Wird nie true bei einem leeren Iterator der gecycled wird
+      if (!result.done) return result;
+
+      inner = iteratorOf(iterable);
+      return next();
+    };
+
+   return { next };
+  };
+
+  return createMonadicIterable(cycleIterator);
+};
+
+```
+
