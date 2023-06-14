@@ -421,25 +421,26 @@ for (const el of array) {
 So wurde bsp ein Fehler entdeckt auf `cycle` mit leeren Listen:
 
 ``` javascript
- const cycle = iterable => {
+const cycle = iterable => {
 
-  const cycleIterator = () => {
-    let inner = iteratorOf(iterable);
+ const cycleIterator = () => {
+   let inner = iteratorOf(iterable);
 
-    const next = () => {
-      const result = inner.next();
-      // Wird nie true bei einem leeren Iterator der gecycled wird
-      if (!result.done) return result;
+   const next = () => {
+     const result = inner.next();
+     // Wird nie true bei einem leeren Iterator der gecycled wird
+     if (!result.done) return result;
 
-      inner = iteratorOf(iterable);
-      return next();
-    };
+     inner = iteratorOf(iterable);
+     return next();
+   };
 
-   return { next };
-  };
+  return { next };
+ };
 
-  return createMonadicIterable(cycleIterator);
+ return createMonadicIterable(cycleIterator);
 };
 
 ```
-
+# equals of prototyp
+* auf dem Prototyp für Iteratoren ['==='] zum Vergleichen von iteratoren hinzugefügt
