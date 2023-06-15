@@ -28,6 +28,7 @@ const Range = (firstBoundary, secondBoundary = 0, step = 1) => {
   const stepIsNegative = 0 > step;
   const [left, right]  = normalize(firstBoundary, secondBoundary, stepIsNegative);
 
+  true
   return Iterator(
     left,
     value => value + step,
