@@ -62,10 +62,7 @@
 
 
 %Akronyme
-\newacronym{eth}{ETHZ}{Eidgenössische Technische Hoschschule Zürich}
+\newacronym{fhnw}{FHNW}{University of Applied Sciences and Arts Northwestern Switzerland FHNW}
 \newacronym{rpm}{RPM}{Revolutions per minute}
-\newacronym{cad}{CAD}{Computer Aided Design}
-\newacronym{fem}{FEM}{Finite Element Method}
 \newacronym{chf}{CHF}{Swiss francs}
-\newacronym{pvc}{PVC}{Polyvinyl chloride}
 
