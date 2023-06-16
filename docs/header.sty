@@ -29,7 +29,7 @@
 \let\enddescription\endcompactdesc
 
 \usepackage[backend=biber]{biblatex}                                        %literaturverzeichnis
-\addbibresource{./backmatter/literature.bib}
+\addbibresource{./backmatter/lit.bib}
 
 %zitieren
 \usepackage[                                                                %steuert anführungszeichen << oder " etc
@@ -61,7 +61,7 @@ threshold=0                                                                 %blo
 \renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter.\ #1}{}} %convert \leftmark to lower case 
 
 \usepackage{scrlayer-scrpage}												%header
-\clearscrheadfoot
+\clearpairofpagestyles
 
 \lehead[\rightmark]{\rightmark}												%Left   Even Head [header pei seite mit titel]{header}
 \lohead[\leftmark]{\leftmark}												%Left    Odd Head [header pei seite mit titel]{header}
