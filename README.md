@@ -47,7 +47,11 @@ vim.g.tex_conceal = 'abdmg'
 -- Viewer options: One may configure the viewer either by specifying a built-in
 -- viewer method:
 vim.g.vimtex_view_method = 'skim'
-
+vim.g.vimtex_compiler_latexmk = {
+  aux_dir = '.build',
+  out_dir = '.build',
+  options = {}
+}
 -- for tex files width to 80
 vim.cmd([[
   augroup WrapLineInTeXFile
