@@ -37,18 +37,45 @@ a4paper                     %a4 format
 %auswählen welche files kompiliert werden sollen (Auskommentieren)
 
 \includeonly{
-./frontmatter/Titlepage,            
-./frontmatter/Declaration,
-./frontmatter/Abstract,           
-./mainmatter/Demo,  
-./mainmatter/Introduction,
-./mainmatter/Theory,
-./mainmatter/Methods,
-./mainmatter/Results,
-./mainmatter/Discussion,
-./mainmatter/Conclusion,
-./mainmatter/Code,
-./backmatter/Appendix   
+ ./frontmatter/titlepage,
+ ./frontmatter/abstract,
+ ./frontmatter/note_of_thanks,
+ % main 
+ ./mainmatter/theory/studies_surveys,
+ ./mainmatter/theory/comparable_works,
+ ./mainmatter/theory/description_of_used_methods,
+ ./mainmatter/theory/literary_studies,
+ ./mainmatter/theory/description_of_env_and_domain,
+ % development
+./mainmatter/development/power_of_the_dot,
+./mainmatter/development/iterables_everywhere,
+./mainmatter/development/basics_iterable_protocol,
+./mainmatter/development/the_two_glues,
+./mainmatter/development/monads_prototype_jinq,
+./mainmatter/development/naming,
+./mainmatter/development/decorating_sequences,
+./mainmatter/development/experiments,
+ % api
+ ./mainmatter/api/introduction,
+ ./mainmatter/api/more_monads,
+ ./mainmatter/api/prototype_functions,
+ ./mainmatter/api/iterator_builder,
+ ./mainmatter/api/jinq,
+ ./mainmatter/api/how_to_test,
+ ./mainmatter/api/how_to_extend,
+ ./mainmatter/api/range,
+ ./mainmatter/api/constructors,
+ ./mainmatter/api/special_constructors,
+ ./mainmatter/api/operators,
+ ./mainmatter/api/terminal_operators,
+ % results 
+ ./mainmatter/results/future_features,
+ ./mainmatter/results/discussion,
+ ./mainmatter/results/examples,
+ ./mainmatter/results/user_testing_evaluatio,
+ % appendix
+ ./backmatter/reflection,
+ ./backmatter/declaration_of_independence
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -57,8 +84,10 @@ a4paper                     %a4 format
 %Frontmatter
 \begin{document}
 \sloppy
-\include{./frontmatter/Titlepage}
-\include{./frontmatter/Abstract}
+\include{./frontmatter/titlepage}
+\include{./frontmatter/abstract}
+\include{./frontmatter/introduction}
+\include{./frontmatter/note_of_thanks}
 \cleardoublepage                                        %alle gleitobj. ausgeben und wechsel auf rechte seite
 \tableofcontents
 \cleardoublepage
@@ -80,15 +109,38 @@ a4paper                     %a4 format
 
 %Mainmatter                                             \chapter \section \subsection \subsubsection 
 \mainmatter	                                            %arabische Seitenzahlen
-\include{./mainmatter/Demo}
-\include{./mainmatter/Introduction}
-\include{./mainmatter/Theory}
-\include{./mainmatter/Methods}
-\include{./mainmatter/Results}
-\include{./mainmatter/Discussion}
-\include{./mainmatter/Conclusion}
-\include{./mainmatter/Code}
+\include{./mainmatter/theory/studies_surveys}
+\include{./mainmatter/theory/comparable_works}
+\include{./mainmatter/theory/description_of_used_methods}
+\include{./mainmatter/theory/literary_studies}
+\include{./mainmatter/theory/description_of_env_and_domain}
 
+\include{./mainmatter/development/power_of_the_dot}
+\include{./mainmatter/development/iterables_everywhere}
+\include{./mainmatter/development/basics_iterable_protocol}
+\include{./mainmatter/development/the_two_glues}
+\include{./mainmatter/development/monads_prototype_jinq}
+\include{./mainmatter/development/naming}
+\include{./mainmatter/development/decorating_sequences}
+\include{./mainmatter/development/experiments}
+
+\include{./mainmatter/api/introduction}
+\include{./mainmatter/api/more_monads}
+\include{./mainmatter/api/prototype_functions}
+\include{./mainmatter/api/iterator_builder}
+\include{./mainmatter/api/jinq}
+\include{./mainmatter/api/how_to_test}
+\include{./mainmatter/api/how_to_extend}
+\include{./mainmatter/api/range}
+\include{./mainmatter/api/constructors}
+\include{./mainmatter/api/special_constructors}
+\include{./mainmatter/api/operators}
+\include{./mainmatter/api/terminal_operators}
+
+\include{./mainmatter/results/user_testing_evaluation}
+\include{./mainmatter/results/examples}
+\include{./mainmatter/results/future_features}
+\include{./mainmatter/results/discussion}
 
 %Backmatter
 \cleardoublepage
@@ -99,8 +151,8 @@ title={Bibliography}]                                   %Titel des Literaturverz
 \markboth{Appendix\ \thechapter: #1}{}}                 
 \begin{appendices}                                      %umfangreichere variante als \appendix
 \clearpage
-\include{./backmatter/Appendix}
+\include{./backmatter/reflection}
+\include{./backmatter/declaration_of_independence}
 \end{appendices}
-
 
 \end{document}
