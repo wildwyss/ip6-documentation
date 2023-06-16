@@ -45,20 +45,18 @@ vim.g.tex_conceal = 'abdmg'
 -- vim.cmd('syntax enable')
 
 -- Viewer options: One may configure the viewer either by specifying a built-in
--- viewer method:
-vim.g.vimtex_view_method = 'skim'
 
 -- on apple devices:
+vim.g.vimtex_view_method = 'skim'
 vim.g.vimtex_compiler_latexmk = {
-  aux_dir = '.build',
-  out_dir = '.build',
-  options = {}
+  aux_dir = 'build',
+  out_dir = 'build',
 }
 
 -- on linux devices:
+vim.g.vimtex_view_method = 'zathura'
 vim.g.vimtex_compiler_latexmk = {
-  build_dir = '.build',
-  options = {}
+  build_dir = 'build',
 }
 
 -- for tex files width to 80
