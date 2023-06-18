@@ -4,15 +4,59 @@ better partition programs and easily hang them together later. He refers to
 this as "glue". These "glues" are on the one hand higher order functions and on
 the other hand lazy evaluation. \cite{hughes_why_1989}
 
-\subsection{Using the glues in Haskell} % (fold)
+\subsection{Using these glues in Haskell} % (fold)
 \label{sub:Using the glues in Haskel}
 \subsubsection{Higher order functions Haskell} % (fold)
 \label{sec:Higher order functions Haskell}
 Higher order functions are functions that receive another function as arguments
 or produce a function as a result. In Haskell, where the whole program is
-actually a single function, this concept is of course particularly strong. \\
+actually a single function, this concept is of course particularly strong.
 The easiest way to understand higher order functions is to look at an
-example:\\
+example:
+\begin{lstlisting}[language=Haskell, caption=Higher order functions in
+HaskellHigher order functions in Haskell \label{lst:hof_haskell}]
+double    = map (\x -> 2 * x)
+quadruple = map (\x -> 4 * x)
+doubles   = double [1,2,3,4]
+quads     = quadruple [1,2,3,4]
+print $ doubles ++ quads
+-- => Prints [2,4,6,8,4,8,12,16]
+\end{lstlisting}
 
+Listing~\ref{lst:hof_haskell} shows how the higher order function 
+works in Haskell. Code can easily be reused this way, since |map| can
+be parametrized with a function.
 % subsubsection Higher order functions Haskell (end)
+\subsection{Lazy evaluation} % (fold)
+\label{sub:Lazy evaluation}
+Lazy evaluation means that only as many program statements are evaluated as are
+actually required. This makes it possible to work with lists that have an
+infinite amount of values. This can best be shown in an example as well.
+
+\begin{lstlisting}[language=Haskell, caption=lazy evaluation in Haskell
+  \label{lst:lazy_eval_haskell}]
+as = [1..]
+doubles = double as
+
+print $ take 4 doubles 
+-- => Prints [2,4,6,8]
+\end{lstlisting}
+
+On line 1 in Listing~\ref{lst:lazy_eval_haskell} generates a
+list with infinite values is created. Then the function |double| defined in
+Listing~\ref{lst:hof_haskell}, is applied on this list. Since the list has an
+infinite amount of elements this would take forever. But since Haskell
+evaluates its statements lazy, Nothing happens on line 2. The |double| function
+is only applied when the elements are actually used. This is only the case when
+they are printed with |print|. With |take| the list is reduced to four
+elements. The function |double| is then only applied to these four elements.
+
+More theoretically, when the function |f| is applied to |g x|, |g| produces
+only as much output as |f| actually needs. Therefore, working with a big amount
+data becomes much more convenient and faster as well.
+
+Using these two concepts, it is much easier to build large programs consisting
+of small parts.
+
+% subsection Lazy evaluation (end)
 % subsection Using the glues in Haskell (end)
