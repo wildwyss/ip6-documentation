@@ -102,9 +102,9 @@ Therefore, |fmap| is just a way to "map values".
 \subsubsection{Making a Context Monadic} % (fold)
 \label{sec:Making a Context Monadic}
 Haskell defines many other functions analogous to |fmap| to interact with
-values in a context. Some of them are more powerful than |fmap|. These will not
-be discussed in detail here. For a detailed introduction to this topic, see,
-for example, HELLOWORLD. \\
+values in a context. Some of them are more powerful than |fmap|. The following
+section gives a brief overview of which operations exist on monads. For a
+detailed introduction to this topic, see, for example, HELLOWORLD. \\
 
 If the context supports the following operations, it is considered monadic:
 
@@ -158,3 +158,40 @@ section "TODO link section here".
 
 % subsubsection Why using these constraints? (end)
 % subsection Working with values in a context (end)
+
+\subsection{Monads in JavaScript} % (fold)
+\label{sub:Monads in JavaScript}
+Since monads are so good at handling values in a context, this concept is also
+interesting for JavaScript. However, JavaScript has a weaker type system than
+Haskell. Therefore, two important concepts can not be transferred to
+JavaScript: 
+\begin{enumerate}
+  \item In Haskell, it is possible, to force the type hierarchy hinted in
+    Section~\ref{sec:Making a Context Monadic}.
+  \item Haskell can use its type system to determine a specific implementation
+    for a function. The Listing~\ref{lst:hs_fn_body} shows the binding of the
+    function body to the name using the example of |fmap|:
+    \begin{lstlisting}[
+      style=Haskell,
+      caption=Haskell determines the correct function body,
+      label={lst:hs_fn_body}
+    ]
+    -- The implementation for List is used
+    print $ fmap double [1,2,3,4]
+    -- The implementation for Maybe is used
+    print $ fmap double (Just 1)
+    \end{lstlisting}
+\end{enumerate}
+
+
+Since it is not possible to implement these two concepts in JavaScript, a
+different approach to these two problems is needed:
+\begin{enumerate}
+  \item Since JavaScript can not enforce type hierarchy, we created only one
+    type, the |MonadType|. This type combines all operations a type needs to be
+    monadic.
+  \item Instead of type inference and global functions, we added all operations
+    to the corresponding object's prototype.
+\end{enumerate}
+
+% subsection Monads in JavaScript (end)
