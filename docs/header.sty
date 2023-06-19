@@ -1,25 +1,23 @@
 \ProvidesPackage{header}                                                    %Dies ist ein customised Style header
 
-\usepackage[english]{babel} 		                                        % Umlaute; Sprache: für deutsch ngerman statt english
+\usepackage[english]{babel} 		                                            % Umlaute; Sprache: für deutsch ngerman statt english
 \usepackage[utf8]{inputenc}                                                 % Texcodierung
-\usepackage[T1]{fontenc} 		                                            % Silbentrennung
+\usepackage[T1]{fontenc} 		                                                % Silbentrennung
 \usepackage{mathtools}                                                      % \mathclap
-\usepackage[normalem]{ulem}                                                           % unterstreichen \uline etc.
+\usepackage[normalem]{ulem}                                                 % unterstreichen \uline etc.
 \usepackage{cancel} 
 \usepackage{tabu}                                                           % Tabellen formatierung
 \usepackage{array,dcolumn}	                                                %Tabellen,mit Zahlen am Komma ausrichten
-\usepackage{calc}			                                                %operationen mit Längen und Massen
+\usepackage{calc}			                                                      %operationen mit Längen und Massen
 \usepackage{amssymb,amsmath,amsfonts,dsfont,fourier}                        %mathematiksymbole
 \usepackage{scrhack}
-\clubpenalty = 5000		                                                    % keine einzelne zeile anfangs seite; max 10000
-\widowpenalty = 5000 		                                                % keine einzelne zeile ende seite; max 10000
+\clubpenalty = 5000		                                                      % keine einzelne zeile anfangs seite; max 10000
+\widowpenalty = 5000 		                                                    % keine einzelne zeile ende seite; max 10000
 \usepackage[toc,page]{appendix}                                             % erweiterte anhang umgebung
 
 \usepackage{siunitx}                                                        %SI-Einheiten \SI{value}{unit} halber leerschlag
 
-\usepackage{listings} 									                    %Einfügen von Programmcode
-\lstset{numbers=left, numberstyle=\tiny, numbersep=5pt} 			        %mit Zeilennummerierung links
-
+\usepackage{listings} 									                                    %Einfügen von Programmcode
 \usepackage{paralist}                                                       %Kompakte Listen
 \let\itemize\compactitem
 \let\enditemize\endcompactitem
@@ -30,6 +28,7 @@
 
 \usepackage[backend=biber]{biblatex}                                        %literaturverzeichnis
 \addbibresource{./backmatter/lit.bib}
+
 
 %zitieren
 \usepackage[                                                                %steuert anführungszeichen << oder " etc
@@ -54,7 +53,6 @@ threshold=0                                                                 %blo
 \usepackage{subcaption}
 
 \usepackage[left=25 mm,right=25 mm,top=30 mm,bottom=30 mm]{geometry}
-
 
 %header &footer (Linien werden in den dokumentklassenoptionen definiert)
 \renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}{}}              %convert \rightmark to lower case 
@@ -91,81 +89,6 @@ threshold=0                                                                 %blo
 \definecolor{lightgray}{rgb}{0.95, 0.95, 0.95}
 \definecolor{darkgray}{rgb}{0.4, 0.4, 0.4}
 
-% Source Code colors
-% JavaScript
-\lstdefinelanguage{JavaScript}{
-  morekeywords=[1]{break, continue, delete, else, for, function, if, in,
-    new, return, this, typeof, var, void, while, with},
-  % Literals, primitive types, and reference types.
-  morekeywords=[2]{false, null, true, boolean, number, undefined,
-    Array, Boolean, Date, Math, Number, String, Object},
-  % Built-ins.
-  morekeywords=[3]{eval, parseInt, parseFloat, escape, unescape},
-  sensitive,
-  morecomment=[s]{/*}{*/},
-  morecomment=[l]//,
-  morecomment=[s]{/**}{*/}, % JavaDoc style comments
-  morestring=[b]',
-  morestring=[b]"
-}[keywords, comments, strings]
-
-\lstdefinelanguage[ECMAScript2015]{JavaScript}[]{JavaScript}{
-  morekeywords=[1]{await, async, case, catch, class, const, default, do,
-    enum, export, extends, finally, from, implements, import, instanceof,
-    let, static, super, switch, throw, try},
-  morestring=[b]` % Interpolation strings.
-}
-
-\lstalias[]{ES6}[ECMAScript2015]{JavaScript}
-
-\definecolor{mediumgray}{rgb}{0.3, 0.4, 0.4}
-\definecolor{mediumblue}{rgb}{0.0, 0.0, 0.8}
-\definecolor{forestgreen}{rgb}{0.13, 0.55, 0.13}
-\definecolor{darkviolet}{rgb}{0.58, 0.0, 0.83}
-\definecolor{royalblue}{rgb}{0.25, 0.41, 0.88}
-\definecolor{crimson}{rgb}{0.86, 0.8, 0.24}
-
-\lstdefinestyle{JSES6Base}{
-  backgroundcolor=\color{white},
-  basicstyle=\ttfamily,
-  breakatwhitespace=false,
-  breaklines=false,
-  captionpos=b,
-  columns=fullflexible,
-  commentstyle=\color{mediumgray}\upshape,
-  emph={},
-  emphstyle=\color{crimson},
-  extendedchars=true,  % requires inputenc
-  fontadjust=true,
-  frame=none,
-  identifierstyle=\color{black},
-  keepspaces=true,
-  keywordstyle=\color{mediumblue},
-  keywordstyle={[2]\color{darkviolet}},
-  keywordstyle={[3]\color{royalblue}},
-  numbers=left,
-  numbersep=5pt,
-  numberstyle=\tiny\color{black},
-  rulecolor=\color{black},
-  showlines=true,
-  showspaces=false,
-  showstringspaces=false,
-  showtabs=false,
-  stringstyle=\color{forestgreen},
-  tabsize=2,
-  title=\lstname,
-  upquote=true  % requires textcomp
-}
-
-\lstdefinestyle{JavaScript}{
-  language=JavaScript,
-  style=JSES6Base
-}
-\lstdefinestyle{ES6}{
-  language=ES6,
-  style=JSES6Base
-}
-
 \usepackage[ocgcolorlinks,                                                  %Farebe der Links definieren für abgabe: Black
     linkcolor=black,
     citecolor=green,
@@ -174,7 +97,8 @@ threshold=0                                                                 %blo
     {hyperref}
     
 \newcommand*{\Appendixautorefname}{Appendix}                                % referenz auf anhang mit keyword Appendix    Kann auf Anhang geändert werden!
-\usepackage{todonotes}                                                      %bild platzhalter
+\usepackage{todonotes}                                                      % bild platzhalter
+\usepackage{listings-settings}                                              % custom code listings
 %pdfborderstyle={/S/U/W 1},      
                                        
 
