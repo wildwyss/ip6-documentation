@@ -1,1 +1,145 @@
 \section{Decorating Sequences}
+\label{sec:Decorating Sequences}
+This chapter explores how to process Sequences by implementing the Decorator 
+Pattern and effectively managing Sequence state. Discover powerful techniques 
+to enhance Sequence functionality and manipulate data.
+
+\subsection{Decorator Pattern}
+\label{sub:Decorator Pattern}
+% TODO Zitat von Gang of four
+Let us look at the Decorator Pattern~\cite{} to understand the content of the following sections.
+In object-oriented programming, the decorator pattern is a widely used concept. 
+An object is decorated, as the name implies. As a result, an outer object refers 
+to an inner object, and both implement the same interface. As a result, the 
+outer object forwards requests to the inner one. It modifies the calls on 
+demand to manipulate or decorate the functionality of the inner one. Figure
+\ref{} shows how a decorator forwards the receiving calls and transfers the
+answer back to the client.
+
+\usetikzlibrary{calc,positioning,arrows}
+\begin{tikzpicture}[node distance=2cm,auto,>=stealth']
+  \node[] (Decorated) {Decorated};
+  \node[left = of Decorated] (Decorator) {Decorator};
+  \node[left = of Decorator] (Client) {Client};
+  \node[below of=Decorated, node distance=5cm] (Decorated_ground) {};
+  \node[below of=Client, node distance=5cm] (Client_ground) {};
+  \node[below of=Decorator, node distance=5cm] (Decorator_ground) {};
+  %
+  \draw (Client) -- (Client_ground);
+  \draw (Decorated) -- (Decorated_ground);
+  \draw (Decorator) -- (Decorator_ground);
+  \draw[->] ($(Client)!0.25!(Client_ground)$) -- node[above,scale=1,midway]{operation()} ($(Decorator)!0.25!(Decorator_ground)$); 
+  \draw[->] ($(Decorator)!0.35!(Decorator_ground)$) -- node[above,scale=1,midway]{operation()} ($(Decorated)!0.35!(Decorated_ground)$); 
+  \draw[->] ($(Decorator)!0.35!(Decorator_ground)$) -- node[above,scale=1,midway]{operation()} ($(Decorated)!0.35!(Decorated_ground)$); 
+  \draw[->] ($(Decorated)!0.55!(Decorated_ground)$) -- node[below,scale=1,midway]{returns} ($(Decorator)!0.55!(Decorator_ground)$);
+  \draw[->] ($(Decorator)!0.65!(Decorator_ground)$) -- node[above,scale=1,midway]{calls} ($(Client)!0.65!(Client_ground)$); 
+\end{tikzpicture}
+
+The Decorator Pattern is often used in object-oriented programming languages 
+because it adds additional functionality to an object at runtime. It is also 
+possible to add extended functionality to a single object of a class. In the 
+following, we will see how to exploit this to manipulate and change an Iterable.
+
+\subsection{Processing Sequences}
+\label{sec:Processing Sequences}
+We use exactly that decorating approach to process Sequences further. 
+The goal is to find a way to manipulate sequences so that they can solve 
+complex problems. With many other programming languages it is possible to write
+programs in this way. Lists and operations on lists solve numerous problems in 
+computer science. This way of programming has the advantage that the structure 
+of the code is declarative. This code is easier to understand and extend.
+
+\subsubsection{Manipulate Iteratbles with Functions}
+
+In the following, |map| serves as a representative for any function of the
+Sequence library.
+Listing~\ref{lst:impl_map} shows how |map| processes a Sequence. 
+For this, we use the Decorator approach just mentioned. To keep the example 
+simple, on Line~\ref{line:seq_definition} a client calls the map function with a Sequence of numbers. But it
+could process any kind of iterables.
+\newline
+On line~\ref{line:args}, the function signature shows that a client can invoke 
+|map| with two arguments: a mapper-function capable of processing an element of
+an iterable and an iterable itself. An iterable must adheres to the protocol outlined in 
+Section~\ref{subsub:The Iterable Protocol}. As a result, map can process 
+Sequences, Arrays or any other iterable. 
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Implementation of map,
+  label={lst:impl_map}
+  ]
+const map = mapper => iterable => { *'\label{line:args}'*
+*'\label{line:state_iterable}'*
+const mapIterator = () => {
+   const inner = iteratorOf(iterable);*'\label{line:state_iterator}'*
+   let mappedValue;
+ 
+   const next = () => {
+     const { done, value } = inner.next();*'\label{line:inner_next}'*
+     if (!done) mappedValue = mapper(value);
+ 
+     return { /**@type boolean */ done, value: mappedValue }
+   };
+ 
+   return { next };
+  };
+ 
+  return createMonadicSequence(mapIterator);
+};
+
+const sequence = Sequence(0, x => x < 10, x => x++);*'\label{line:seq_definition}'*
+const mapped   = map(x => x * 2)(sequence);*'\label{line:obj_mapped}'*
+\end{lstlisting}
+
+Because map decorates iterables, |map| also returns an object of type Iterable. 
+We define this object on line~\ref{line:obj_mapped} as mapped. 
+Consequently, |map| also has a next function. Since the Iterable protocol 
+specifies only this single function, it is the only one that must be externally 
+callable. The object mapped now forwards function calls of the next function to 
+the inner iterable, on line~\ref{line:inner_next}. The mapper function then processes the 
+result and returns it.
+
+\subsection{Benefits form the Decorater Approach}
+\label{sub:Benefits form the Decorater Approach}
+This section discusses the benefits and consequences of using the Decorator Pattern 
+to implement the Sequence Library.
+
+\subsubsection{Standalone Functions}
+\label{subsub:Standalone Functions}
+In an object-oriented approach, the Sequence object defines the functions to 
+process the elements. Functions are available by using dot notation. Similar to 
+Java implements the Stream API. However, with the approach of programming the 
+functions independently, there are three significant advantages:
+\begin{enumerate}
+  \item {Strict adherence to the open-close principle. Changes to a function do
+      not affect the implementation of Sequence. Also, extensions to the 
+      Sequence library do not affect existing code.
+    }
+  \item{Adherence to the single responsibility approach. The Sequence 
+      constructor has only the task of creating a sequence. Mapping the
+    elements of a sequence is not its responsibility.
+  }
+  \item{Easy scalability is guaranteed. It is very straightforward to add new 
+    functionality from the outside.
+  }
+\end{enumerate}
+
+Due to the independent implementation of the functions, the last parameter can 
+be the iterable object. The functions therefore define the parameters in curried 
+style. Therefore, it is possible to benefit from eta-reduction in different
+situations.
+
+\subsection{Stateful Decorating}
+\label{sub:Stateful Decorating}
+A state is present as soon as functions decorate iterables or implement 
+additional functionalities. This chapter is about where the functions implement 
+this state and which consequences this implies.
+
+There are two possible locations to bring state in. First into the 
+closure scope of the surrounding function of the iterator, in
+listing~\ref{lst:impl_map} on line~\ref{line:state_iterable} in the following 
+referred as iterable state. Second into the closure scope of 
+the function which is returned from the |[Symbol.iterator]| property, on
+line~\ref{line:state_iterator}, reffered to iterator state. Both variants are possible and will 
+be discussed in the following.
