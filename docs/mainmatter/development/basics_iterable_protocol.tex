@@ -1,11 +1,12 @@
-\lstMakeShortInline[columns=fixed]|
 \section{Sequence and Iterable in General}
+\label{sec:Sequence and Iterable in General}
 In this section, we explain the concept of iterable objects and show how to 
 create them. Sequence is one such implementation. It illustrates how the 
 benefits of iterators are utilized in a specific implementation using 
 illustrations and explanations.
 
 \subsection{What is an Iterator?}
+\label{sub:What is an Iterator?}
 Iterators are a common notion in computer science. An iterator is essentially 
 a mechanism to access elements of any data structure. An iterator uses a 
 function call to return the next element. The iterator either acts on a data 
@@ -13,19 +14,20 @@ structure in memory or computes the elements when they are queried. Iterators
 are an essential part of this work. As a result, the fundamentals are essential 
 to understand and will be covered in greater depth in the next sections.
 
-
 % \subsection{Iteration Protocols in JavaScript}
 \subsection{Exploring the Meaning Of Protocols}
+\label{sub:Exploring the Meaning Of Protocols}
 An iterator in JavaScript is an object that is implemented in compliance with
-the JavaScript iterator and iterable protocols \cite{noauthor_iteration_2023}
+the JavaScript iterator and iterable protocols \cite{mdn_iteration_2023}
 (henceforth called JS iteration protocols). An iterator is characterized by the
 fact that it can only be iterated once over a set of elements. After that the
 iterator is used up and further access works on a new instance of it.
 
 
 \subsubsection{The Iterable Protocol}
+\label{subsub:The Iterable Protocol}
 An object is an iterable according to the JS iterable protocol if it has a
-property with the name |[symbol.iterator]|. Thus, such an object is of type
+property with the name |[Symbol.iterator]|. Thus, such an object is of type
 |Iterable<T>| which defines its iteration behavior. All objects in JavaScript
 that have this property can be processed using destructuring and |for...of|
 loop. The sample code for defining a property named |[Symbol.iterator]| is shown
@@ -45,6 +47,7 @@ function which has to follow the iterator protocol.
 \end{lstlisting}
 
 \subsubsection{The Iterator Protocol}
+\label{subsub:The Iterator Protocol}
 This protocol defines the structure of the iterator object. This object is
 obtained when calling the |[Symbol.iterator]| property. The object must implement a
 function next, which defines how and which values are returned when iterating.
@@ -65,7 +68,8 @@ never finished.
   };
 \end{lstlisting}
 
-\paragraph{Creating Iterables}
+\subsubsection{Creating Iterables}
+\label{subsub:Creating Iterables}
 By combining the two protocols, the result could look like listing
 \ref{lst:protocols}. in listing \ref{lst:protocols} the constructor 
 |SampleIterable| on line 1 wraps the two previously
@@ -107,8 +111,9 @@ There are already some language built-in iterable in JavaScript. Array and
 HTML Collections are probably the most prominent of these.
 
 \subsection{Types of Iterables}
-Previously we saw that there is a distinction between iterables and iterator. 
-These abstractions also have their own types. 
+\label{sub:Types of Iterables}
+Previously we saw that there is a distinction between iterables~\ref{subsub:Creating Iterables} 
+and iterator~\ref{subsub:The Iterator Protocol}. These abstractions also have their own types. 
 Listing \ref{lst:iterable_types}  shows an excerpt of the relevant types.
 
 \begin{lstlisting}[
@@ -148,6 +153,7 @@ iterators have been built and reveal that some objects are nested within each
 other. There is a reason for this. We will get to the roots of these later.
 
 \subsection{Building custom Series of Data}
+\label{sub:Building custom Series of Data}
 The last chapter has shown how to make an object iterable. This chapter 
 demonstrates how powerful concepts can be created using the protocols 
 discussed so far. Previously, an endless iterator that generates only ones 
@@ -155,6 +161,7 @@ served as an illustration. Now, the goal is to create a constructor that can
 generate arbitrary series of data.
 
 \subsection{Sequence - The Naming of connected Data}
+\label{sub:Sequence - The Naming of connected Data}
 As is often the case in computer science, one of the hardest things is finding 
 the right names. Various arguments have contributed to the fact that the 
 constructor for creating any series is called "Sequence". First, it should be 
@@ -166,6 +173,7 @@ only a minimum of memory is needed, because the subsequent elements are not yet
 in memory.
 
 \subsection{Everything a Sequence needs}
+\label{sub:Everything a Sequence needs}
 To define a sequence of data, three essential elements must be specified. 
 Firstly, a fixed starting value for the sequence is required. Secondly, a 
 function must be defined to calculate the next element based on its predecessor. 
@@ -208,7 +216,8 @@ const Sequence = (start, untilFunction, incrementFunction) => {
 \end{lstlisting}
 
 
-\paragraph{Using a Sequence}
+\subsubsection{Using a Sequence}
+\label{subsub:Using a Sequence}
 Listing \ref{lst:even-sequence} shows the definition of a sequence over even numbers smaller than 
 10. Then the |for..of| loop iterates over each element of the sequence until
 |done| is true. Meanwhile, |console.log| writes the elements out to the terminal.
