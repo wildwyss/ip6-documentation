@@ -7,6 +7,7 @@ to enhance Sequence functionality and manipulate data.
 \subsection{Decorator Pattern}
 \label{sub:Decorator Pattern}
 % TODO Zitat von Gang of four
+% TODO Quelle
 Let us look at the Decorator Pattern~\cite{} to understand the content of the following sections.
 In object-oriented programming, the decorator pattern is a widely used concept. 
 An object is decorated, as the name implies. As a result, an outer object refers 
@@ -16,6 +17,7 @@ demand to manipulate or decorate the functionality of the inner one. Figure
 \ref{} shows how a decorator forwards the receiving calls and transfers the
 answer back to the client.
 
+% TODO: replace
 \usetikzlibrary{calc,positioning,arrows}
 \begin{tikzpicture}[node distance=2cm,auto,>=stealth']
   \node[] (Decorated) {Decorated};
@@ -136,10 +138,105 @@ A state is present as soon as functions decorate iterables or implement
 additional functionalities. This chapter is about where the functions implement 
 this state and which consequences this implies.
 
-There are two possible locations to bring state in. First into the 
-closure scope of the surrounding function of the iterator, in
-listing~\ref{lst:impl_map} on line~\ref{line:state_iterable} in the following 
-referred as iterable state. Second into the closure scope of 
-the function which is returned from the |[Symbol.iterator]| property, on
-line~\ref{line:state_iterator}, reffered to iterator state. Both variants are possible and will 
-be discussed in the following.
+There are two possible locations to bring state in. 
+Both variants are possible and is content of the following two scenarios. 
+The first scenario places the state into the closure scope of the surrounding 
+function of the iterator. The second scenario implements the state into the 
+closure scope of the iterator.
+For both variants it is of great relevance that the underlying object must not 
+be changed.
+
+\subsubsection{Scenario 1}
+Listing~\ref{lst:scen_1} shows that the state is on line~\ref{line:scen_1_state}.
+The state is created by calling SampleIterator and is valid for the entire 
+object's lifetime. 
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Scenario 1 - State in closure scope of iterable,
+  label={lst:scen_1}
+  ]
+const SampleIterable = () => {
+
+  let i = 0; *'\label{line:scen_1_state}'*
+  const next = () => {
+    return { done: i > 5, value: i++ };
+  };
+
+  const copy = ...
+
+  return {[Symbol.iterator]: () => ({ next })}
+};
+\end{lstlisting}
+
+Listing~\ref{lst:scen_1_demo} shows a possible program flow. An object is created 
+and then partially processed. On line~\ref{line:scen1_map} |map| uses the same 
+object as well. Line~\ref{line:scen1_output} shows an expected result. 
+Nevertheless, copying the object before processing is necessary to achieve this 
+result. That implies that each sequence must be copyable. Generating a new 
+sequence with the same parameters allows for creating a copy of the sequence. 
+The same is true for any function that decorates a sequence.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Scenario 1 - Example usage,
+  label={lst:scen_1_demo}
+  ]
+const seq = SampleIterable(0, x => x < 5, x => x++); // [0, 1, 2, 3, 4]
+const mapped = map(id)(seq); *'\label{line:scen1_map}'*
+
+for (const elem of mapped) {
+  break; // Just consuming one element
+}
+for (const elem of seq) {
+  console.log(elem);
+}
+// => Logs: '[0, 1, 2, 3, 4]' *'\label{line:scen1_output}'*
+\end{lstlisting}
+
+In many respects, copying is an elaborate thing. All functions and constructors 
+dealing with sequences must implement it. Thus, implementation errors are 
+possible. On the other hand, it is also an extra effort from a performance point 
+of view. It means more function calls and also giant stack calls to manage.
+The advantage of this implementation is that partially processed iterators could 
+be further used with the current state because they do not reinitialize the 
+state with a new iteration.
+Because all objects must have copy implemented, Sequence Library functions can 
+only process objects that implement copy. That means JavaScipt array or HTML 
+Collection would not be processable.
+
+\subsubsection{Scenario 2}
+Listing~\ref{lst:scen_2} represents scenario 2. Here, the state is on 
+line~\ref{line:scen_2_state}. Running the code from the previously
+Listing~\ref{lst:scen_1_demo} produces the same result. The difference is that 
+the object does not have to be copyable. Each call to |Symnol.iterator| creates
+a new object. This type of iterator is immutable. As a consequence, 
+copying is not necessary. Another advantage is that all functions of the 
+Sequence Library can process objects with the |Symbol.iterator| property, such 
+as an JavaScipt array.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Scenario 2 - State in closure scope of iterator,
+  label={lst:scen_2}
+  ]
+const SampleIterable2 = () => {
+
+  return {
+    [Symbol.iterator]: () => {
+      let i = 0; *'\label{line:scen_2_state}'*
+      return {
+        next: () => ({ done: i > 5, value: i++ })
+      }
+    }
+  };
+};
+\end{lstlisting}
+
+In this chapter, we have examined the possibilities for adding State to 
+sequences. Due to the advantages of immutability, we built the sequence library 
+according to Scenario 2.
+
+% Dieser Ansatz stellt eine Alternative dar zur aktuellen Implementierung der Sequence Library.
+% Die folgenden Gründe haben dazu beigetragen, die Umsetzung wie im darauf folgenden Abschnitt beschrieben zu machen.
+
