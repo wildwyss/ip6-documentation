@@ -1,0 +1,127 @@
+\section{Monads in JavaScript} % (fold)
+\label{sec:Monads in JavaScript}
+
+\subsection{Wrapping values in a context} % (fold)
+\label{sub:Wrapping values in a context}
+
+In Haskell, you often work with values wrapped in a particular context. This
+context can be, for example, a list. Nevertheless, this context can also be
+another data structure, for example, |Maybe|. \\
+For the context |Maybe| two implementations in Haskell co-exist:
+
+% section Monads in JavaScript (end)
+\begin{lstlisting}[
+  style=Haskell,
+  caption=The data type Maybe in Haskell,
+  label={lst:maybe_hs}
+]
+-- defining the datatype Maybe
+data Maybe a = Nothing | Just a
+\end{lstlisting}
+
+The Listing~\ref{lst:maybe_hs} defines this datatype. Why is this useful?
+Imagine you want to create a function |head|, which returns the first value of
+a given list. |head| is pretty simple to implement. But wait, what to do when
+the list is empty? In object-oriented languages, one might return |null|. The
+problem with this solution is that the user must remember that the list can be
+empty, and thus the result of |head| can be |null|. This is very error-prone.
+\\
+
+That is where the new datatype |Maybe| comes in. |Maybe| allows us to describe
+either the absence of a value or the value itself. The following
+Listing~\ref{lst:safe_head} defines a new function |safeHead|
+(line~\ref{line:safe_head1}), which does
+precisely this - it returns |Just a| when the list is not empty
+(line~\ref{line:safe_head2}) and |Nothing| otherwise (line~\ref{line:safe_head3}):
+
+\begin{lstlisting}[
+  style=Haskell,
+  caption=Safely get the first element of a list,
+  label={lst:safe_head}
+]
+-- a function which produces a Maybe:
+safeHead :: [a] -> Maybe a *'\label{line:safe_head1}'*
+safeHead (a:_) = Just a *'\label{line:safe_head2}'*
+safeHead []    = Nothing *'\label{line:safe_head3}'*
+
+printHead list = print $ case (safeHead list) of 
+  Just val -> show val
+  Nothing  -> "List was empty!"
+
+printHead [1,2,3,4]
+-- Prints '"1"'
+printHead []
+-- Prints '"List was empty!"'
+\end{lstlisting}
+
+The difference with returning just |null| is that the user now has to
+explicitly deal with the case where there is no first element. This leads to
+improved safety.
+% subsection Wrapping values in a context (end)
+
+\subsection{Working with values in a context} % (fold)
+\label{sub:Working with values in a context}
+\subsubsection{Introducing fmap} % (fold)
+\label{subsub:Introducing fmap}
+The example with |Maybe| shows how values work in a context. Over time,
+however, it can become tedious to keep making this distinction between whether
+it has value. Therefore, Haskell offers a concept of working with values in a
+context. The simplest way to work with the value using this concept is using
+the function |fmap|. |fmap| knows how to execute a function for the value(s) in
+a context. Listing~\ref{lst:fmap_maybe_hs} shows the usage of |fmap| for
+|Maybe|:
+
+\begin{lstlisting}[
+  style=Haskell,
+  caption=fmap applied to Maybe,
+  label={lst:fmap_maybe_hs}
+]
+double = (\x -> 2*x)
+print $ fmap double (Just 5)
+-- Prints 'Just 10' 
+print $ fmap double Nothing
+--> Prints 'Nothing'
+\end{lstlisting}
+
+Similar to |Maybe| also lists describe such a context.
+Listing~\ref{lst:hs_fmap_list} shows how |fmap| works on lists:
+
+\begin{lstlisting}[
+  style=Haskell,
+  caption=fmap applied to a list,
+  label={lst:hs_fmap_list}
+]
+print $ fmap double [1,2,3,4,5]
+--> Prints '[2,4,6,8,10]'
+\end{lstlisting}
+
+Applying |fmap| to a list has the same result as applying |map| to a list.
+Therefore, |fmap| is just a way to "map values".
+
+% subsubsection Introducing fmap (end)
+\subsubsection{Making a Context Monadic} % (fold)
+\label{sec:Making a Context Monadic}
+Haskell defines many other functions analogous to |fmap| to interact with
+values in a context. Some of them are more powerful than |fmap|. These will not
+be discussed in detail here. For a detailed introduction to this topic, see,
+for example, HELLOWORLD. \\
+
+If the context supports the following operations, it is considered monadic:
+
+\begin{itemize}
+  \item \textbf{Functor}: A context |f| is a |Functor| when it provides a function
+|fmap|. |fmap| receives another function as an argument and applies it to the
+value(s) in the context.\\
+\item \textbf{Applicative}: A context |f| is an |Applicative| when it is a |Functor|
+and additionally provides a function |<*>| (pronounced "app"). |<*>| receives
+another function as an argument wrapped in the same context and applies the
+unwrapped function to the value(s) in the context.\\
+\item \textbf{Monad}: A context |f| is a |Monad| when it is an |Applicative| and
+additionally provides a function |>>=| (pronounced "bind"). |>>=| takes another
+function as an argument which, when applied to the value(s), again creates a
+value in the same context. So that the value(s) are not nested in the context,
+|>>=| resolves the inner context again.
+\end{itemize}
+
+% subsubsection Making a Context Monadic (end)
+% subsection Working with values in a context (end)
