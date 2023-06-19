@@ -1,0 +1,324 @@
+\section{Modularizing programs}
+This section explains how to break down programs and functions into small,
+reusable pieces using lazy evaluation and higher-order functions. The start
+shows how Haskell implements these concepts. The subsequent discussion covers
+the application and limitations of these concepts in JavaScript before showing
+how the Sequence Library overcomes these limitations, providing valuable tools
+for writing reliable and reusable code.
+
+\subsection{Gluing Programs together} % (fold)
+\label{sub:Gluing Programs together}
+
+John Hughes says functional programming languages provide two extra ways to
+better partition programs and easily hang them together later. He refers to
+this as "glue". These "glues" are on the one hand higher order functions and on
+the other hand lazy evaluation. \cite{hughes_why_1989}
+% subsection Gluing Programs together (end)
+
+
+\subsection{Using these Glues in Haskell} % (fold)
+\label{sub:Using these Glues in Haskel}
+
+\subsubsection{Higher Order Functions in Haskell} % (fold)
+\label{sec:Higher order functions Haskell}
+Higher order functions are functions that receive another function as arguments
+or produce a function as a result. In Haskell, where the whole program is
+actually a single function, this concept is of course particularly strong.
+The easiest way to understand higher order functions is to look at an
+example:
+
+\begin{lstlisting}[style=Haskell, caption=Higher order functions in
+Haskell \label{lst:hof_haskell}]
+double    = \x -> 2 * x
+quadruple = \x -> 4 * x
+doubles   = map double [1,2,3,4]
+quads     = map quadruple [1,2,3,4]
+
+print $ doubles ++ quads
+-- Prints '[2,4,6,8,4,8,12,16]'
+\end{lstlisting}
+
+Listing~\ref{lst:hof_haskell} shows how higher order functions work in Haskell.
+Code can easily be reused this way, since |map| can be parametrized with a
+function.
+% subsubsection Higher order functions Haskell (end)
+
+\subsubsection{Lazy evaluation} % (fold)
+\label{subsub:Evaluation}
+Lazy evaluation means that only as many program statements are evaluated as are
+actually required. This makes it possible to work with lists that have an
+infinite amount of values. This can best be shown in an example as well.
+
+\begin{lstlisting}[
+  style=Haskell,
+  caption=lazy evaluation in Haskell,
+  label={lst:lazy_eval_haskell}
+]
+as = [1..]*'\label{line:lazy_eval_haskell_1}'*
+doubles = map double as*'\label{line:lazy_eval_haskell_2}'*
+
+print $ take 4 doubles 
+-- Prints '[2,4,6,8]'
+\end{lstlisting}
+
+Line~\ref{line:lazy_eval_haskell_1} in Listing~\ref{lst:lazy_eval_haskell}
+defines a list with infinite values is created. Then the function |double|
+defined in Listing~\ref{lst:hof_haskell}, is applied on this list. Since the
+list has an infinite amount of elements this would take forever. But since
+Haskell evaluates its statements lazy, Nothing happens on
+line~\ref{line:lazy_eval_haskell_2}. The |double| function is only applied when
+the elements are actually used. This is only the case when they are printed
+with |print|. With |take| the list is reduced to four elements. The function
+|double| is then only applied to these four elements. \\ More theoretically,
+when the function |f| is applied to |g x|, |g| produces only as much output as
+|f| actually needs. Therefore, working with a big amount data becomes much more
+convenient and faster as well. If the elements in a list are generated with a
+rule (as with list comprehensions), lazy evaluation brings great advantages:
+The whole list will never materialize in the memory, but only the current
+value. So you don't have to worry about what happens when large amounts of data
+are processed. \\ Using these two concepts, it is much easier to build large
+programs consisting of small parts.
+% subsubsection Lazy evaluation (end)
+% subsection Using the glues in Haskell (end)
+
+\subsection{Using these Glues in JavaScript} % (fold)
+\label{sub:Using these Glues in JavaScript}
+
+\subsubsection{Higher Order Functions in JavaScript} % (fold)
+\label{subsub:Higher Order Functions in JavaScript}
+Higher order functions in JavaScript work similarly as they to in Haskell. \\
+So the meaning of the Listing~\ref{lst:hof_haskell} can be translated to 
+JavaScript like:
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=Higher order functions in JavaScript,
+  label={lst:hof_in_js}
+]
+const double    = x => 2 * x;
+const quadruple = x => 4 * x;
+const doubles   = [1,2,3,4].map(double);
+const quads     = [1,2,3,4].map(quadruple);
+
+console.log(doubles.concat(quads));
+// => Logs '2, 4, 6, 8, 4, 8, 12, 16'
+\end{lstlisting}
+% subsubsection Higher Order Functions in JavaScript (end)
+
+\subsubsection{Eager Evaluation in JavaScript} % (fold)
+\label{subsub:Eager Evaluation in JavaScript}
+
+% subsubsection Lazy Evaluation in JavaScript (end)
+When it comes to lazy evaluation in JavaScript, it becomes less intuitive:
+JavaScript does not know this concept when working with its in-built arrays.
+Mapping over an array producing a side effect can shed some light on this:
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=JavaScript evaluates eagerly,
+  label={lst:js_eagerly_eval}
+]
+const as     = [1,2,3,4,5];
+const bs     = [];
+const mapped = as.map(x => {
+  bs.push(x);
+  return 2*x;
+});
+
+console.log(mapped.slice(0,4));
+// => Logs '2, 4, 6, 8'
+console.log(bs);
+// => Logs '2, 4, 6, 8, 10'
+\end{lstlisting}
+
+Through Listing~\ref{lst:js_eagerly_eval} it becomes clear, that although only
+the first four elements of the array are actually used, each element of the
+array is still traversed using the |map| function. This can be seen from the
+fact that the array |bs| contains all elements of the array |as| and not just
+the first four.
+
+\subsubsection{Lazy Evaluating Iterables} % (fold)
+\label{Lazy Evaluate Iterables}
+
+% subsubsection Lazy Evaluate Iterables (end)
+The eager evaluation of JavaScript is a significant limitation when working with it.
+Fortunately, JavaScript provides a way to emulate this laziness using the
+Iterable protocols, which the section~\ref{sec:Sequence and Iterable in General}
+describes. \\ 
+
+With the use of the sequence library, it is possible to rewrite the JS Code of
+Listing~\ref{lst:js_eagerly_eval} lazily:
+
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=Lazy evaluation in JavaScript,
+  label={lst:lazy_eval_js}
+]
+const as     = [1,2,3,4,5];
+const bs     = [];
+const mapped = map(x => {
+  bs.push(x);
+  return 2*x;
+})(as);
+
+console.log(...take(4)(mapped));
+// => Logs '2, 4, 6, 8'
+console.log(bs);
+// => Logs '2, 4, 6, 8'
+\end{lstlisting}
+
+The first output is the same as in Listing~\ref{lst:js_eagerly_eval} - the
+first four elements of the array |as| have been multiplied by 2. However, the
+second output differs: the array |bs| now contains only four elements. So the
+function passed to |map| was only applied to four elements of the initial
+array! This proves that arrays are processed lazily when transformed using the
+Sequence Library!\\
+This works because the iterable protocols process element by element. The
+iterator delivers the next element only if it is requested. If no further
+element is needed, you just don't ask the iterator for the next element! This
+decouples the termination condition (asking the iterator for another element)
+from the loop body (how the iterator generates/accesses the next element).\\
+
+Furthermore, it is even possible to port the initial Haskell laziness
+example defined in Listing~\ref{lst:lazy_eval_haskell} to JavaScript:
+\begin{lstlisting}[
+  style=ES6,
+  caption=Process infinite sequences in JavaScript,
+  label={lst:inf_seq_js}
+]
+const seq = Sequence(1, _ => true, x => x + 1);*'\label{line:inf_seq_js_1}'*
+const doubles = map(double)(seq);
+
+console.log(...take(4)(doubles));
+// => Logs '2, 4, 6, 8'
+\end{lstlisting}
+
+If the code displayed in Listing~\ref{lst:inf_seq_js} were evaluated eagerly,
+this would go on forever since line~\ref{line:inf_seq_js_1} defines a sequence
+with infinite elements. \\ 
+
+\subsection{Lazy evaluation and side effects} % (fold)
+\label{sub:Lazy evaluation and side effects}
+Decoupling the loop body and termination condition helps to consider these two
+concepts separately. This split reasoning makes sense since they often do not
+relate to each other. Why change the whole list of elements if the program only
+uses the first five? In JavaScript, however, this thinking carries a danger
+that cannot occur in pure functions like those used in Haskell. \\ 
+The following Listing~\ref{lst:side_effects_lazy_js} states the problem:
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=Side effects and lazy evaluation,
+  label={lst:side_effects_lazy_js}
+]
+let i = 0;
+const mapped = map(x => {
+  i++;
+  return 2 * x;
+})([1,2,3,4]);
+
+console.log(i);
+// => Logs '0' i has not been incremented
+console.log(...take(2)(mapped);
+// => Logs '2, 4' 
+console.log(i);
+// => Logs 2 i has only been incremented two times
+\end{lstlisting}
+
+The developer writing the loop body cannot infer from the length of the list
+how often the function runs. Performing side effects in the loop body can lead
+to unexpected behavior, therefore. 
+
+It is tough to make assumptions about |i|, because:
+\begin{itemize}
+  \item |i| is only calculated when the program is evaluated
+  \item It is not possible to predict what value |i| will have when the program
+    finishes.
+\end{itemize}
+This example thus shows that lazy evaluation and side effects almost exclude
+each other. Therefore, omitting side effects when working with lazy evaluation
+makes sense. In Haskell, where the type system can exclude side effects per
+function, this is not a problem. Since side effects often make a program harder
+to understand, getting rid of it feels even more natural.
+% subsection Lazy evaluation and side effects (end)
+
+\subsubsection{Placing the Receiver at the End} % (fold)
+\label{subsub:Placing the Receiver at the End}
+Compared to object-oriented programming languages, where the receiver of an
+operation is always placed before the point (i.e., at the beginning), functions
+in Haskell usually expect it as the last argument. If one sticks to this, it is
+possible to build a new function from a pre-configured function in Haskell
+(line~\ref{line:precon_fs_hs_1} of Listing~\ref{lst:precon_fs_hs}) and then
+reuse these this function:
+
+\begin{lstlisting}[
+  style=Haskell,
+  caption=Pre-configured functions in Haskell,
+  label={lst:precon_fs_hs}
+]
+double    = \x -> 2 * x
+doubleAll = map double --*'\label{line:precon_fs_hs_1}'* preconfigure map with the function double
+as        = [1,2,3,4]
+bs        = [5,6,7,8]
+
+print $ doubleAll as ++ doubleAll bs
+-- Prints '[2,4,6,8,10,12,14,16]'
+\end{lstlisting}
+
+This paradigm allows it also to link existing functions together using the |.|
+operator:
+
+\begin{lstlisting}[
+  style=Haskell,
+  caption=Function composition in Haskell,
+  label={lst:fn_comp_hs}
+]
+-- "sum" sums up all elements in the list
+doubleAndSum = sum . doubleAll
+
+print $ doubleAndSum [1,2,3,4]
+-- Prints '20'
+\end{lstlisting}
+
+The Listing~\ref{lst:fn_comp_hs} links the function |doubleAll| defined in
+Listing~\ref{lst:precon_fs_hs} and the function |sum| to create a new function
+applicable to any list with numerical values. This concept makes the code very
+reusable.\\
+Placing the receiver at the end is another powerful modularization
+tool. Therefore, the sequence library supports this kind of modularization.
+Let us refactor the initial example from Listing~\ref{lst:hof_in_js}, which 
+shows how higher-order functions work in JavaScript:
+\begin{lstlisting}[
+  style=ES6,
+  caption=Receiver before the point,
+  label={lst:rec_bef_point}
+]
+// initial code
+const double  = x => 2 * x;
+const doubles = [1,2,3,4].map(double);
+
+// refactored using plain JS
+const doubleAll = receiver => receiver.map(double);
+console.log(doubleAll([1, 2, 3, 4]));
+// => Logs '2, 4, 6, 8'
+\end{lstlisting}
+
+The Listing~\ref{lst:rec_bef_point} shows that this could be fixed using a
+function which gets the receiver as an argument. However, this is not very
+convenient. The sequence library provides a more elegant way to solve this:
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=Place the receiver at the end in JavaScript,
+  label={lst:rcv_at_end_js}
+]
+const doubleAll = map(double);
+\end{lstlisting}
+
+The code in Listing~\ref{lst:rcv_at_end_js} is not only less to type but also
+more accurate when reading because the term |doubleAll = map(double)| says that
+the pre-configured function |map(double)| gets a new name (|doubleAll|). No worrying about
+parameter naming is needed here.
+% subsubsection Placing the Receiver at the End (end)
+
