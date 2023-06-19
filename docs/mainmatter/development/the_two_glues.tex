@@ -236,11 +236,11 @@ It is tough to make assumptions about |i|, because:
   \item It is not possible to predict what value |i| will have when the program
     finishes.
 \end{itemize}
-
-Therefore, omitting side effects when working with lazy evaluation makes sense.
-In Haskell, where the type system can exclude side effects per function, this
-is not a problem. Since side effects often make a program harder to understand,
-getting rid of it feels even more natural.
+This example thus shows that lazy evaluation and side effects almost exclude
+each other. Therefore, omitting side effects when working with lazy evaluation
+makes sense. In Haskell, where the type system can exclude side effects per
+function, this is not a problem. Since side effects often make a program harder
+to understand, getting rid of it feels even more natural.
 % subsection Lazy evaluation and side effects (end)
 
 \subsubsection{Placing the Receiver at the End} % (fold)
