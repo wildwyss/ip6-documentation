@@ -1,8 +1,20 @@
-\section{Gluing Programs together}
+\section{Modularizing programs}
+This section explains how to break down programs and functions into small,
+reusable pieces using lazy evaluation and higher-order functions. The start
+shows how Haskell implements these concepts. The subsequent discussion covers
+the application and limitations of these concepts in JavaScript before showing
+how the Sequence Library overcomes these limitations, providing valuable tools
+for writing reliable and reusable code.
+
+\subsection{Gluing Programs together} % (fold)
+\label{sub:Gluing Programs together}
+
 John Hughes says functional programming languages provide two extra ways to
 better partition programs and easily hang them together later. He refers to
 this as "glue". These "glues" are on the one hand higher order functions and on
 the other hand lazy evaluation. \cite{hughes_why_1989}
+% subsection Gluing Programs together (end)
+
 
 \subsection{Using these Glues in Haskell} % (fold)
 \label{sub:Using these Glues in Haskel}
@@ -125,7 +137,7 @@ array is still traversed using the |map| function. This can be seen from the
 fact that the array |bs| contains all elements of the array |as| and not just
 the first four.
 
-\subsubsection{Lazy Evaluate Iterables} % (fold)
+\subsubsection{Lazy Evaluating Iterables} % (fold)
 \label{Lazy Evaluate Iterables}
 
 % subsubsection Lazy Evaluate Iterables (end)
@@ -185,6 +197,51 @@ console.log(...take(4)(doubles));
 If the code displayed in Listing~\ref{lst:inf_seq_js} were evaluated eagerly,
 this would go on forever since line~\ref{line:inf_seq_js_1} defines a sequence
 with infinite elements. \\ 
+
+\subsection{Lazy evaluation and side effects} % (fold)
+\label{sub:Lazy evaluation and side effects}
+Decoupling the loop body and termination condition helps to consider these two
+concepts separately. This split reasoning makes sense since they often do not
+relate to each other. Why change the whole list of elements if the program only
+uses the first five? In JavaScript, however, this thinking carries a danger
+that cannot occur in pure functions like those used in Haskell. \\ 
+The following Listing~\ref{lst:side_effects_lazy_js} states the problem:
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=Side effects and lazy evaluation,
+  label={lst:side_effects_lazy_js}
+]
+let i = 0;
+const mapped = map(x => {
+  i++;
+  return 2 * x;
+})([1,2,3,4]);
+
+console.log(i);
+// => Logs '0' i has not been incremented
+console.log(...take(2)(mapped);
+// => Logs '2, 4' 
+console.log(i);
+// => Logs 2 i has only been incremented two times
+\end{lstlisting}
+
+The developer writing the loop body cannot infer from the length of the list
+how often the function runs. Performing side effects in the loop body can lead
+to unexpected behavior, therefore. 
+
+It is tough to make assumptions about |i|, because:
+\begin{itemize}
+  \item |i| is only calculated when the program is evaluated
+  \item It is not possible to predict what value |i| will have when the program
+    finishes.
+\end{itemize}
+
+Therefore, omitting side effects when working with lazy evaluation makes sense.
+In Haskell, where the type system can exclude side effects per function, this
+is not a problem. Since side effects often make a program harder to understand,
+getting rid of it feels even more natural.
+% subsection Lazy evaluation and side effects (end)
 
 \subsubsection{Placing the Receiver at the End} % (fold)
 \label{subsub:Placing the Receiver at the End}
@@ -264,3 +321,4 @@ more accurate when reading because the term |doubleAll = map(double)| says that
 the pre-configured function |map(double)| gets a new name (|doubleAll|). No worrying about
 parameter naming is needed here.
 % subsubsection Placing the Receiver at the End (end)
+
