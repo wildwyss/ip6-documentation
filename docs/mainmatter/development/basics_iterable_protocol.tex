@@ -1,1 +1,238 @@
-\section{Basics of the iterable Protocol}
+\lstMakeShortInline[columns=fixed]|
+\section{Sequence and Iterable in General}
+In this section, we explain the concept of iterable objects and show how to 
+create them. Sequence is one such implementation. It illustrates how the 
+benefits of iterators are utilized in a specific implementation using 
+illustrations and explanations.
+
+\subsection{What is an Iterator?}
+Iterators are a common notion in computer science. An iterator is essentially 
+a mechanism to access elements of any data structure. An iterator uses a 
+function call to return the next element. The iterator either acts on a data 
+structure in memory or computes the elements when they are queried. Iterators 
+are an essential part of this work. As a result, the fundamentals are essential 
+to understand and will be covered in greater depth in the next sections.
+
+
+% \subsection{Iteration Protocols in JavaScript}
+\subsection{Exploring the Meaning Of Protocols}
+An iterator in JavaScript is an object that is implemented in compliance with
+the JavaScript iterator and iterable protocols \cite{noauthor_iteration_2023}
+(henceforth called JS iteration protocols). An iterator is characterized by the
+fact that it can only be iterated once over a set of elements. After that the
+iterator is used up and further access works on a new instance of it.
+
+
+\subsubsection{The Iterable Protocol}
+An object is an iterable according to the JS iterable protocol if it has a
+property with the name |[symbol.iterator]|. Thus, such an object is of type
+|Iterable<T>| which defines its iteration behavior. All objects in JavaScript
+that have this property can be processed using destructuring and |for...of|
+loop. The sample code for defining a property named |[Symbol.iterator]| is shown
+in Listing \ref{lst:iterable_protocols}. The value of this property is a
+function which has to follow the iterator protocol.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Iterable protocol,
+  label={lst:iterable_protocols}
+  ]
+  return {
+    [Symbol.iterator]: () => {
+      return { next: next };
+    }
+  }
+\end{lstlisting}
+
+\subsubsection{The Iterator Protocol}
+This protocol defines the structure of the iterator object. This object is
+obtained when calling the |[Symbol.iterator]| property. The object must implement a
+function next, which defines how and which values are returned when iterating.
+Each iteration calls the function |next|. Next returns an object, which must
+have two properties according to the iterator protocol: |value| and |done|.
+Therefore, the property |value| contains the current value of the iteration,
+while |done| represents the information on whether the end of the iteration has
+been reached. The following code \ref{lst:iterator_protocol} shows a simple example implementation. 
+Each call on |next| returns an object with the |value| 1 and the iteration is
+never finished. 
+
+\begin{lstlisting}[
+  style=ES6, caption=Iterator protocol,
+  label={lst:iterator_protocol}
+  ]
+  const next = () => {
+    return { done: false, value: 1 };
+  };
+\end{lstlisting}
+
+\paragraph{Creating Iterables}
+By combining the two protocols, the result could look like listing
+\ref{lst:protocols}. in listing \ref{lst:protocols} the constructor 
+|SampleIterable| on line 1 wraps the two previously
+defined implementations of the protocols. Objects from this constructor are now
+iterables. It has the type |Iterable<Number>| because the return value from the
+iterator is one.
+
+\begin{lstlisting}[
+  style=ES6, caption=Iterable and iterator protocol,
+  label={lst:protocols}
+  ]
+ const SampleIterable = () => {
+
+  const next = () => {
+    return { done: false, value: 1 };
+  };
+
+  return {
+    [Symbol.iterator]: () => {
+      return { next: next };
+    }
+  }
+};
+\end{lstlisting}
+
+Since |SampleIterator| follows the JS iterator protocols it is now possible to
+construct iterable objects.
+Built-in language features like |for..of| and destructuring (|...|) can now process these objects. 
+But beware, in this case, this would lead to an infinite loop because the 
+property done never becomes true. We will see examples with non-endless iterators 
+later in this. But for now, the focus here is on the protocols, therefore this 
+example will be sufficient at this point.
+\newline
+Such protocols make it possible to iterate your customized objects and
+collections. This opens new possibilities. Various programming tasks can be 
+solved in a different, probably simpler way.
+\newline
+There are already some language built-in iterable in JavaScript. Array and
+HTML Collections are probably the most prominent of these.
+
+\subsection{Types of Iterables}
+Previously we saw that there is a distinction between iterables and iterator. 
+These abstractions also have their own types. 
+Listing \ref{lst:iterable_types}  shows an excerpt of the relevant types.
+
+\begin{lstlisting}[
+  style=ES6, caption=Types of iterables,
+  label={lst:iterable_types}
+  ]
+// lib.es2015.iterable.d.ts
+
+interface Iterable<T> {
+    [Symbol.iterator](): Iterator<T>;
+}
+
+interface Iterator<T, TReturn = any, TNext = undefined> {
+    next(...args: [] | [TNext]): IteratorResult<T, TReturn>;
+    return?(value?: TReturn): IteratorResult<T, TReturn>;
+    throw?(e?: any): IteratorResult<T, TReturn>;
+}
+
+type IteratorResult<T, TReturn = any> = IteratorYieldResult<T> 
+                                      | IteratorReturnResult<TReturn>;
+
+interface IteratorReturnResult<TReturn> {
+    done: true;
+    value: TReturn;
+}
+\end{lstlisting}
+
+An iterable is of type |Iterable<T>|, whereas the object returned by the property
+|[Symbol.Iterator]| is of type |Itertator<...>|. As shown in listing
+\ref{lst:iterable_types}, an iterator is required to have a property next. 
+This is the function that returns values when iterating. These values must be 
+of type |IteratorResult<...>|. Defined on line 8 of listing 
+\ref{lst:iterable_types}. |IteratorResult<...>| itself is defined to return an 
+object of type |ItereratorReturnResult<...>|. This object contains the actual 
+values we want to work with. Examining these types illustrates how JavaScript's 
+iterators have been built and reveal that some objects are nested within each
+other. There is a reason for this. We will get to the roots of these later.
+
+\subsection{Building custom Series of Data}
+The last chapter has shown how to make an object iterable. This chapter 
+demonstrates how powerful concepts can be created using the protocols 
+discussed so far. Previously, an endless iterator that generates only ones 
+served as an illustration. Now, the goal is to create a constructor that can 
+generate arbitrary series of data.
+
+\subsection{Sequence - The Naming of connected Data}
+As is often the case in computer science, one of the hardest things is finding 
+the right names. Various arguments have contributed to the fact that the 
+constructor for creating any series is called "Sequence". First, it should be 
+clear that sequences are not conventional lists known from other programming 
+languages. However, it must be clear from the name that it is about connected 
+data. The nice thing about the objects generated by Sequence is that one has 
+the feeling of handling arbitrarily large amounts of data. In reality, however, 
+only a minimum of memory is needed, because the subsequent elements are not yet 
+in memory.
+
+\subsection{Everything a Sequence needs}
+To define a sequence of data, three essential elements must be specified. 
+Firstly, a fixed starting value for the sequence is required. Secondly, a 
+function must be defined to calculate the next element based on its predecessor. 
+Lastly, a function is needed to determine if the sequence has reached its end.
+These three elements basically define the sequence and are passed as arguments, 
+see listing \ref{lst:sequence} line 2.
+To keep the focus on the core elements of the Sequence, some functionality in 
+listing \ref{lst:sequence} is discussed later. The Next function, explained in 
+the Iterator Protocol section, is located on lines 12 -17. It contains the 
+logic to return the next object of an iteration. First, it uses |untilFunction| 
+to check if the sequence has finished. If this is not the case, the next value 
+is calculated and returned with the |incrementFunction|.
+
+\begin{lstlisting}[
+  style=ES6, caption=Parts of Sequence,
+  label={lst:sequence}
+  ]
+// Sequence.js
+const Sequence = (start, untilFunction, incrementFunction) => {
+
+  const iterator = () => {
+    let value = start;
+    /**
+     * @template _T_
+     * Returns the next iteration of this iterable object.
+     * @returns { IteratorResult<_T_, _T_> }
+     */
+    const next = () => {
+      const current = value;
+      const done = !untilFunction(current);
+      if (!done) value = incrementFunction(value);
+      return { done, value: current };
+    };
+
+    return { next };
+  };
+
+  return createMonadicSequence(iterator);
+};
+\end{lstlisting}
+
+
+\paragraph{Using a Sequence}
+Listing \ref{lst:even-sequence} shows the definition of a sequence over even numbers smaller than 
+10. Then the |for..of| loop iterates over each element of the sequence until
+|done| is true. Meanwhile, |console.log| writes the elements out to the terminal.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Sequence over the even numbers,
+  label={lst:even-sequence}
+  ]
+const startValue        = 0;
+const untilFunction     = x => x < 10;
+const incrementFunction = x => x + 2;
+
+const seq = Sequence(startValue, untilFunction, incrementFunction);
+
+for (const elem of seq) {
+  console.log(elem);
+}
+
+// => Logs '0, 2, 4, 6, 8'
+
+\end{lstlisting}
+
+Now, the ability to generate arbitrary sequences of data has been discussed. 
+However, just creation is often inadequate as there is a need to manipulate the 
+data or introduce additional levels of abstraction. In the upcoming chapter, 
+we will delve into the topic of processing such sequences.
