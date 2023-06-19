@@ -113,9 +113,13 @@ If the context supports the following operations, it is considered monadic:
 |fmap|. |fmap| receives another function as an argument and applies it to the
 value(s) in the context.\\
 \item \textbf{Applicative}: A context |f| is an |Applicative| when it is a |Functor|
-and additionally provides a function |<*>| (pronounced "app"). |<*>| receives
-another function as an argument wrapped in the same context and applies the
-unwrapped function to the value(s) in the context.\\
+and additionally provides two functions:
+\begin{itemize}
+  \item |<*>| (pronounced "app") receives another function as an
+    argument wrapped in the same context and applies the unwrapped function to
+    the value(s) in the context.
+  \item |pure| receives a single argument and wraps it in the context \\
+\end{itemize}
 \item \textbf{Monad}: A context |f| is a |Monad| when it is an |Applicative| and
 additionally provides a function |>>=| (pronounced "bind"). |>>=| takes another
 function as an argument which, when applied to the value(s), again creates a
@@ -123,5 +127,34 @@ value in the same context. So that the value(s) are not nested in the context,
 |>>=| resolves the inner context again.
 \end{itemize}
 
+Some of these functions have special rules they must follow. Chapter "TODO link
+chapter" discusses these rules using their corresponding JavaScript
+implementation.
 % subsubsection Making a Context Monadic (end)
+\subsubsection{Why using these constraints?} % (fold)
+\label{sec:Why using these constraints?}
+These constraints allow building general functions that can handle various
+types. Listing~\ref{lst:hs_why_use_constraints} shows a function |doubleAll|
+applicable to |List|s and also |Maybe|s:
+
+\begin{lstlisting}[
+  style=Haskell,
+  caption=Double the values in a context,
+  label={lst:hs_why_use_constraints}
+]
+doubleAll :: (Functor f) => f Int -> f Int
+doubleAll = fmap double
+
+print $ doubleAll [1,2,3,4]
+-- Prints '[2,4,6,8]'
+print $ doubleAll $ Just 1
+-- Prints 'Just 2'
+\end{lstlisting}
+
+Even though a |List| and a |Maybe| have nothing in common, the same function
+can be applied to both types! \\ 
+\textit{Note:} Another example that makes use of this is JINQ, which is described in the
+section "TODO link section here".
+
+% subsubsection Why using these constraints? (end)
 % subsection Working with values in a context (end)
