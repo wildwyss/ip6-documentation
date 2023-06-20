@@ -683,3 +683,71 @@ line~\ref{line:use_template_constraint} does not work anymore because it is not
 possible to abstract over another type using JSDoc.\\
 % subsubsection Limitations of JSDoc (end)
 % subsection Implementing Monadic Operaions in JavaScript (end)
+
+\subsection{Making the Sequence Monadic} % (fold)
+\label{sub:Making the Sequence Monadic}
+Section~\ref{sub:Using JSDoc to type monads} defines the function |keepEven|
+which accepts any |MonadType| as an argument. Since the |Sequence| is monadic,
+Listing~\ref{lst:keep_even_iterable} applies |keepEven| to a |Sequence| without
+defining how to implement the monadic operations on it. The following section
+shows the implementation of the monadic operaitons on the |Sequence|.\\
+The signatures of the operations are analogous to those of |Maybe|. However,
+they do not work with |MaybeMonadType| but with |SequenceMonadType|. Again, the
+prototype defines these functions. |Object.setPrototypeOf| then adds it to the
+sequence.\\
+Listing~\ref{lst:monadic_ops_sequence} shows the definition of these
+operations - it is straight forward:
+\begin{itemize}
+  \item |empty| (line~\ref{line:monadic_empty_sequence}): An empty |Sequence|
+    contains no values and returns, therefore immediately |done: true| when
+    calling |next| on its iterator.
+  \item |pure| (line~\ref{line:monadic_pure_sequence}): A |Sequence| with one
+    single value iterates only once, returning this value. |PureSequence| does
+    precisely this.
+  \item |fmap| (line~\ref{line:monadic_fmap_sequence}): Mapping a |Sequence|
+    applies the given function to each element. Which is what |map| does.
+  \item |and| (line~\ref{line:monadic_and_sequence}): Bind on a |Sequence|
+    applies the given function to each element and then flattens it. This is
+    what |bind| does.
+\end{itemize}
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=The monadic operations on the Sequence,
+  label={lst:monadic_ops_sequence}
+]
+/**
+ * @template _T_
+ * @returns SequenceType<_T_>
+ */
+SequencePrototype.empty = () => Sequence(undefined, _ => false, _ => undefined); *'\label{line:monadic_empty_sequence}'*
+
+/**
+ * @template _T_
+ * @param { _T_ } val - lifts a given value into the context
+ * @returns SequenceType<_T_>
+ */
+SequencePrototype.pure = val => PureSequence(val); *'\label{line:monadic_pure_sequence}'*
+
+/**
+ * @template _T_, _U_
+ * @param { (_T_) => _U_ } mapper - maps the value in the context
+ * @returns SequenceType<_U_>
+ */
+SequencePrototype.fmap = function (mapper) {*'\label{line:monadic_fmap_sequence}'*
+  return map(mapper)(this); 
+};
+
+/**
+ * @template _T_, _U_
+ * @param { (_T_) => SequenceType<_U_> } bindFn
+ * @returns { SequenceType<_U_> }
+ */
+SequencePrototype.and = function (bindFn) {*'\label{line:monadic_and_sequence}'*
+  return bind(bindFn)(this); 
+};
+
+\end{lstlisting}
+
+
+% subsection Making the Sequence Monadic (end)
