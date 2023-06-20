@@ -118,7 +118,10 @@ and additionally provides two functions:
   \item |<*>| (pronounced "app") receives another function as an
     argument wrapped in the same context and applies the unwrapped function to
     the value(s) in the context.
-  \item |pure| receives a single argument and wraps it in the context \\
+  \item |pure| receives a single argument and wraps it in the context. When
+    describing |pure|, people often use the term lifting instead of wrapping.
+    |pure| lifts a value into a context.\\
+ \\
 \end{itemize}
 \item \textbf{Monad}: A context |f| is a |Monad| when it is an |Applicative| and
 additionally provides a function |>>=| (pronounced "bind"). |>>=| takes another
