@@ -6,7 +6,7 @@
 
 In Haskell, you often work with values wrapped in a particular context. This
 context can be, for example, a list. Nevertheless, this context can also be
-another data structure, for example, |Maybe|. \\
+another data structure, for instance, |Maybe|. \\
 For the context |Maybe| two implementations in Haskell co-exist:
 
 % section Monads in JavaScript (end)
@@ -19,7 +19,7 @@ For the context |Maybe| two implementations in Haskell co-exist:
 data Maybe a = Nothing | Just a
 \end{lstlisting}
 
-The Listing~\ref{lst:maybe_hs} defines this datatype. Why is this useful?
+Listing~\ref{lst:maybe_hs} defines this datatype. Why is this useful?
 Imagine you want to create a function |head|, which returns the first value of
 a given list. |head| is pretty simple to implement. But wait, what to do when
 the list is empty? In object-oriented languages, one might return |null|. The
@@ -27,7 +27,7 @@ problem with this solution is that the user must remember that the list can be
 empty, and thus the result of |head| can be |null|. This is very error-prone.
 \\
 
-That is where the new datatype |Maybe| comes in. |Maybe| allows us to describe
+That is where the new datatype |Maybe| comes in. |Maybe| allows describing
 either the absence of a value or the value itself. The following
 Listing~\ref{lst:safe_head} defines a new function |safeHead|
 (line~\ref{line:safe_head1}), which does
@@ -54,10 +54,10 @@ printHead []
 -- Prints '"List was empty!"'
 \end{lstlisting}
 
-The difference with returning just |null| is that the user now has to
-explicitly deal with the case where there is no first element. This leads to
-improved safety.
-\subsubsection{Doing the same in JavaScript} % (fold)
+When returning just |null|, the user has to explicitly deal with the case where
+there is no first element. This leads to improved safety.
+
+\subsubsection{Doing the Same in JavaScript} % (fold)
 \label{subsub:Doing the same in JavaScript}
 Listing~\ref{lst:maybe_js} defines the same type in JavaScript:
 \begin{lstlisting}[
@@ -69,16 +69,15 @@ const Just    = x => _f => g => g(x);*'\label{line:maybe_js1}'*
 const Nothing = f => _g => f(undefined);*'\label{line:maybe_js2}'*
 \end{lstlisting}
 
-So |Just| and |Nothing| are just functions! How could it be different in
+So |Just| and |Nothing| are only functions! How could it be different in
 functional programming? \\ 
 Line~\ref{line:maybe_js1} defines the |Just| case:
 |Just| takes a value |x| and two functions while not using the first function
 at all. |Just| applies the second function to the initial value |x|. \\ 
-|Nothing| looks very similar to |Just|, with the difference that is does not
-receive a value, and the first and not the second function will be called.\\ 
-
-Now how can this be used? Noticeably, |Just(value)| and |Nothing| have the same
-structure: both receive two functions as arguments. That means they are
+|Nothing| looks very similar to |Just|, with the difference that it does not
+receive a value. Furthermore, |Nothing| calls the second function at the end.\\ 
+Now how to use this? Noticeably, |Just(value)| and |Nothing| have the same
+structure: both receive two functions as arguments. Meaning they are
 structurally the same. Listing~\ref{lst:js_safeHead} takes advantage of this
 property to port the previous function |safeHead| to JavaScript:
 
@@ -110,7 +109,7 @@ lines~\ref{line:js_safeHead1} and following evaluate the result of |safeHead|.
 % subsubsection Doing the same in JavaScript (end)
 % subsection Wrapping values in a context (end)
 
-\subsection{Working with values in a context} % (fold)
+\subsection{Working with Values in a Context} % (fold)
 \label{sub:Working with values in a context}
 \subsubsection{Introducing fmap} % (fold)
 \label{subsub:Introducing fmap}
@@ -127,11 +126,11 @@ a context. Listing~\ref{lst:fmap_maybe_hs} shows the usage of |fmap| for
   caption=fmap applied to Maybe,
   label={lst:fmap_maybe_hs}
 ]
-double = (\x -> 2*x)
+double = \x -> 2 * x
 print $ fmap double (Just 5)
 -- Prints 'Just 10' 
 print $ fmap double Nothing
---> Prints 'Nothing'
+-- Prints 'Nothing'
 \end{lstlisting}
 
 Similar to |Maybe| also lists describe such a context.
@@ -143,7 +142,7 @@ Listing~\ref{lst:hs_fmap_list} shows how |fmap| works on lists:
   label={lst:hs_fmap_list}
 ]
 print $ fmap double [1,2,3,4,5]
---> Prints '[2,4,6,8,10]'
+-- Prints '[2,4,6,8,10]'
 \end{lstlisting}
 
 Applying |fmap| to a list has the same result as applying |map| to a list.
@@ -195,9 +194,9 @@ To really dive into it and see the rules each function follows, please see
 \cite[Chapter~12]{hutton_pih_2016}.
 
 % subsubsection Making a Context Monadic (end)
-\subsubsection{Why using these Constraints?} % (fold)
-\label{sec:Why using these constraints?}
-These constraints allow building general functions that can handle various
+\subsubsection{Why using these Abstractions ?} % (fold)
+\label{sec:Why using these Abstractions?}
+These abstractions allow building general functions that can handle various
 types. Listing~\ref{lst:hs_why_use_constraints} shows a function |doubleAll|
 applicable to |List|s and also |Maybe|s:
 
@@ -217,8 +216,8 @@ print $ doubleAll $ Just 1
 
 Even though a |List| and a |Maybe| have nothing in common, the same function
 can be applied to both types! \\ 
-\textit{Note:} Another example that makes use of this is JINQ, which is described in the
-section "TODO link section here".
+\textit{Note:} Another example that makes use of these abstractions is JINQ,
+which is described in the Section~\ref{sec:Query different Data Structures}
 
 % subsubsection Why using these constraints? (end)
 % subsection Working with values in a context (end)
@@ -230,7 +229,7 @@ interesting for JavaScript. However, JavaScript has a weaker type system than
 Haskell. Therefore, two important concepts can not be transferred to
 JavaScript: 
 \begin{enumerate}
-  \item In Haskell, it is possible, to force the type hierarchy hinted in
+  \item In Haskell, it is possible to force the type hierarchy hinted in
     Section~\ref{sec:Making a Context Monadic}.
   \item Haskell can use its type system to determine a specific implementation
     for a function. The Listing~\ref{lst:hs_fn_body} shows the binding of the
@@ -261,23 +260,22 @@ different approach to these two problems is needed:
 Section~\ref{sub:Using JSDoc to type monads} describes these workarounds in
 detail.
 
-\subsubsection{Which operations fit JavaScript?} % (fold)
+\subsubsection{Which Operations fit JavaScript?} % (fold)
 \label{subsub:Which operations fit JavaScript?}
 Since JavaScript works quite differently than Haskell, not all operations are
 equally suitable to adopt. \\
 The |MonadType| specifies the following operations:
 \begin{itemize}
   \item |famp|: Changing values inside a context is a typical pattern,
-    also in JavaScript. Porting |fmap| to JavaScript brings many benefits,
-    therefore.
+    also in JavaScript. Porting |fmap| to JavaScript brings many benefits.
   \item |pure|: At first sight |pure| is a function that is not needed.
-    However, it quickly became apparent during use that it is often practical
-    to lift an element into context via an abstracted function. \\ This is
-    often the case when using |>>|.
+    However, it quickly became apparent that lifting an element into context is
+    often practical via an abstracted function. 
+    \\ This is often the case when using |>>=|.
   \item |>>=|: The |bind| operator allows access to the result of the last
-    computation. |Bind| is the only way to determine a new result depending on
+    computation. |bind| is the only way to determine a new result depending on
     the previous result. \\ Since in JavaScript function names must not contain
-    the special characters |>| and |=|, |>>=| cannot be used. |Bind| is also
+    the special characters |>| and |=|, |>>=| cannot be used. |bind| is also
     already an existing function on every object. Using another term is
     required, therefore. We used the name |and| because it nicely expresses
     that the following result depends on the previous one.
@@ -290,24 +288,25 @@ The |MonadType| specifies the following operations:
 
 \end{itemize}
 % subsubsection Which operations fit JavaScript? (end)
-\subsubsection{What about the app operator?} % (fold)
+\subsubsection{What about the app Operator (<*>)?} % (fold)
 \label{sec:Which operations do not fit JavaScript?}
 The operator |<*>| is great when applying a function wrapped in a context to
-values wrapped in a context. This use-case is relatively rare in JavaScript
-because you do not operate as strictly in contexts as in Haskell. In addition,
-the app operator also only works on functions that accept their arguments
-curried. Most functions in JavaScript do not. Using the JavaScript |Maybe| as
-an example, Listing~\ref{lst:app_js_maybe} shows how |<*>| would work:
+values wrapped in the same context. This use-case is relatively rare in
+JavaScript because you do not operate as strictly in contexts as in Haskell. In
+addition, the app operator also only works on functions that receive their
+arguments curried. Most functions in JavaScript do not. Using the JavaScript
+|Maybe| as an example, Listing~\ref{lst:app_js_maybe} shows how |<*>| would
+work:
 
 \begin{lstlisting}[
   style=Es6,
   caption=The app operator in JavaScript used on Maybe,
   label={lst:app_js_maybe}
 ]
-const x = 1, y = 0;
-const plus = x => y => x + y; *'\label{line:app_js_maybe1}'*
+const x     = 1, y = 0;
+const plus  = x => y => x + y; *'\label{line:app_js_maybe1}'*
 const jPlus = Just(plus); 
-const sum = jPlus.app(Just(x)).app(Just(y)); *'\label{line:app_js_maybe2}'*
+const sum   = jPlus.app(Just(x)).app(Just(y)); *'\label{line:app_js_maybe2}'*
 
 sum 
   (_ => console.log("Something went wrong") // Nothing case
@@ -321,17 +320,17 @@ function is lifted into the |Maybe| context. Then |<*>| applies the function
 As this example shows, the usefulness of |<*>| is relatively limited in
 JavaScript because functions rarely occur in context. Additionally, |>>=| can
 solve everything solvable with |<*>|. \\ 
-Listing~\ref{lst:and_js_maybe} shows how |>>| solves the same problem:
+Listing~\ref{lst:and_js_maybe} shows how |>>=| solves the same problem:
 
 \begin{lstlisting}[
   style=ES6,
   caption=The app operator replaced by and,
   label={lst:and_js_maybe}
 ]
-const x = 1, y = 0;
-const plus = x => y => x + y; 
+const x     = 1, y = 0;
+const plus  = x => y => x + y; 
 const jPlus = Just(plus); 
-const sum = jPlus.and(f => f(x)).and(g => g(y)); *'\label{line:and_js_maybe1}'*
+const sum   = jPlus.and(f => f(x)).and(g => g(y)); *'\label{line:and_js_maybe1}'*
 
 sum 
   (_ => console.log("Something went wrong") // Nothing case
@@ -343,7 +342,7 @@ Which is the function |plus| the first time and then the function |plus(x)|.
 % subsubsection Which operations do not fit JavaScript? (end)
 
 % subsection Monads in JavaScript (end)
-\subsection{Using JSDoc to type monads} % (fold)
+\subsection{Using JSDoc to type Monads} % (fold)
 \label{sub:Using JSDoc to type monads}
 JSDoc is the optional type system of JavaScript. As the name says, it is pure
 documentation, therefore, not enforceable.

@@ -1,10 +1,12 @@
 \section{Query different Data Structures}
+\label{sec:Query different Data Structures}
 This section explains what Language integrated queries (LINQ) are and how they
 can be implemented in JavaScript to query various data structures easily. It
 also goes into detail about the implementation of LINQ in JavaScript. Finally,
 the section shows how you can easily browse lists of JavaScript objects using
 LINQ.
 \subsection{Introduction to LINQ} % (fold)
+\label{sub:Introduction to LINQ}
 Some programming languages offer uniform ways to query different data
 structures in an SQL-like syntax.
 
@@ -39,7 +41,6 @@ You can replace the data structure defined on line~\ref{line:linq_in_csharp1}
 with any other one compatible with this API. This abstraction makes it very
 easy to define reusable queries.
 
-\label{sub:Introduction to LINQ}
 
 % subsection Introduction to LINQ (end)
 \subsection{Why does this not exist in JavaScript?} % (fold)
@@ -255,7 +256,7 @@ a list comprehension.
 % subsubsection Creating Sequences using JINQ (end)
 
 \subsubsection{Using the JSONMonad to process lists of JavaScript objects} % (fold)
-\label{sec:Using the JSONMonad to process lists of JavaScript objects}
+\label{subsub:Using the JSONMonad to process lists of JavaScript objects}
 The |JSONMonad| provides arrays of JavaScript objects with a monadic API. The
 |JSONMonad| makes them, therefore, compatible with JINQ. This is especially
 useful when JavaScript Objects are created from JSON because they often have
@@ -321,7 +322,7 @@ assert.is(results[0], "Atonadias")
 
 % subsubsection Using the JSONMonad to process lists of JavaScript objects (end)
 \subsubsection{Conclusion} % (fold)
-\label{sec:Conclusion}
+\label{subsub:Conclusion}
 Monadic APIs allow the building of very general abstractions that can handle a
 wide variety of data types, even if they seem to have nothing in common at
 first glance - such as a |Sequence| or a |Maybe|! JINQ showcases an excellent
