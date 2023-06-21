@@ -1,0 +1,35 @@
+\section{Make iterables intelligent}
+The last chapter has shown how to make an object iterable. In this chapter we will
+discuss how logic and state can be integrated. Previously, an endless iterator
+that generates only ones served as an illustration. By using state and logic, 
+it is possible to construct more complex iterators.  
+\par
+There are two possible locations to bring state in. First into the 
+closure scope of the surrounding object of the iterator, in listing  
+\ref{lst:state} referred to as iterable state. Second into the closure scope of 
+the function which is returned from the |[Symbol.iterator]| property, marked as 
+Iterator state in listing \ref{lst:state}. Both variants are possible and will 
+be discussed in the following.
+
+\begin{lstlisting}[
+  style=ES6, caption=Iterable and iterator protocol,
+  label={lst:state}
+  ]
+ const SampleIterable = () => {
+ // Iteratble state
+  const next = () => ({ done: false, value: 1 });
+
+  return {
+    [Symbol.iterator]: () => {
+      // Iterator state
+      return { next: next };
+    }
+  }
+};
+\end{lstlisting}
+
+\subsection{Stateful Iterable}
+
+
+
+\subsection{Stateful Iterator}
