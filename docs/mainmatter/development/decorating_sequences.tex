@@ -6,9 +6,7 @@ to enhance Sequence functionality and manipulate data.
 
 \subsection{Decorator Pattern}
 \label{sub:Decorator Pattern}
-% TODO Zitat von Gang of four
-% TODO Quelle
-Let us look at the Decorator Pattern~\cite{} to understand the content of the 
+Let us look at the Decorator Pattern~\cite[p.~226]{gang_of_four_depa} to understand the content of the 
 following sections. In object-oriented programming, the Decorator Pattern is a 
 widely used concept. An object decorates another, as the name implies. As a 
 result, an outer object refers to an inner object, and both implement the same 
@@ -229,6 +227,104 @@ const SampleIterable2 = () => {
 };
 \end{lstlisting}
 
-In this chapter, we have examined the possibilities for adding State to 
-sequences. Due to the advantages of immutability, we built the sequence library 
-according to Scenario 2.
+In this chapter, we have examined the possibilities for adding state to 
+Sequences. Due to the advantages of immutability, we built the Sequence library 
+according to Scenario 2 with an immutable approach.
+
+
+\subsection{Adding Monadic Functions to Iterables}
+\label{sub:Adding Monadic Functions to Iterables}
+In this last section of this chapter, we will highlight one more function we 
+have left out so far. It is about the function |createMonadicSequence|, which has
+already appeared in a previous Listing.
+
+\subsubsection{A Convenience Function}
+\label{subsub:A Convenience Function}
+In Section~\ref{subsub:Processing Iteratbles with Functions} Listing~\ref{lst:impl_map} shows the implementation of |map|. This needs a function
+|mapIterator|, which surrounds the function |next|. |createMonadicSequence| now 
+expects such an iterator. As the name suggests, |mapIterator| is part of the 
+iterable object that follows the JS Iterator protocol.
+Listing~\ref{lst:createMonadicSequence} demonstrates the implementation of 
+|createMonadicSequence|.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Implementation of createMonadicSequence,
+  label={lst:createMonadicSequence}
+  ]
+/**
+ * Builds an {@link SequenceType} from a given {@link Iterator}.
+ * @template _T_
+ * @param { () => Iterator<_T_> } iterator
+ * @returns { SequenceType<_T_> }
+ */
+ const createMonadicSequence = iterator => {
+   *'\label{line:start_createMonadicSequence}'* const result = {[Symbol.iterator]: iterator};
+  return setPrototype(result);
+};*'\label{line:end_createMonadicSequence}'*
+
+
+/**
+ *
+ * @template _T_
+ * @param { Iterable<_T_> } iterable
+ * @returns { SequenceType<_T_> }
+ */
+ const setPrototype = iterable => { *'\label{line:setPrototype}'*
+  Object.setPrototypeOf(iterable, SequencePrototype);
+  return /**@type SequenceType*/ iterable;
+};
+\end{lstlisting}
+
+Between line~\ref{line:start_createMonadicSequence} and 
+line~\ref{line:end_createMonadicSequence}, we can recognize two main tasks of the
+function |toMonadicSequence|.
+
+\begin{itemize}
+  \item{Assign the passed iterator to the |[Symbol.iterator]| property}
+  \item{Add the Sequence prototype to the resulting object}
+\end{itemize}
+
+Many of the operations of the Sequence library use this code.
+Outsourcing the code helps to improve the code base's overview and readability.
+The following section explains what the prototype is all about.
+
+\subsubsection{Sequence Prototype}
+\label{Sequence Prototype}
+An object in JavaScript has one or more prototypes. Prototypes define functions
+that are available to the corresponding object. The |createMonadicIterable|
+function expects the passed argument to be of type |Iteratble<T>|. The subsequent
+function |setPrototype| on line~\ref{line:setPrototype} sets the Sequence 
+prototype to this iterable. This causes some functions to be available on each 
+|SequenceType|. These are, among others, monadic functions. You will read more
+about Monads and there functionality in chapter~\ref{sec:Monads in JavaScript}. 
+|SequenceType| represents a Sequence and the monadic functions defined on it. 
+Listing~\ref{lst:sequence_type} shows the definition of the type.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=SequenceType definition,
+  label={lst:sequence_type}
+  ]
+/**
+ * @typedef {
+ *   {
+ *     and:  <_U_>(bindFn: (_T_)    => SequenceType<_U_>) => SequenceType<_U_>,
+ *     pure: <_U_>(_U_)             => SequenceType<_U_>,
+ *     fmap: <_U_>(f: (_T_) => _U_) => SequenceType<_U_>,
+ *     empty: ()                    => SequenceType<_T_>
+ *   } & Iterable<_T_>
+ * } SequenceType
+ */
+\end{lstlisting}
+
+Why is this necessary? With this approach, we can ensure that Sequences become
+monadic but still iterable. Monadic APIs can thus also process Sequences. An
+example of this is JINQ. Chapter~\ref{TODO} discusses JINQ in detail. 
+\newline
+The most excellent solution to this problem will be if |SequenceType| combines
+two types. To some extent, this is possible with the union
+Type~\cite{js_doc_types} of
+JavaScript. This defines that an object is of one type or the other. However, it
+cannot be both at the same time. |SequenceType| is therefore defined to be a
+mixture of type and prototype.

@@ -1,1 +1,100 @@
 \section{Iterables Everywhere}
+\label{sec:Iterables Everywhere}
+This chapter concerns the implications of the previous findings for other
+data structures.
+Some immutable collections are already implemented in the Kolibri Web Ui
+Toolkit~\cite{kolibri}. The Pair example demonstrates the advantages of 
+iterating existing implementations in the following section.
+
+\subsection{Making immutable Data Structures iterable}
+\label{sub:Making immutable Data Structures iterable}
+In the following, we will examine the implementation of immutable Pair. 
+There are no immutable collections by default in JavaScript, so you have to 
+build them yourself. The Kolibri Web Ui Toolkit already implements some 
+immutable collections. Listing~\ref{lst:pair_non_iterable} shows how to create and use a Pair.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Immutable Pair,
+  label={lst:pair_non_iterable}
+  ]
+/** *'\label{line:start_pair_type}'*
+ * @typedef PairType
+ * @type {  <_T_, _U_>
+ *          (x: _T_)
+ *       => (y: _U_)
+ *       => (s: PairSelectorType<_T_, _U_>) => ( _T_ | _U_ ) 
+ *      }
+ */ *'\label{line:end_pair_type}'*
+const pair = Pair(1)(2);
+
+const one  = pair(fst);*'\label{line:fst_pair}'*
+const two  = pair(snd);*'\label{line:snd_pair}'*
+
+console.log(one + " " + two);
+// => Logs '1 2'
+\end{lstlisting}
+
+The only way to make a Pair immutable is to build it from functions. The type 
+signature on line~\ref{line:start_pair_type}~-~\ref{line:end_pair_type} shows 
+that the first two arguments are arbitrary values. Pair stores these two values. 
+Selector functions named |fst| on line~\ref{line:fst_pair} and |snd| on 
+line~\ref{line:snd_pair} grant access to these values. However, it is not 
+possible to change the values in the Pair.
+Listing~\ref{lst:pair_non_iterable} shows that handling a Pair can be tedious. 
+It would be great to use the built-in JavaScript language features to access 
+the content of a Pair. 
+
+\subsubsection{Iterable Pair}
+\label{subsub:Iterable Pair}
+Listing~\ref{lst:pair_iterable} demonstrates the implementation of an iterable 
+Pair. Still, Pair operates only with functions. However, it additionally defines the
+|[Symbol.iterator]| property.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Iterable Pair,
+  label={lst:pair_iterable}
+  ]
+const Pair = x => y => {
+  /**
+   * @template _T_, _U_
+   * @type { PairSelectorType<_T_,_U_> }
+   */
+  const pair = selector => selector(x)(y);
+
+  pair[Symbol.iterator] = () => [x,y][Symbol.iterator]();*'\label{line:pair_symbol_iterator}'*
+
+  return pair;
+};
+\end{lstlisting}
+
+Line~\ref{line:pair_symbol_iterator} shows that 
+this property defines a function, which only returns the |[Symbol.iterator]| 
+property of array. The array stores the values of the Pair. Thanks to this 
+procedure, all iterable functions are now available to Pair. Also, the 
+operators from the Sequence library supports now working with a Pair.
+Listing~\ref{lst:handling_pair_iterable} shows the usage of the iterable Pair. 
+Line~\ref{line:pair_destructuring} shows the deconstruction of a Pair in the same way as an array. 
+This access option is more convenient than in Listing~\ref{lst:pair_non_iterable}. 
+Line~\ref{line:show_pair} demonstrates the use of operations from the Sequence 
+Library. |show| converts an iterable into a string, analogous to how |toString|
+works.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Working with iterable Pairs,
+  label={lst:handling_pair_iterable}
+  ]
+const pair = Pair(1)(2);
+
+const [one, two] = pair;*'\label{line:pair_destructuring}'*
+
+console.log(show(pair));*'\label{line:show_pair}'*
+// => Logs '[1,2]'
+\end{lstlisting}
+
+This has significant advantages because it is now possible to process different 
+collections with the same abstractions. Therefore, the motivation is great to 
+make all collections iterable.
+

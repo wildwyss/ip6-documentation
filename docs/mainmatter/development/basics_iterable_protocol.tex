@@ -1,39 +1,45 @@
 \section{Sequence and Iterable in General}
 \label{sec:Sequence and Iterable in General}
-This section explains the concept of iterable objects and shows how to create 
-them. Sequence is one such implementation. It illustrates how the benefits of 
-iterators are utilized in a specific implementation using illustrations and 
-explanations.
+This section explains the concept of iterable and iterator objects and points
+out features and characteristics of it. The Sequence is one implementation of
+an iterable and represents the core functionality of the Sequence Library. The following
+discussion will cover challenges and solutions for creating a robust and
+user-friendly API.
 
 \subsection{What is an Iterator?}
 \label{sub:What is an Iterator?}
-Iterators are a common notion in computer science. An iterator is a mechanism 
+In computer science, iterators are a popular concept. An iterator is a mechanism 
 to access elements of any data structure. It uses a function call to return the 
-next element and either act on a data structure in memory or compute the 
-elements when queried. Iterators are an essential part of this work. Therefore, 
-the fundamentals are essential to understand, and the following sections cover
+next element and either acts on a data structure in memory or compute the 
+elements lazily when queried. Iterators are an essential part of this work. Therefore, 
+the fundamentals are essential to understand. The following sections cover
 the topic in depth.
 
 % \subsection{Iteration Protocols in JavaScript}
-\subsection{Exploring the Meaning Of Protocols}
-\label{sub:Exploring the Meaning Of Protocols}
+\subsection{Exploring the Meaning of Protocols}
+\label{sub:Exploring the Meaning of Protocols}
 In JavaScript, an iterator is an object that implements the JavaScript iterator
 and iterable protocols \cite{mdn_protocols}
-(henceforth called JS iteration protocols). An iterator
-has the characteristic of only iterating once across a collection of items.
-After that, the iterator is exhausted, and the following operations will be
-performed on a new instance.
+(henceforth called JS iteration protocols). An iterator has the characteristic 
+of only iterating once across a collection of items.
+After that, the iterator is exhausted. Further operations will only perform on 
+a new instance of it.
+\newline
+To create an iterator, implementing the two following protocols is required.
 
 \subsubsection{The Iterable Protocol}
 \label{subsub:The Iterable Protocol}
 An object is an iterable according to the JS iterable protocol if it has a
-property with the name |[Symbol.iterator]|. Thus, such an object is of type
-|Iterable<T>| which defines its iteration behavior.
-All objects in JavaScript that have this property can be processed using 
-destructuring and |for...of| loop. 
-The sample code for defining a property named |[Symbol.iterator]| is shown
-in Listing \ref{lst:iterable_protocols}. The value of this property is a
-function which has to follow the iterator protocol.
+property with the name |[Symbol.iterator]|. This property defines the iteration
+behavior of the object. Such an object is of type |Iterable<T>|.
+All objects in JavaScript that implements this property can be processed using 
+destructuring\footnote{The destructuring assignment syntax is a JavaScript
+expression that allows you to extract array items or object properties into
+individual variables.} and |for...of| loop. 
+Listing \ref{lst:iterable_protocols} demonstrates how an object defines a
+|[Symbol.iterator]| property.
+This property's value is a function that must adhere to the iterator protocol.
+It is content of the next section.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -49,17 +55,17 @@ function which has to follow the iterator protocol.
 
 \subsubsection{The Iterator Protocol}
 \label{subsub:The Iterator Protocol}
-This protocol defines the structure of the iterator object. Invoking the 
-|[Symbol.iterator]| property obtains such an object. These objects must 
-implement a function next, which defines how and which values are returned 
+Invoking the |[Symbol.iterator]| property obtains an iterator object.
+This protocol defines the structure of such an object. It must 
+implement a function |next|, which defines how and which values are returned 
 when iterating.
-Each iteration calls the function |next|. |next| returns an object, which must
-have two properties according to the iterator protocol: |value| and |done|.
+Each iteration on an iterator calls the function |next|. |next| returns an object, which must
+include two properties according to the iterator protocol: |value| and |done|.
 Therefore, the property |value| contains the current value of the iteration,
 while |done| represents the information on whether the end of the iteration has 
 been reached. The following code \ref{lst:iterator_protocol} shows a simple 
-example implementation. Each call on |next| returns an object with the |value| 
-1, and the iteration is never finished. 
+implementation of it. Each call on |next| returns an object with the |value| 
+1 and done is false. 
 
 \begin{lstlisting}[
   style=ES6, caption=Iterator protocol,
@@ -73,11 +79,10 @@ example implementation. Each call on |next| returns an object with the |value|
 \subsubsection{Creating Iterables}
 \label{subsub:Creating Iterables}
 By combining the two protocols, the result could look like listing
-\ref{lst:protocols}. In listing \ref{lst:protocols}, the constructor 
-|SampleIterable| on line 1 wraps the two previously
-defined implementations of the protocols. Objects from this constructor are now
-iterables. It has the type |Iterable<Number>| because the return value from the
-iterator is one.
+\ref{lst:protocols}. The constructor |SampleIterable| on line 1 wraps the two previously
+defined implementations of the protocols. Objects returned by this constructor 
+are now iterables. Since the return value is always one, the object type
+is |Iterable<Number>|.
 
 \begin{lstlisting}[
   style=ES6, caption=Iterable and iterator protocol,
@@ -97,25 +102,26 @@ iterator is one.
 };
 \end{lstlisting}
 
-Since |SampleIterator| follows the JS iterator protocols it is now possible to 
-construct iterable objects. Built-in language features like |for..of| and 
-destructuring (|...|) can now process these objects. However, beware in this 
+Because |SampleIterator| adheres to the JS iterator protocols, it is now 
+possible to create iterable objects. Language features like |for..of| and 
+destructuring (|...|) can now process these objects. However, beware of this 
 case. This would lead to an infinite loop because the property done never 
 becomes true. We will see examples with non-endless iterators later in this. 
-Nevertheless, for now, the focus here is on the protocols. Therefore this 
+For now, the focus here is on the protocols. Therefore, this 
 example will be sufficient at this point.
 \newline
-Such protocols make it possible to iterate your customized objects and
-collections. This opens new possibilities. Various programming tasks can be 
-solvable differently, probably more straightforwardly.\newline
-There are already some languages built-in iterable in JavaScript. Array and
+Such protocols make it possible to build your customized iterables and
+collections. This opens new possibilities. Various programming tasks can have 
+different, more straightforward solving approaches in a more declarative way to
+write.
+There are already some JavaScript iterables present. Array and
 HTML Collections are probably the most prominent of these.
 
 \subsection{Types of Iterables}
 \label{sub:Types of Iterables}
 Previously we saw a distinction between 
 iterables~\ref{subsub:Creating Iterables} and 
-iterator~\ref{subsub:The Iterator Protocol}. These abstractions also have their 
+iterators~\ref{subsub:The Iterator Protocol}. These abstractions also have their 
 types. Listing \ref{lst:iterable_types} shows an excerpt of the relevant types.
 
 \begin{lstlisting}[
@@ -129,7 +135,7 @@ interface Iterable<T> {
 }
 
 interface Iterator<T, TReturn = any, TNext = undefined> {
-    next(...args: [] | [TNext]): IteratorResult<T, TReturn>;
+  next(...args: [] | [TNext]): IteratorResult<T, TReturn>;*'\label{line:iterator_result}'*
     return?(value?: TReturn): IteratorResult<T, TReturn>;
     throw?(e?: any): IteratorResult<T, TReturn>;
 }
@@ -145,15 +151,14 @@ interface IteratorReturnResult<TReturn> {
 
 An iterable is of type |Iterable<T>|, whereas the object returned by the property
 |[Symbol.Iterator]| is of type |Itertator<...>|. As shown in listing
-\ref{lst:iterable_types}, an iterator is required to have a property next. 
+\ref{lst:iterable_types}, an iterator requires having a property |next|. 
 This is the function that returns values when iterating. These values must be 
-of type |IteratorResult<...>|, defined on line 8 of listing 
-\ref{lst:iterable_types}. |IteratorResult<...>| itself is defined to return an 
-object of type |ItereratorReturnResult<...>|. This object contains the actual 
-values we want to work with. Examining these types illustrates how JavaScript's 
-iterators have been built and reveal that some objects are nested within each
-other. There is a reason for this. We will get to the roots of these in
-chapter~\ref{sub:Stateful Decorating}.
+of type |IteratorResult<...>|, line~\ref{line:iterator_result} shows the 
+definition. |IteratorResult<...>| itself is defined to return an 
+object of type |IteratorReturnResult<...>|. This object contains the actual 
+values we want to work with. Examining these types illustrates how JavaScript 
+builds these types in a nested way. There is a reason for this. We will get to 
+the roots of these in chapter~\ref{sub:Stateful Decorating}.
 
 \subsection{Building custom Series of Data}
 \label{sub:Building custom Series of Data}
@@ -161,41 +166,45 @@ The last chapter has shown how to make an object iterable. By exploring the
 protocols discussed so far, this chapter showcases the ability to create 
 powerful concepts. Previously, an endless iterator that generates only ones 
 served as an illustration. The goal is to create a constructor that can 
-produce arbitrary data series.
+produce more meaningful data series.
 
 \subsection{Sequence - The Name of connected Data}
 \label{sub:Sequence - The Name of connected Data}
-As is often the case in computer science, finding the proper names is one of 
-the hardest things in programming sustainable and robust code. Various arguments 
-have contributed to the fact that the constructor for creating any series is 
-called "Sequence". First, sequences are not conventional lists known from other 
-programming languages. However, it must be clear from the name that it is about 
-connected data. Second, it carries a small risk of introducing new names and
-thus discourages users. However, we chose the name because it was important not
-to make false assumptions about what we were working with. 
-\newline
-The nice thing about the objects generated by Sequence compared to
-conventional lists is that one has the feeling of handling large 
-amounts of data arbitrarily. In reality, however, only a minimum of memory is 
-needed because the subsequent elements are not yet in memory.
+In computer science, naming elements accurately poses a significant challenge 
+when aiming to develop sustainable and robust code. The constructor for creating 
+any series being called "Sequence" has been influenced by several factors. 
 
-\subsection{Everything a Sequence needs}
-\label{sub:Everything a Sequence needs}
-Defining a Sequence of data requires specifying three essential points:
+\begin{itemize}
+  \item{Sequences are not conventional lists known from other programming languages}
+  \item{It contains interrelated data}
+  \item{Having the courage to introduce an unfamiliar name, with the risk of increasing the barrier to use}
+\end{itemize}
+
+We opted for the name "Sequence" to avoid making incorrect assumptions about 
+the nature of our work.
+\newline
+What distinguishes the object generated by the Sequence from conventional list
+is the fact, that it needs almost no memory. At the same time, you have the 
+impression that you are dealing with huge amounts of data.
+
+\subsection{Components of a Sequence}
+\label{sub:Components of a Sequence}
+Defining a Sequence requires specifying three essential points:
 \begin{enumerate}
   \item{A fixed starting value for the Sequence} 
   \item{A function to calculate the next element based on its predecessor} 
-  \item{A function to determine if the Sequence has reached its end} 
+  \item{A function that determines whether the Sequence has reached its end} 
 \end{enumerate}
-These three elements define the Sequence and are passed as arguments, 
-see listing \ref{lst:sequence} line~\ref{line:seq_args}.
+These three elements define the Sequence. Listing \ref{lst:sequence} on
+line~\ref{line:seq_args} shows the passing arguments to the constructor.
 To keep the focus on the core elements of the Sequence, some functionality in 
 listing \ref{lst:sequence} is discussed later. The |next| function, explained in 
 the Iterator Protocol section~\ref{subsub:The Iterator Protocol}, 
 is on lines~\ref{line:start_protocol}~-~\ref{line:end_protocol}. It contains the 
 logic to return the next object of an iteration. First, it uses |untilFunction| 
 to check if the Sequence has finished. If this is not the case, the
-|incrementFunction| calculates the next element and returns it.
+|incrementFunction| calculates the next element which afterward will be
+returned.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -233,7 +242,7 @@ Listing \ref{lst:even-sequence} shows the definition of a sequence of even
 numbers smaller than ten and how to use it. 
 \begin{lstlisting}[
   style=ES6, 
-  caption=Sequence over the even numbers,
+  caption=Sequence of even numbers,
   label={lst:even-sequence}
   ]
 const startValue        = 0;
@@ -257,4 +266,4 @@ to the console. Line~\ref{line:demo_output} shows the output produced.
 Now, we discussed the ability to generate arbitrary sequences of data. However, 
 just creation is often inadequate as there is a need to manipulate the data or 
 introduce additional levels of abstraction. In the upcoming chapter, we will 
-delve into processing such sequences.
+delve into processing such Squences.
