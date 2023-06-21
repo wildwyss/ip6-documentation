@@ -8,10 +8,10 @@ iterating existing implementations in the following section.
 
 \subsection{Making immutable Data Structures iterable}
 \label{sub:Making immutable Data Structures iterable}
-In the following, we will examine the implementation of immutable Pair. 
-There are no immutable collections by default in JavaScript, so you have to 
-build them yourself. The Kolibri Web Ui Toolkit already implements some 
-immutable collections. Listing~\ref{lst:pair_non_iterable} shows how to create and use a Pair.
+In the following, we will examine the implementation the immutable data structure |Pair|. 
+Among other immutable data structures, the Kolibri Web Ui Toolkit provides an
+implementation for |Pair|. 
+Listing~\ref{lst:pair_non_iterable} shows how to create and use a Pair.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -26,6 +26,8 @@ immutable collections. Listing~\ref{lst:pair_non_iterable} shows how to create a
  *       => (s: PairSelectorType<_T_, _U_>) => ( _T_ | _U_ ) 
  *      }
  */ *'\label{line:end_pair_type}'*
+const Pair = x => y => selector => selector(x)(y);
+
 const pair = Pair(1)(2);
 
 const one  = pair(fst);*'\label{line:fst_pair}'*
@@ -35,13 +37,13 @@ console.log(one + " " + two);
 // => Logs '1 2'
 \end{lstlisting}
 
-The only way to make a Pair immutable is to build it from functions. The type 
+The only way to make a Pair immutable is to build it using functions. The type 
 signature on line~\ref{line:start_pair_type}~-~\ref{line:end_pair_type} shows 
-that the first two arguments are arbitrary values. Pair stores these two values. 
+that the first two arguments are arbitrary values. Pair stores these two values
+in its closure scope. 
 Selector functions named |fst| on line~\ref{line:fst_pair} and |snd| on 
-line~\ref{line:snd_pair} grant access to these values. However, it is not 
-possible to change the values in the Pair.
-Listing~\ref{lst:pair_non_iterable} shows that handling a Pair can be tedious. 
+line~\ref{line:snd_pair} grant access to these values. However, |Pair| offers
+no way to modify these values. Listing~\ref{lst:pair_non_iterable} shows that handling a Pair can be tedious. 
 It would be great to use the built-in JavaScript language features to access 
 the content of a Pair. 
 
@@ -71,9 +73,8 @@ const Pair = x => y => {
 
 Line~\ref{line:pair_symbol_iterator} shows that 
 this property defines a function, which only returns the |[Symbol.iterator]| 
-property of array. The array stores the values of the Pair. Thanks to this 
-procedure, all iterable functions are now available to Pair. Also, the 
-operators from the Sequence library supports now working with a Pair.
+property of array. The array stores the values of the Pair. With that, |Pair|
+is an |Iterable|. Therefore, all iterable functions are now available to Pair.
 Listing~\ref{lst:handling_pair_iterable} shows the usage of the iterable Pair. 
 Line~\ref{line:pair_destructuring} shows the deconstruction of a Pair in the same way as an array. 
 This access option is more convenient than in Listing~\ref{lst:pair_non_iterable}. 
