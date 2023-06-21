@@ -273,14 +273,14 @@ a |loser|. Imagine you want to find all names of the heroes of the winner team.
   caption=Two data sources,
   label={lst:jsonmonad_data}
 ]
-const battleData = JSON.parse( `
+const battleData = JSON.parse(`
   {
     "battleName": "The battle of Curly",
     "numberOfDeaths": 420000,
     "winner": { "teamName": "JSON", "outStandingHeroes": [1] },
     "loser": { "teamName": "XML", "outStandingHeroes": [] }
   }
-);
+`);
 
 const heroes = JSON.parse(`
   [
