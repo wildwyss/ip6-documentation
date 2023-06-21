@@ -1,8 +1,8 @@
 \section{Decorating Sequences}
 \label{sec:Decorating Sequences}
 This chapter explores how to process Sequences by implementing the Decorator 
-Pattern and effectively managing Sequence state. Discover powerful techniques 
-to enhance Sequence functionality and manipulate data.
+Pattern and effectively managing Sequence state. And then we will discover 
+powerful techniques to enhance Sequence functionality and manipulate data.
 
 \subsection{Decorator Pattern}
 \label{sub:Decorator Pattern}
@@ -30,7 +30,7 @@ following, we will see how to exploit this to manipulate and change an Iterable.
 
 \subsection{Processing Sequences}
 \label{sec:Processing Sequences}
-We use precisely that decorating approach to process Sequences further. 
+We use precisely that decorating approach to process Iterables further. 
 The goal is to find a way to manipulate sequences so that they can solve 
 complex problems. With many other programming languages, it is possible to write 
 programs this way. Lists and operations on lists solve numerous problems in 
@@ -45,7 +45,7 @@ Sequence library. We call these functions in the following operators.
 According to the package they are in.
 Listing~\ref{lst:impl_map} shows how |map| processes a 
 Sequence. For this, we use the Decorator approach just mentioned. To keep the 
-example simple, on Line~\ref{line:seq_definition}, a client calls the map 
+example simple, on line~\ref{line:seq_definition}, a client calls the |map| 
 operator with a Sequence of numbers. However, it could process any iterable.
 \newline
 On line~\ref{line:args}, the function signature shows that a client can invoke 
@@ -86,20 +86,21 @@ Because |map| decorates iterables, |map| also returns an object of type |Iterabl
 We define this object on line~\ref{line:obj_mapped} as |mapped|. 
 Consequently, |map| also has a next function. Since the Iterable protocol 
 specifies only this single function, it is the only one that must be externally 
-callable. The object mapped now forwards function calls of the |next| function to 
-the inner iterable, on line~\ref{line:inner_next}. The |mapper| function then 
-processes the result and returns it.
+callable. The object |mapped| now forwards function calls on |next| to the
+inner function |next|, on line~\ref{line:inner_next}. The |mapper| function then 
+processes the result and returns it. This process involves decorating the next function of the inner iterable.
 
 \subsection{Benefits form the Decorater Approach}
 \label{sub:Benefits form the Decorater Approach}
 This section discusses the benefits and consequences of using the Decorator 
-Pattern to implement the Sequence library.
+Pattern to implement the Sequence library. We start with the fact that functions 
+stand-alone, then discuss the options for managing State.
 
-\subsubsection{Standalone Functions}
+\subsubsection{Stand-alone Functions}
 \label{subsub:Standalone Functions}
-In an object-oriented approach, the Sequence object defines the operators to 
-process the elements. Therefore, such operators are available by using dot notation. 
-Similar to Java implements the Stream API \cite{java_stream}. 
+In an object-oriented approach, the Sequence object would provide access to the 
+operations. Therefore, such operators are available by using dot notation,
+similar to Java implements the Stream API \cite{java_stream}. 
 However, with the approach of programming the operators independently, there 
 are three significant advantages:
 
@@ -117,28 +118,29 @@ are three significant advantages:
   }
 \end{enumerate}
 
-Due to the independent implementation of the iterable operators, the last 
-parameter can be the iterable object. The operator, therefore, defines the 
+Since the independent implementation of the iterable operators, the last
+argument is the iterable object. The operator defines the 
 parameters in a curried style. So it is possible to benefit from eta-reduction 
 in different situations.
 
-\subsection{Stateful Decorating}
-\label{sub:Stateful Decorating}
+\subsubsection{Stateful Decorating}
+\label{subsub:Stateful Decorating}
 A state is present as soon as operators decorate iterables or implement 
-additional functionalities. This chapter is about where the operators implement 
-this state and which consequences this implies.
+additional functionalities. This chapter explores the implementation of state
+within operators and the implications it involves.
 
-There are two possibilities for including the state.
-Both variants are possible and are the content of the following two scenarios. 
+There are two valid possibilities for including the state.
 The first scenario places the state into the closure scope to the surrounding 
 operator of the iterator. The second scenario implements the state into the 
-closure scope of the iterator. For both variants, it is of great relevance that 
-the underlying object must not be changed.
+closure scope of the iterator. In both variants, it is crucial to ensure that 
+the underlying object remains unchanged.
 
 \subsubsection{Scenario 1}
-Listing~\ref{lst:scen_1} shows that the state is on line~\ref{line:scen_1_state}.
-The state is created by calling SampleIterator and is valid for the entire 
-object's lifetime. 
+Listing~\ref{lst:scen_1} shows an example of a Sequence generating numbers from
+zero to five. On line ~\ref{line:scen_1_state}, value |i| works as a counter 
+and represents the state. 
+A call to |SampleIterator| creates a state which is valid for the entire 
+object's lifetime.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -158,12 +160,13 @@ const SampleIterable = () => {
 };
 \end{lstlisting}
 
-Listing~\ref{lst:scen_1_demo} shows a possible program flow. An object is 
-created and then partially processed. On line~\ref{line:scen1_map} |map| also 
+Listing~\ref{lst:scen_1_demo} shows a possible program flow. 
+The program first creates an object of |SampleIterator|, maps it and processes
+an element on the original object. Note, that on line~\ref{line:scen1_map} |map| also 
 uses the same object. Line~\ref{line:scen1_output} shows an expected result. 
-Nevertheless, copying the object before processing is necessary to achieve this 
-result. That implies that each sequence must be copyable. Generating a new 
-sequence with the same parameters allows for creating a copy of the sequence. 
+To achieve this result, copying the object before processing is necessary.
+That implies that each sequence must be copyable. Generating a new 
+Sequence with the same parameters allows for creating a copy of it. 
 The same is true for any function that decorates an iterable.
 
 \begin{lstlisting}[
@@ -185,24 +188,23 @@ for (const elem of seq) {
 
 In many respects, copying is an elaborate thing. All operators and constructors 
 dealing with sequences must implement it. Thus, implementation errors are 
-possible. On the other hand, it is also an extra effort from a performance point 
-of view. It means more function calls and also giant stack calls to manage.
-The advantage of this implementation is that partially processed iterators could 
-be further used with the current state because they do not reinitialize the 
-state with a new iteration.
+almost certain. On the other hand, it is an extra effort from a performance point 
+of view. It means more function calls and also larger stack calls to manage.
+The advantage of this implementation is that partially processed iterators can
+be further utilized while maintaining their current state, without
+reinitializing the state with a new iteration.
 Because all objects must have copy implemented, operators can 
-only process objects that implement copy. That means JavaScipt array or HTML 
-Collection would not be processable.
+only process objects that implement copy. That means JavaScipt Arrays or HTML 
+Collection are not be processable.
 
 \subsubsection{Scenario 2}
 Listing~\ref{lst:scen_2} represents scenario 2. Here, the state is on 
 line~\ref{line:scen_2_state}. Running the code from the previously
-Listing~\ref{lst:scen_1_demo} produces the same result. The difference is that 
-the object does not have to be copyable. Each call to |[Symnol.iterator]| 
-creates a new object. This type of iterator is immutable. As a consequence, 
-copying is not necessary. Another advantage is that all operators of the 
-Sequence Library can process objects with the |[Symbol.iterator]| property, 
-such as a JavaScipt array.
+example~\ref{lst:scen_1_demo} produces the same output. The distinction lies in
+the fact that the object does not need to be copyable. Each call to |[Symbol.iterator]| 
+creates a new object. This type of iterator is immutable. Another advantage is
+that all operators within the Sequence library can handle objects that have the
+|[Symbol.iterator]| property, including JavaScript Arrays.
 \newline
 As is now apparent, there is a reason for the deep nesting of objects, according 
 to chapter~\ref{sub:Types of Iterables}. The JS iteration protocols design the 

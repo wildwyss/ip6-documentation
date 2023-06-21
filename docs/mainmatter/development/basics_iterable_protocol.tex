@@ -158,7 +158,7 @@ definition. |IteratorResult<...>| itself is defined to return an
 object of type |IteratorReturnResult<...>|. This object contains the actual 
 values we want to work with. Examining these types illustrates how JavaScript 
 builds these types in a nested way. There is a reason for this. We will get to 
-the roots of these in chapter~\ref{sub:Stateful Decorating}.
+the roots of these in chapter~\ref{subsub:Stateful Decorating}.
 
 \subsection{Building custom Series of Data}
 \label{sub:Building custom Series of Data}
@@ -203,7 +203,7 @@ the Iterator Protocol section~\ref{subsub:The Iterator Protocol},
 is on lines~\ref{line:start_protocol}~-~\ref{line:end_protocol}. It contains the 
 logic to return the next object of an iteration. First, it uses |untilFunction| 
 to check if the Sequence has finished. If this is not the case, the
-|incrementFunction| calculates the next element which afterward will be
+|incrementFunction| calculates the next element, which afterward will be
 returned.
 
 \begin{lstlisting}[
