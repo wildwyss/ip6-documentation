@@ -1,0 +1,338 @@
+\section{Query different Data Structures}
+This section explains what Language integrated queries (LINQ) are and how they
+can be implemented in JavaScript to query various data structures easily. It
+also goes into detail about the implementation of LINQ in JavaScript. Finally,
+the section shows how you can easily browse lists of JavaScript objects using
+LINQ.
+\subsection{Introduction to LINQ} % (fold)
+Some programming languages offer uniform ways to query different data
+structures in an SQL-like syntax.
+
+C\# calls this concept LINQ (Language Integrated Query). LINQ allows to
+decarlatively query compatible data sources. Listing~\ref{lst:linq_in_csharp}
+shows how to use LINQ to query a simple array of numeric values.
+
+\begin{lstlisting}[
+  style=sharpc,
+  caption=LINQ in C\# \cite{billwagner_language-integrated_2023},
+  label={lst:linq_in_csharp}
+]
+// Specify the data source.
+int[] scores = { 97, 92, 81, 60 }; *'\label{line:linq_in_csharp1}'*
+
+// Define the query expression.
+IEnumerable<int> scoreQuery =
+    from score in scores
+    where score > 80
+    select score;
+
+// Execute the query.
+foreach (int i in scoreQuery)
+{
+    Console.Write(i + " ");
+}
+
+// Output: 97 92 81
+\end{lstlisting}
+
+You can replace the data structure defined on line~\ref{line:linq_in_csharp1}
+with any other one compatible with this API. This abstraction makes it very
+easy to define reusable queries.
+
+\label{sub:Introduction to LINQ}
+
+% subsection Introduction to LINQ (end)
+\subsection{Why does this not exist in JavaScript?} % (fold)
+\label{sub:Why does this not exist in JavaScript?}
+However, JavaScript does not define a uniform API for data structures except
+for the JS iteration protocols and thus cannot offer language-integrated queries
+without further effort. \\
+Section~\ref{sub:Making the Sequence Monadic} introduced the monadic sequence,
+which provides additional operations to work with a |Sequence|. All of these
+operations are available through the |sequence| prototype. Since these
+operations work solely on the committed properties of the JS iteration
+protocols, the function |toMonadicIterable|, explained in
+Section~\ref{sec:Iterables Everywhere} can quickly turn them into a monadic
+sequence.\\
+With that, a more extensive API is now available to every data structure
+conforming to the JS iteration protocols. This monadic API makes it possible to
+implement abstractions similar to LINQ in JavaScript.
+% subsection Why does this not exist in JavaScript? (end)
+
+\subsection{Introducing JINQ} % (fold)
+\label{sub:Introducing JINQ}
+JINQ (JavaScript integrated query) is the implementation of LINQ for
+JavaScript. It can handle any data that conforms to the |MonadType| explained
+in Section~\ref{subsub:The MonadType}. So JINQ can handle monadic iterables and
+every monadic type, such as the type|Maybe| introduced in
+Section~\ref{subsub:Doing the same in JavaScript}.\\
+\textit{Note}: All operations supported by JINQ are explained in detail in 
+Section~\ref{sec:API_JINQ}. This sections descibres how JINQ works
+internally.
+
+Listing~\ref{lst:keepeven_recap} shows again the function |keepEven| already
+introduced in Section~\ref{subsub:The MonadType}, which works on a |Maybe| as
+well as on a |Sequence|:
+\begin{lstlisting}[
+  style=ES6,
+  caption=Recapitulate keepEven,
+  label={lst:keepeven_recap}
+]
+const keepEven = monad => monad
+  .and(x => {
+    if (x % 2 === 0) {
+      return monad.pure(x);
+    } else {
+      return monad.empty();
+    }
+}); 
+\end{lstlisting}
+
+JINQ makes it possible to simplify the implementation of this function.
+Listing~\ref{lst:keepeven_jinq} therefore introduces a new function
+|keepEvenJINQ|, which does precisely the same as |keepEven|:
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=keepEvenJINQ does the same as keepEven,
+  label={lst:keepeven_jinq}
+]
+const keepEvenJINQ = monad =>
+  from(monad)
+    .where(x => x % 2 === 0)
+    .result();
+\end{lstlisting}
+
+|keepEvenJINQ| is not only shorter but also more readable! It becomes clear
+within moments what this function does, as it reads almost like prose!\\
+That is the power of these abstractions - compatible types must only follow a
+minimal API to be compatible with them. Additionally, they are very readable.
+
+\textit{Note}: As explained before, JINQ works only on the monadic API. So you
+can just as well use the monadic functions to achieve the same. However, the
+example |keepEven| shows that it is easier to work with JINQ and save lines of
+code.
+
+\subsubsection{How does JINQ work?} % (fold)
+\label{sec:How does JINQ work?}
+JINQ uses a pattern analogue to the Builder pattern
+\cite[Chapter~3.2]{gang_of_four_depa} to create a new structure which can be
+used to transform the initially passed monad. \\
+Have a look at the function on line~\ref{line:jinq_impl1} of
+Listing~\ref{lst:jinq_impl}: If |from| is called, a new builder is created.
+|from| expects a monad, which serves as the starting point of the builder. The
+next operation executed on the builder operates on this monad. |result| then
+returns the monad created based on the builder.
+
+\textit{Note}: None of the functions change monad - therefore, JINQ is
+immutable! This allows reusing an intermediate state of the JINQ builder!
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=How is where implemented?,
+  label={lst:jinq_impl}
+]
+// jinq.js
+export { from }
+const jinq = monad => ({ *'\label{line:jinq_impl1}'*
+  pairWith: pairWith(monad),
+  where:    where   (monad),
+  select:   select  (monad),
+  map:      select  (monad),
+  inside:   inside  (monad),
+  result:   () =>    monad
+});
+
+const from = jinq;*'\label{line:jinq_impl2}'*
+
+// ...
+\end{lstlisting}
+
+Listing~\ref{lst:jinq_where_impl} uses the already familiar function |where| to
+showcase how the builder operations work:
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=How is where implemented?,
+  label={lst:jinq_where_impl}
+]
+// jinq.js
+// ...
+
+const where = monad => predicate => {
+  const processed = 
+    monad.and(a => predicate(a) ? monad.pure(a) : monad.empty()); *'\label{line:jinq_where_impl1}'*
+  return jinq(processed);*'\label{line:jinq_where_impl2}'*
+};
+
+// ...
+\end{lstlisting}
+
+You may have already guessed it - the implementation of |where| is almost
+precisely the implementation of |keepEven|. It is more general because the
+predicate |x % 2 === 0| is outsourced to a function called |predicate|. See
+line~\ref{line:jinq_where_impl1} in Listing~\ref{lst:jinq_where_impl}: |and|
+keeps a value matching the predicate using |monad.pure| or discards it
+otherwise using |monad.empty|.\\
+Line~\ref{line:jinq_where_impl2} then wraps the resulting monad in a new
+builder instance and returns it.
+
+Another notable function of JINQ is |pairWith| - its implementation is shown in
+Listing~\ref{lst:jinq_pairwith_impl}. Use it to combine a data source with
+another one (or even with itself):
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=How is pairWith implemented?,
+  label={lst:jinq_pairwith_impl}
+]
+// jinq.js
+// ...
+
+cconst pairWith = monad1 => monad2 => {
+  const processed = monad1.and(x =>
+    monad2.fmap(y => Pair(x)(y))
+  );
+
+  return jinq(processed)
+};
+// ...
+\end{lstlisting}
+
+|pairWith| takes a second monad. It now forms a new monad with a |Pair| in it!
+But what happens here? Difficult to say because we can not know it! It just
+calls |and| on |monad1| and combines it with |monad2|. \\
+So when combining two |SequenceType|s, every element of the first sequence gets
+paired up with every element of the second sequence. One could argue that this
+will take too much memory and could be more efficient. But let us step back and
+think about Section 2.3, which discusses the laziness of |Sequence|s. |monad1|
+(a sequence in the current example) is evaluated lazily! So never all
+combinations will be materialized in memory at once!
+% subsubsection How does JINQ work? (end)
+
+\subsubsection{Creating Sequences using JINQ} % (fold)
+\label{sec:Creating Sequences using JINQ}
+A list comprehension in Haskell is an expression form that allows generating
+lists in a declarative way. See \cite[Chapter 5]{hutton_pih_2016} for an
+in depth introduction to list comprehensions. \\
+Listing~\ref{lst:list_comp_hs} creates a list using a list comprehension with
+Haskell:
+
+\begin{lstlisting}[
+  style=Haskell,
+  caption=List comprehension in Haskell,
+  label={lst:list_comp_hs}
+]
+pairs = [(i,j) |         -- create a union list of pairs where
+          i <- [1..10], -- i can have the values 1 to 10
+          j <- [1..4],  -- j can have the values 1 to 4
+          i - j == 1]   -- only keep pairs with i - j == 1
+
+print pairs
+-- Prints '[(2,1),(3,2),(4,3),(5,4)]'
+\end{lstlisting}
+
+Using JINQ, it is possible to create sequences similarly:
+\begin{lstlisting}[
+  style=ES6,
+  caption=Creating Sequences using JINQ,
+  label={lst:list_comp_js}
+]
+const pairs =
+  from(Range(1,10))                 // create a seq with values 1 to 10
+    .pairWith(Range(1, 4))          // union with a seq containing 1 to 4
+    .where(([i, j]) => i - j === 1) // only keep pairs with i - j == 1
+    .result();
+
+console.log(pairs.fmap(show).toString());
+// => Logs '[[2,1],[3,2],[4,3],[5,4]]'
+\end{lstlisting}
+
+Of course, Haskell offers more features than Listing~\ref{lst:list_comp_hs}
+shows. Also, some that JINQ might not be capable of. Nevertheless, JINQ
+provides an easy way to create sequences based on rules, coming quite close to
+a list comprehension.
+% subsubsection Creating Sequences using JINQ (end)
+
+\subsubsection{Using the JSONMonad to process lists of JavaScript objects} % (fold)
+\label{sec:Using the JSONMonad to process lists of JavaScript objects}
+The |JSONMonad| provides arrays of JavaScript objects with a monadic API. The
+|JSONMonad| makes them, therefore, compatible with JINQ. This is especially
+useful when JavaScript Objects are created from JSON because they often have
+missing fields. The monadic operations of |JSONMonad| deal with that and ensure
+that querying nullable attributes does not cause problems.
+
+The Listing~\ref{lst:jsonmonad_data} dives right into an example defines two
+records that are related to each other. The first one contains data about an
+ancient battle, while the second one contains data about the heroes of the
+battle. The |heroId| connects these two records. The battle had a |winner| and
+a |loser|. Imagine you want to find all names of the heroes of the winner team.
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=Two data sources,
+  label={lst:jsonmonad_data}
+]
+const battleData = JSON.parse( `
+  {
+    "battleName": "The battle of Curly",
+    "numberOfDeaths": 420000,
+    "winner": { "teamName": "JSON", "outStandingHeroes": [1] },
+    "loser": { "teamName": "XML", "outStandingHeroes": [] }
+  }
+);
+
+const heroes = JSON.parse(`
+  [
+    { "heroId": 1, "kills": 47076, "name": "Atonadias" },
+    { "heroId": 2, "kills": 5691,  "name": "Tanobiri" },
+    { "heroId": 3, "kills": 3707,  "name": "Tonadri" }
+  ]
+`);
+\end{lstlisting}
+
+Listing~\ref{lst:jsonmonad_example} combines these two data sources using JINQ.
+Line~\ref{line:jsonmonad_example1} wraps the |battleData| with the |JSONMonad|
+to become queriable. |select| then accesses the property |winner| and from
+there the property |outstandingHeroes|. Line~\ref{line:jsonmonad_example2}
+pairs the second data source before Line~\ref{line:jsonmonad_example3}, then
+destructures the |Pair| and only keeps the elements from the heroes of the
+second data source, which belong to the winner team!
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=Combining data sources using JINQ and JSONMonad,
+  label={lst:jsonmonad_example}
+]
+const outstandingHeroNames =
+  from(JsonMonad(battleData)) *'\label{line:jsonmonad_example1}'*
+    .select   (x => x["winner"])
+    .select   (x => x["outStandingHeroes"])
+    .pairWith (JsonMonad(heroes)) *'\label{line:jsonmonad_example2}'*
+    .where    (([heroId, hero]) => heroId === hero["heroId"]) *'\label{line:jsonmonad_example3}'*
+    .select   (([_, hero]) => hero["name"])
+    .result   ();
+
+// Then
+const results = [...outstandingHeroNames];
+assert.is(results.length, 1);
+assert.is(results[0], "Atonadias")
+\end{lstlisting}
+
+% subsubsection Using the JSONMonad to process lists of JavaScript objects (end)
+\subsubsection{Conclusion} % (fold)
+\label{sec:Conclusion}
+Monadic APIs allow the building of very general abstractions that can handle a
+wide variety of data types, even if they seem to have nothing in common at
+first glance - such as a |Sequence| or a |Maybe|! JINQ showcases an excellent
+instance of such a general abstraction - its operations only compose generic
+monadic functions. Nevertheless, JINQs operations have very expressive names
+describing their purpose, making it easy to use JINQ with different data types!
+That is truly beautiful and quite rare: general concepts with specific
+meanings.\\ 
+JINQ shows its versatility through the possibility of creating new lists based
+on declarative rules and using the "JSONMonad".
+
+% subsubsection Conclusion (end)
+% subsection Introducing JINQ (end)
+% section Why does this not exist in JavaScript? (end)
