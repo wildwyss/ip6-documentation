@@ -573,23 +573,22 @@ To make another object monadic, apply the same pattern to it!
 JSDoc is structurally typed. We exploit this to extend existing types with
 the monadic type. Such complemented types are then compatible with functions
 that expect |MonadType|s as parameters. \\ 
-Listing~\ref{lst:jsdoc_maybe} adds the |MonadType| JSDoc to Maybe:
+Listing~\ref{lst:jsdoc_add_maybe} adds the |MonadType| JSDoc to Maybe:
 
 \begin{lstlisting}[
   style=ES6,
   caption=Adding JSDoc to Maybe,
-  label={lst:jsdoc_maybe}
+  label={lst:jsdoc_add_maybe}
 ]
-
-/** *'\label{line:jsdoc_maybe1}'*
+/** *'\label{line:jsdoc_add_maybe1}'*
  * @template _T_
  * @typedef { 
- *              ((f:<omitted>)  => (g:<omitted>) => _T_) *'\label{line:jsdoc_maybe2}'*
-              & MaybeMonadType<_T_>    *'\label{line:jsdoc_maybe3}'*
+ *              ((f:<omitted>)  => (g:<omitted>) => _T_) *'\label{line:jsdoc_add_maybe2}'*
+              & MaybeMonadType<_T_>    *'\label{line:jsdoc_add_maybe3}'*
             } MaybeType
  */
 
-/** *'\label{line:jsod_maybe4}'*
+/** 
  * @typedef MaybeMonadType
  * @template _T_
  * @property { <_V_> ((_T_) => MaybeType<_V_>) => MaybeType<_V_> } and
@@ -600,13 +599,155 @@ Listing~\ref{lst:jsdoc_maybe} adds the |MonadType| JSDoc to Maybe:
 \end{lstlisting}
 
 What happens here? \\ 
-Line~\ref{line:jsdoc_maybe1} and following specify the updated |MaybeType|.
-|MaybeType| is a function, which receives to other functions as parameters
-(Line~\ref{line:jsdoc_maybe2}). And it is also everything that is specified by
-|MaybeMonadType| (Line~\ref{line:jsdoc_maybe3}))! \\
+Line~\ref{line:jsdoc_add_maybe1} and following specify the updated |MaybeType|.
+|MaybeType| is a function, which receives two other functions as parameters
+(Line~\ref{line:jsdoc_add_maybe2}). And it is also everything that is specified by
+|MaybeMonadType| (Line~\ref{line:jsdoc_add_maybe3}))! \\
 This |&| sign allows intersecting two JsDoc type definitions into a new one.\\
 \textit{Note}: This kind of typing is called "intersection type".
 
+Using such an intersection type brings the advantage of splitting up type
+declarations, which makes it easier to extend types and also to reuse specific
+parts of a type definition.
 
 % subsubsection Specify the JSDoc (end)
+\subsubsection{Limitations of JSDoc} % (fold)
+\label{sec:Limitations of JSDoc}
+You may have recognized that |MaybeMonadType| and |MonadType| look almost
+identical. So why not drop the specification for |MaybeMonadType| and directly
+use |MonadType|? The reason is simple: |MonadType| is less specific than
+|MaybeMonadType| - every operation on |MonadType| returns a |MonadType|
+again.\\
+Consider line~\ref{line:monad_type_maybe_directly1} in the following
+Listing~\ref{lst:monad_type_maybe_directly}, where the |MaybeType| is defined
+using the more generic |MonadType| (defined in Listing~\ref{lst:monad_type_js})
+instead of the |MaybeMonadType| (defined in Listing~\ref{lst:jsdoc_add_maybe}):
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=Why not use MonadType with Maybe?,
+  label={lst:monad_type_maybe_directly}
+]
+/** *'\label{line:jsdoc_maybe1}'*
+ * @template _T_
+ * @typedef { 
+ *              ((f:<omitted>)  => (g:<omitted>) => _T_)
+              & *'\colorbox{code-highlight}{MonadType<\_T\_>}  \label{line:monad_type_maybe_directly1}'*
+            } MaybeType
+ */
+const maybe        = Just(5); // MaybeType
+const mappedMaybe  = maybe.fmap(x => 2*x); // MonadType *'\label{line:monad_type_maybe_directly2}'*
+
+// produces a type error
+evalMaybe(mappedMaybe); // *'\label{line:monad_type_maybe_directly3} Defined in Listing~\ref{lst:keep_even_maybe}'*
+
+const mappedMaybe2 = /** @type { MaybeType } */ maybe.fmap(x => 2*x); *'\label{line:monad_type_maybe_directly4}'*
+evalMaybe(mappedMaybe); // *'Defined in Listing~\ref{lst:keep_even_maybe}'*
+\end{lstlisting}
+
+Since |fmap| is defined by |MonadType|
+line~\ref{line:monad_type_maybe_directly2} loses the information that |maybe|
+was of |MaybeType|. Therefore, line~\ref{line:monad_type_maybe_directly3} does
+not accept |mappedMaybe| anymore since |evalMaybe| requires a |MaybeType| and
+not a |MonadType|. The workaround would be to add a typecast every time any
+monadic function has been called, like on
+line~\ref{line:monad_type_maybe_directly4}.
+
+For this to work without type casting, JSDoc would have to support higher
+kinded types \cite{baeldung_higher-kinded_2020}, which would allow type definitions as defined by
+Listing~\ref{lst:not_working_type}:
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=Not working JSDoc types,
+  label={lst:not_working_type}
+]
+  /**
+   * Defines a Monad.
+   * @typedef   MonadType
+   * @template  *'\colorbox{code-highlight}{\{ MonadType \} \_M\_} \label{line:def_template_constraint}'*
+   * @template  _T_
+   * ...
+   * <other functions omitted>
+   * ...
+   * @property  { <_U_>
+   *                 ((_T_) => <_U_>)
+   *              => *'\colorbox{code-highlight}{\_M\_<\_U\_>} \label{line:use_template_constraint}'*
+   *            } fmap
+   */
+\end{lstlisting}
+
+Line~\ref{line:def_template_constraint} defines a generic type variable that
+has to conform to |MonadType|. This far, everything works with JSDoc.\\ But
+line~\ref{line:use_template_constraint} does not work anymore because it is not
+possible to abstract over another type using JSDoc.\\
+% subsubsection Limitations of JSDoc (end)
 % subsection Implementing Monadic Operaions in JavaScript (end)
+
+\subsection{Making the Sequence Monadic} % (fold)
+\label{sub:Making the Sequence Monadic}
+Section~\ref{sub:Using JSDoc to type monads} defines the function |keepEven|
+which accepts any |MonadType| as an argument. Since the |Sequence| is monadic,
+Listing~\ref{lst:keep_even_iterable} applies |keepEven| to a |Sequence| without
+defining how to implement the monadic operations on it. The following section
+shows the implementation of the monadic operaitons on the |Sequence|.\\
+The signatures of the operations are analogous to those of |Maybe|. However,
+they do not work with |MaybeMonadType| but with |SequenceMonadType|. Again, the
+prototype defines these functions. |Object.setPrototypeOf| then adds it to the
+sequence.\\
+Listing~\ref{lst:monadic_ops_sequence} shows the definition of these
+operations - it is straight forward:
+\begin{itemize}
+  \item |empty| (line~\ref{line:monadic_empty_sequence}): An empty |Sequence|
+    contains no values and returns, therefore immediately |done: true| when
+    calling |next| on its iterator.
+  \item |pure| (line~\ref{line:monadic_pure_sequence}): A |Sequence| with one
+    single value iterates only once, returning this value. |PureSequence| does
+    precisely this.
+  \item |fmap| (line~\ref{line:monadic_fmap_sequence}): Mapping a |Sequence|
+    applies the given function to each element. Which is what |map| does.
+  \item |and| (line~\ref{line:monadic_and_sequence}): Bind on a |Sequence|
+    applies the given function to each element and then flattens it. This is
+    what |bind| does.
+\end{itemize}
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=The monadic operations on the Sequence,
+  label={lst:monadic_ops_sequence}
+]
+/**
+ * @template _T_
+ * @returns SequenceType<_T_>
+ */
+SequencePrototype.empty = () => Sequence(undefined, _ => false, _ => undefined); *'\label{line:monadic_empty_sequence}'*
+
+/**
+ * @template _T_
+ * @param { _T_ } val - lifts a given value into the context
+ * @returns SequenceType<_T_>
+ */
+SequencePrototype.pure = val => PureSequence(val); *'\label{line:monadic_pure_sequence}'*
+
+/**
+ * @template _T_, _U_
+ * @param { (_T_) => _U_ } mapper - maps the value in the context
+ * @returns SequenceType<_U_>
+ */
+SequencePrototype.fmap = function (mapper) {*'\label{line:monadic_fmap_sequence}'*
+  return map(mapper)(this); 
+};
+
+/**
+ * @template _T_, _U_
+ * @param { (_T_) => SequenceType<_U_> } bindFn
+ * @returns { SequenceType<_U_> }
+ */
+SequencePrototype.and = function (bindFn) {*'\label{line:monadic_and_sequence}'*
+  return bind(bindFn)(this); 
+};
+
+\end{lstlisting}
+
+
+% subsection Making the Sequence Monadic (end)
