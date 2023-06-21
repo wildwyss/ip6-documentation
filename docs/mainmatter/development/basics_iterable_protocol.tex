@@ -150,7 +150,7 @@ interface IteratorReturnResult<TReturn> {
 \end{lstlisting}
 
 An iterable is of type |Iterable<T>|, whereas the object returned by the property
-|[Symbol.Iterator]| is of type |Itertator<...>|. As shown in listing
+|[Symbol.Iterator]| is of type |Iterator<...>|. As shown in listing
 \ref{lst:iterable_types}, an iterator requires having a property |next|. 
 This is the function that returns values when iterating. These values must be 
 of type |IteratorResult<...>|, line~\ref{line:iterator_result} shows the 
@@ -267,4 +267,4 @@ to the console. Line~\ref{line:demo_output} shows the output produced.
 Now, we discussed the ability to generate arbitrary sequences of data. However, 
 just creation is often not enough as there is a need to manipulate the data or 
 introduce additional levels of abstraction. In the upcoming chapter, we will 
-delve into processing such Squences.
+delve into processing such Sequences.

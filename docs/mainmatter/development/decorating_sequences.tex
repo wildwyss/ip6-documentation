@@ -39,7 +39,7 @@ of the code is declarative. This code is more straightforward to understand
 and easier to extend.
 
 \subsubsection{Processing Iteratbles with Functions}
-\label{subsub:Processing Iteratbles with Functions}
+\label{subsub:Processing Iterables with Functions}
 In the following, |map| serves as a representative for any function of the
 Sequence Library. We call such functions in the following operators,
 according to the package they are in.
@@ -97,8 +97,8 @@ inner function |next|, on line~\ref{line:inner_next}. The |mapper| function then
 processes the result and returns it. so |map| decorates the function |next| of
 the inner |Iterable|.
 
-\subsection{Benefits of the Decorater Approach}
-\label{sub:Benefits of the Decorater Approach}
+\subsection{Benefits of the Decorator Approach}
+\label{sub:Benefits of the Decorator Approach}
 This section discusses the benefits and consequences of using the Decorator 
 Pattern to implement the Sequence Library. We start with the fact that functions 
 stand-alone, then discuss the options for managing State.
@@ -254,7 +254,7 @@ The advantage of this implementation is that partially processed iterators can
 be further utilized while maintaining their current state, without
 reinitializing the state with a new iteration.
 Because all objects must have copy implemented, operators can 
-only process objects that implement copy. That means JavaScipt |array|s or 
+only process objects that implement copy. That means JavaScript |array|s or
 |HTML Collection| are not processable anymore, which is a significant drawback.
 
 \subsubsection{Scenario 2}
@@ -302,7 +302,7 @@ can be used to create |Iterable|s.
 
 \subsubsection{A Convenience Function}
 \label{subsub:A Convenience Function}
-In Section~\ref{subsub:Processing Iteratbles with Functions} 
+In Section~\ref{subsub:Processing Iterables with Functions}
 Listing~\ref{lst:impl_map} shows the implementation of |map|. 
 This implementation uses a function |mapIterator|, which returns an object
 containing a function |next|. Thus, |mapIterator| forms an |Iterator|.
