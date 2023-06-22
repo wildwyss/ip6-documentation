@@ -303,15 +303,15 @@ work:
   caption=The app operator in JavaScript used on Maybe,
   label={lst:app_js_maybe}
 ]
-const xs        = [1, 2, 3]; // array with x values
-const ys        = [4, 5, 6]; // array with y values
+const xs        = [1, 2, 3];    // array with x values
+const ys        = [4, 5, 6];    // array with y values
 const maybeX    = safeHead(xs); // getting the head of xs, defined by *'Listing~\ref{lst:js_safeHead}'*
 const maybeY    = safeHead(ys); // getting the head of ys
 
 const plus      = x => y => x + y; *'\label{line:app_js_maybe1}'*
 const maybePlus = Just(plus); *'\label{line:app_js_maybe2}'*
 
-const sum       = jPlus.app(maybeX).app(maybeY); *'\label{line:app_js_maybe3}'*
+const sum       = maybePlus.app(maybeX).app(maybeY); *'\label{line:app_js_maybe3}'*
 sum 
   (_ => console.log("Something went wrong") // Nothing case
   (s => console.log(s));                    // Just case 
@@ -323,7 +323,7 @@ safely! The function |plus| on line~\ref{line:app_js_maybe1} allows you to sum
 up two numbers. However, these two addends are now in a context. So |plus|
 cannot be applied directly to the values. That is when |app| comes into play!
 |app| expects a parameter in the same context as the original wrapped function.
-Line line~\ref{line:app_js_maybe2}, therefore, wraps |plus| in |Just|. So it is
+Line~\ref{line:app_js_maybe2}, therefore, wraps |plus| in |Just|. So it is
 now also in the Maybe context. Line~\ref{line:app_js_maybe3} repeatedly calls
 |app| on the wrapped function to pass parameter after parameter. In the end,
 the variable |sum| contains the result of the addition! If one of the addends
