@@ -130,39 +130,113 @@ types. Listing \ref{lst:iterable_types} shows an excerpt of the relevant types.
   ]
 // lib.es2015.iterable.d.ts
 
-interface Iterable<T> {
+interface Iterable<T> {*'\label{line:start_iteration_types}'*
     [Symbol.iterator](): Iterator<T>;
 }
 
 interface Iterator<T, TReturn = any, TNext = undefined> {
-  next(...args: [] | [TNext]): IteratorResult<T, TReturn>;*'\label{line:iterator_result}'*
+  next(...args: [] | [TNext]): IteratorResult<T, TReturn>;
     return?(value?: TReturn): IteratorResult<T, TReturn>;
     throw?(e?: any): IteratorResult<T, TReturn>;
-}
+}*'\label{line:end_iteration_types}'*
 
-type IteratorResult<T, TReturn = any> = IteratorYieldResult<T> 
+type IteratorResult<T, TReturn = any> = IteratorYieldResult<T> *'\label{line:start_iteration_result_types}'*
                                       | IteratorReturnResult<TReturn>;
 
-interface IteratorReturnResult<TReturn> {
-    done: true;
-    value: TReturn;
+
+interface IteratorYieldResult<TYield> {
+    done?: false;
+    value: TYield;
 }
+
+interface IteratorReturnResult<TReturn> {
+    done: true;*'\label{line:iteration_return_result_done}'*
+    value: TReturn;
+} *'\label{line:end_iteration_result_types}'*
 \end{lstlisting}
 
-An iterable is of type |Iterable<T>|, whereas the object returned by the property
-|[Symbol.Iterator]| is of type |Iterator<...>|. As shown in listing
-\ref{lst:iterable_types}, an iterator requires having a property |next|. 
-This is the function that returns values when iterating. These values must be 
-of type |IteratorResult<...>|, line~\ref{line:iterator_result} shows the 
-definition. |IteratorResult<...>| itself is defined to return an 
-object of type |IteratorReturnResult<...>|. This object contains the actual 
-values we want to work with. Examining these types illustrates how JavaScript 
-builds these types in a nested way. There is a reason for this. We will get to 
-the roots of these in chapter~\ref{subsub:Stateful Decorating}.
+\begin{itemize}
+  \item{Line~\ref{line:start_iteration_types}~-~\ref{line:end_iteration_types}: 
+      An iterable is of type |Iterable<T>|, whereas the object returned by the property
+      |[Symbol.Iterator]| is of type |Iterator<...>|. An iterator requires having a property |next|. 
+      This is the function that returns values when iterating. These values must be 
+      of type |IteratorResult<...>.|
+    }
+  \item{Line~\ref{line:start_iteration_result_types}~-~\ref{line:end_iteration_result_types}:
+      |IteratorResult<...>| itself is defined to return an 
+      object of type |IteratorReturnResult<...>|, which either is of type
+      |IteratorYieldResult| or |IteratorReturnResult|. This object contains the actual 
+      values we want to work with.}
+\end{itemize}
+
+In Chapter~\ref{subsub:Stateful Decorating}, we will see the reason for this
+nested architecture of the JS iteration protocol.
+
+\subsubsection{Closer look to IteratorReturnResult}
+\label{subsub:Closer look to IteratorReturnResult}
+When iterating an |Iterable|, the returned elements are of type
+|IteratorYieldResult<T>|. The last element of an iteration is then of type
+|IteratorReturnResult<TReturn>|. All further calls on an already exhausted
+|Iterable| are of this type. This ensures that |done| is set to |true|, as 
+can be seen on line~\ref{line:iteration_return_result_done}.
+
+
+\subsection{Illustration of the JS Iteration Protocol}
+\label{sub:Illustration of the JS Iteration Protocol}
+Following an example scenario in Listing~\ref{lst:example_js_iteration_protocol}
+to illustrate the behavior of the JS iterable protocol more clearly.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Example: JS Iteration Protocol,
+  label={lst:example_js_iteration_protocol}
+  ]
+const seq = Sequence(0, x => x < 2, x =>  x + 1); 
+const iterator = seq[Symbol.iterator]();*'\label{line:illustraion_create_iterator}'*
+
+iterator.next(); // returns { done: false, value: 0 }
+iterator.next(); // returns { done: false, value: 1 }
+iterator.next(); // returns { done: true,  value: 2 }
+iterator.next(); // returns { done: true,  value: 2 }
+\end{lstlisting}
+
+On line~\ref{line:illustraion_create_iterator}, invoking |[Symbol.iterator]|
+returns an instance of an |Iterator| of the |Iterable| |seq|. 
+After that, we call |next| four times directly on the |Iterator|. 
+This leads to the following diagram~\ref{fig:js_iterable_protocol} shown below. 
+
+\begin{figure}[H]
+  \centering
+  \begin{sequencediagram}                                                      
+    \newthread{client}{:Client}                                                        
+    \newinst[3]{iterable}{:Iterable}                                                     
+    \newinst[3]{iterator}{:Iterator}                                                     
+
+    \begin{call}{client}{[Symbol.iteator()]}{iterable}{return Iterator<T>}                                  
+    \end{call}                                                                    
+
+    \begin{call}{client}{next()}{iterator}{returns IteratorYieldResult<T>}                                  
+    \end{call}                                                                    
+
+    \begin{call}{client}{next()}{iterator}{returns IteratorYieldResult<T>}                                  
+    \end{call}                                                                    
+
+    \begin{call}{client}{next()}{iterator}{returns IteratorReturndResult<TReturn>}                                  
+    \end{call}                                                                    
+
+    \begin{call}{client}{next()}{iterator}{returns IteratorReturndResult<TReturn>}                                  
+    \end{call}                                                                    
+  \end{sequencediagram}    
+  \caption{JS iterable protocol procedure}
+  \label{fig:js_iterable_protocol}
+\end{figure}
+
+Since |SampleSequence| only contains three elements, the third
+and fourth element is of type |IteratorReturnResult<TReturn>|.
 
 \subsection{Building custom Series of Data}
 \label{sub:Building custom Series of Data}
-The last chapter has shown how to make an object iterable. By exploring the 
+The last Chapter has shown how to make an object iterable. By exploring the 
 protocols discussed so far, this chapter showcases the ability to create 
 powerful concepts. Based on these abstractions, an endless iterator that always
 returns |1| served as an illustration. The true power of |Iterable|s is 
