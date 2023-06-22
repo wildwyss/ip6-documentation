@@ -1,1 +1,154 @@
-\section{The Power of the Dot}
+\section{The Power of the Dot} % (fold)
+\label{sec:The Power of the Dot}
+In object-oriented languages, the receiver of an operation usually precedes the
+dot. As described in Section 2, this has some downsides. However, it also
+brings advantages: The IDE can help you find the correct method because the
+syntax |receiver.| allows the IDE to list all operations of the |receiver|'s
+type - this is the true power of the dot! \cite[Chapter "The Power of the
+Dot"]{frege_goodness} \\ This chapter shows how one can exploit the module
+system of JavaScript to get similar suggestions from the IDE, even when not
+working with objects.
+
+\subsection{The JavaScript Module System} % (fold)
+\label{sub:The JavaScript Module System}
+
+Nowadays, when JavaScript programs are increasingly complex, it makes sense to
+structure the code better. Modules are a great way to do this - they define
+clear interfaces in which things are made available to other modules.
+For a JavaScript file to become a module, it must either
+\begin{itemize}
+  \item export part of its functionalities using |export|
+  \item or import functionality from other modules via |import|.
+\end{itemize}
+
+Listing~\ref{lst:js_module_example} shows an example of a simple JavaScript
+module:
+\begin{lstlisting}[
+  style=ES6,
+  caption=A simple JavaScript module,
+  label={lst:js_module_example}
+]
+import { Sequence } from "../src/sequence/sequence.js"; *'\label{line:js_module_example1}'*
+
+export { endlessSeq }
+
+const incrFn     = i => i + 1;
+const untilFn    = _ => true;
+const endlessSeq = Sequence(0, untilFn, incrFn);
+\end{lstlisting}
+
+Listing~\ref{lst:js_module_example} imports the constructor |Sequence| and
+becomes a module. It exports |endlessSeq|, which then becomes available in
+other modules. |incrFn| and |untilFn| are not exported and, therefore, only
+available in this module.
+% subsection The JavaScript Module System (end)
+
+\subsection{IDE support through modules} % (fold)
+\label{sub:IDE support through modules}
+The module system now offers several possibilities to bring autocompletion to
+the IDE using the point.
+\subsubsection{Named Imports} % (fold)
+\label{sec:Named Imports}
+The sequence library offers many loose functions. To use them, you need to know
+their names. This isn't easy, especially for the beginner, and reduces the
+development speed. Fortunately, this can be solved using named imports.
+Line~\ref{line:named_imports_js1} in Listing~\ref{lst:named_imports_js} imports
+the sequence library named |_|:
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=Named imports in JavaScript,
+  label={lst:named_imports_js}
+]
+import *'\colorbox{code-highlight}{* as \_}'* from "../src/sequence/sequence.js" *'\label{line:named_imports_js1}'*
+
+const seq = *'\colorbox{code-highlight}{\_.}'*Sequence(0, i => i < 5, i => i + 1);*'\label{line:named_imports_js2}'*
+
+console.log(_.show(seq));
+// => Logs '[0,1,2,3,4]'
+\end{lstlisting}
+This allows the developer to access exported symbols of |_| using |_.|. Thanks
+to the |.| (dot) after the module name (|_|), IDEs like IntelliJ IDEA will
+suggest exported names of this module!\\
+This is a way to combine the power of the dot with the advantages of placing
+the receiver at the end described in Section~\ref{subsub:Placing the Receiver
+at the End}! \\
+For users who know the library well, typing the additional name represents an
+unnecessary extra effort. The good thing about named imports is that every
+export supports them - the library developer does not need to adapt the
+exports. \\
+This leaves it up to the user to import the library named! Named
+imports, therefore, allow the flexible customization of module names.
+
+Additionally, object destructuring allows using often used symbols without
+module names as Listing~\ref{lst:destr_named_import} shows:
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=Destructuring of a named import,
+  label={lst:destr_named_import}
+]
+import *'\colorbox{code-highlight}{* as \_}'* from "../src/sequence/sequence.js" 
+const { Sequence } = *'\colorbox{code-highlight}{\_.}'*; *'\label{line:destr_named_import1}'*
+
+const seq = Sequence(0, i => i < 5, i => i + 1); *'\label{line:destr_named_import3}'*
+\end{lstlisting}
+
+The statement on line~\ref{line:destr_named_import1} destructures the named
+module. Thus, |Sequence| is available as if a developer had imported it
+typically!
+
+
+% subsubsection Named Imports (end)
+\subsubsection{The Namespace object pattern} % (fold)
+\label{sec:The Namespace Object Pattern}
+The previously described approach with named imports is great for
+functionalities that are only loosely related. What do you do if you want to
+define modules that share a common interface with other modules? Good examples
+of such a use case are services. Often you use dummy services in unit tests
+that should have the same interface as the production services that access an
+API. The Namespace Object pattern solves this problem!
+
+Listing~\ref{lst:namespace_object} defines a service with two methods. The
+object Service gathers these two methods into a single namespace. This object
+is the only thing that the module exports.
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=The Namespace Object pattern,
+  label={lst:namespace_object}
+]
+export { Service }
+
+const getAll  = () => { /* <omitted> */ };
+const getById = id => { /* <omitted> */ };
+
+const Service = { getAll, getById };
+\end{lstlisting}
+
+A user of this service can now import it very easily, as Listing 3 shows:
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=Import a Namespace Object,
+  label={lst:import_namespace_obj}
+]
+import { Service } from "./power-of-the-dot.js";
+
+const allElements = Service.getAll();
+\end{lstlisting}
+
+Since this object can follow a defined interface (for example, using JSDoc), it
+can easily be replaced by just changing the import to another implementation!
+% subsubsection The Namespace object pattern (end)
+
+\subsubsection{Conclusion} % (fold)
+\label{sec:Conclusion}
+The module system of JavaScript thus offers several possibilities to couple
+loose functions. While namespace objects can fulfill an interface, the
+flexibility of named imports makes it easier for developers to get started with
+a potentially comprehensive library.
+
+% subsubsection Conclusion (end)
+% subsection IDE support through modules (end)
+% section The Power of the Dot (end)
