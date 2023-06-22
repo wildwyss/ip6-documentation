@@ -30,20 +30,15 @@ following, we will see how to exploit this to manipulate and change an Iterable.
 
 \subsection{Processing Sequences}
 \label{sec:Processing Sequences}
-We use precisely that decorating approach to process Iterables further. 
-The goal is to find a way to manipulate sequences so that they can solve 
-complex problems. With many other programming languages, it is possible to write 
-programs this way. Lists and operations on lists solve numerous problems in 
-computer science. This way of programming has the advantage that the structure 
-of the code is declarative. This code is more straightforward to understand 
-and easier to extend.
+This section explains how the Sequence Library uses the Decorator pattern.
+In the following, the |map| implementation demonstrates the implementation of it. 
 
 \subsubsection{Processing Iteratbles with Functions}
 \label{subsub:Processing Iterables with Functions}
 In the following, |map| serves as a representative for any function of the
 Sequence Library. We call such functions in the following operators,
 according to the package they are in.
-Listing~\ref{lst:impl_map} shows how |map| processes a Sequence. The 
+Listing~\ref{lst:impl_map} shows how |map| processes a Sequence. The
 implementation use the Decorator approach just mentioned. |map| decorates a
 |Sequence| on line~\ref{line:obj_mapped}.
 \newline
@@ -125,10 +120,9 @@ are three significant advantages:
   }
 \end{enumerate}
 
-Since the independent implementation of the iterable operators, the last
-argument is the iterable object. The operator defines the 
-parameters in a curried style. So it is possible to benefit from eta-reduction 
-in different situations.
+Additionally, the |operators| implement their arguments in a curried-style, passing the
+receiver at the last position allows the use of eta-reduction in many situations. 
+More about this later in the paper.
 
 \subsubsection{Stateful Decorating}
 \label{subsub:Stateful Decorating}
@@ -264,12 +258,7 @@ example~\ref{lst:scen_1_demo} produces the same output. The distinction lies in
 the fact that the object does not need to be copyable. Each call to |[Symbol.iterator]| 
 creates a new state. This type of |Iterable| is immutable. Another advantage is
 that all operators within the Sequence Library can handle objects conform to JS
-iteration protocols including JavaScript arrays.
-\newline
-As is now apparent, there is a reason for the deep nesting of objects, according 
-to chapter~\ref{sub:Types of Iterables}. The JS iteration protocols design the 
-interface in this way to achieve this level of immutability, and iterable 
-objects behave as expected.
+iteration protocols including JavaScript |array|s.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -289,6 +278,10 @@ const SampleIterable2 = () => {
 };
 \end{lstlisting}
 
+As mentioned in chapter~\ref{sub:Types of Iterables}, there is a reason for 
+the deep nesting of the |Iterator|. As you can see now, it serves to make 
+the |Iterator| immutable.
+\newline
 In this chapter, we have examined the possibilities for adding state to 
 Sequences. Due to the advantages of immutability, we built the Sequence Library 
 according to Scenario 2 with an immutable approach.
@@ -394,12 +387,12 @@ example of this is JINQ. Chapter~\ref{TODO} discusses JINQ in detail.
 \label{subsub:Turn Iterables into SequenceType}
 Sometimes the |SequenceType| must be set on an arbitrary |Iterable|. For example,
 if you want to use the monadic functions on a JavaScript array. To make this
-possible, we have provided the function |toMonadicIterable|.
+possible, Sequence Library provides |toMonadicIterable| function.
 Listing~\ref{lst:casting_iterables} shows the
 implementation of it. This function takes an arbitrary |Iterable| and returns an
 |SequenceType| mapped by |id| \footnote{The id (identity) function always
 returns the value passed to it.}. 
-The returned object is then of the desired type |SequenceType|.
+Therefore, the returning object is then of the desired type |SequenceType|.
 
 \begin{lstlisting}[
   style=ES6, 
