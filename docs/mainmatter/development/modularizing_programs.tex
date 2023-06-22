@@ -1,4 +1,5 @@
 \section{Modularizing Programs}
+\label{sec:Modularizing Programs}
 This section explains how to break down programs and functions into small,
 reusable pieces using lazy evaluation and higher-order functions. The start
 shows how Haskell implements these concepts. The subsequent discussion covers
@@ -18,7 +19,7 @@ other hand, lazy evaluation. \cite[p.3]{hughes_why_1989}
 \label{sub:Using these Glues in Haskel}
 
 \subsubsection{Higher-order Functions in Haskell} % (fold)
-\label{sec:Higher-order functions Haskell}
+\label{subsub:Higher-order functions Haskell}
 Higher-order functions receive another function as arguments or produce a
 function as a result. This concept is fundamental in Haskell, where the whole
 program is a single function. The easiest way to understand higher-order
@@ -313,4 +314,13 @@ more accurate when reading because the term |doubleAll = map(double)| says that
 the pre-configured function |map(double)| gets a new name (|doubleAll|). No worrying about
 parameter naming is needed here.
 % subsubsection Placing the Receiver at the End (end)
-
+\subsubsection{Conclusion} % (fold)
+\label{subsub:modularizing_programs_conclusion}
+Higher-order functions and lazy evaluation are powerful glues to compose
+smaller parts into a bigger program. Haskell provides a good reference for
+this. In JavaScript, higher-order functions are familiar. However, JavaScript
+offers less support for lazy evaluation - it eagerly evaluates arrays and their
+operations. The Sequence library closes this gap because sequences work
+similarly to Haskell lists. Thus, the Sequence library allows using both types
+of glue in JavaScript.
+% subsubsection Conclusion (end)
