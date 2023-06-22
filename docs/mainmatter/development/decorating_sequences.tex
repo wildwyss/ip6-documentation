@@ -12,15 +12,37 @@ widely used concept. An object decorates another, as the name implies. As a
 result, an outer object holds an inner object, while both implement the same 
 interface. The outer object forwards requests to the inner one. This enables
 the outer to modify (decorate) the behavior of the inner. 
-Figure \ref{fig:seq_diagramm} shows how a decorator forwards the receiving calls and 
+Figure \ref{fig:seq_decorator} shows how a decorator forwards the receiving calls and 
 transfers the answer back to the client.
 
-% TODO: replace
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{./mainmatter/pictures/decorator_sequence_diagramm.png}
-    \caption{Decorator Patter Sequence Diagram}
-    \label{fig:seq_diagramm}
+  \centering
+  \begin{sequencediagram}                                                      
+    \newthread{client}{:Client}                                                        
+    \newinst[3]{decorator}{:Decorator}                                                     
+    \newinst[3]{decorated}{:Decorated}                                                     
+
+    \begin{call}{client}{operation()}{decorator}{return value}                                  
+
+      \begin{sdblock}{}{optionally do somthing befor calling
+        inner.operation()}
+        \begin{call}{decorator}{}{decorator}{}                                  
+        \end{call}                                                                    
+      \end{sdblock}
+
+      \begin{call}{decorator}{operation()}{decorated}{}                                  
+      \end{call}                                                                    
+
+      \begin{sdblock}{}{optionally do somthing after calling
+        inner.operation()}
+        \begin{call}{decorator}{}{decorator}{}                                  
+        \end{call}                                                                    
+      \end{sdblock}
+
+    \end{call}                                                                    
+  \end{sequencediagram}    
+  \caption{Decorator Sequence Diagram}
+  \label{fig:seq_decorator}
 \end{figure}
 
 The Decorator Pattern is often used in object-oriented programming languages 
@@ -320,18 +342,6 @@ Listing~\ref{lst:createMonadicSequence} demonstrates the implementation of
    *'\label{line:start_createMonadicSequence}'* const result = {[Symbol.iterator]: iterator};
   return setPrototype(result);
 };*'\label{line:end_createMonadicSequence}'*
-
-
-/**
- *
- * @template _T_
- * @param { Iterable<_T_> } iterable
- * @returns { SequenceType<_T_> }
- */
- const setPrototype = iterable => { *'\label{line:setPrototype}'*
-  Object.setPrototypeOf(iterable, SequencePrototype);
-  return /**@type SequenceType*/ iterable;
-};
 \end{lstlisting}
 
 Between line~\ref{line:start_createMonadicSequence} and 
@@ -348,15 +358,69 @@ Outsourcing the code helps to improve the code base's overview and readability.
 The following section explains what the prototype is all about.
 
 \subsubsection{Sequence Prototype}
-\label{Sequence Prototype}
-An object in JavaScript can have a prototype. Prototypes define properties 
-that are available to the corresponding object. The subsequent
-function |setPrototype| on line~\ref{line:setPrototype} sets the Sequence 
-prototype to this iterable. This causes some functions to be accessible on each 
+\label{subsub:Sequence Prototype}
+\textcquote{mdn_prototype_2023}{Prototypes are the mechanism by which
+JavaScript objects inherit features from one another.}\\ 
+Multiple objects can use the same implementation of functions simultaneously if
+they have the same prototype.\\
+\textit{Note}: An object can have just \textit{one} prototype. Hierarchies
+emerge through chaining prototypes, meaning setting the prototype of a
+prototype.
+
+A prototype is a function on which you can define any properties. A static
+function |setPrototypeOf| adds this prototype to an existing object. Thus, any
+properties set on the prototype become available on that object. These
+properties can access the current object directly with the keyword |this|.
+Listing~\ref{lst:js_set_proto} shows how this works for any object:
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=Setting the prototype to an object,
+  label={lst:js_set_proto}
+]
+// The prototype is just a function
+const Prototype = () => null; 
+
+// Add a new function to this prototype
+Prototype.getName = function () { return this.name; };
+
+// Creating an object with a name
+const tobi = { name : "Tobi" };
+
+
+// Setting the prototype
+Object.setPrototypeOf(tobi, Prototype);
+
+console.log(tobi.getName());
+// => Logs 'Tobi' 
+\end{lstlisting}
+
+
+The function |setPrototype| on line~\ref{line:setPrototype} sets the Sequence 
+prototype to an |Iterable| with the function |setPrototypeOf|. This causes some functions to be accessible on each 
 |SequenceType| using notation. These are, among others, monadic functions. You will read more
-about Monads and there functionality in chapter~\ref{sec:Monads in JavaScript}. 
+about Monads and there functionality in chapter~\ref{sec:Monads in JavaScript}.
+\begin{lstlisting}[
+  style=ES6,
+  caption=Implementation of setPrototype,
+  label={lst:set_prototype}
+]
+/**
+ *
+ * @template _T_
+ * @param { Iterable<_T_> } iterable
+ * @returns { SequenceType<_T_> }
+ */
+ const setPrototype = iterable => { *'\label{line:setPrototype}'*
+  Object.setPrototypeOf(iterable, SequencePrototype);
+  return /**@type SequenceType*/ iterable;
+};
+\end{lstlisting}
+
 |SequenceType| represents a Sequence and the monadic functions defined on it. 
 Listing~\ref{lst:sequence_type} shows the definition of the type.
+Furthermore, |toString| and equals |"=="| are also functions we decided to add to the
+prototype. Having these functions on each |SequenceType| is convenient.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -380,7 +444,7 @@ Listing~\ref{lst:sequence_type} shows the definition of the type.
 
 Why is this necessary? With this approach, we can ensure that Sequences become
 monadic but still iterable. Monadic APIs can thus also process Sequences. An
-example of this is JINQ. Chapter~\ref{TODO} discusses JINQ in detail.
+example of this is JINQ. Chapter~\ref{sec:API_JINQ} discusses JINQ in detail.
 
 
 \subsubsection{Turn Iterables into SequenceType}
