@@ -1,1 +1,33 @@
-\section{Constructors}
+\section{Constructors} % (fold)
+\label{sec:api_constructors}
+A constructor is anything that builds a |Sequence| without depending on another
+one. So they serve as an entry point to the Sequence library. Some of these
+constructors create a specific series of values, including, for example, the
+|PrimeNumberSequence| which yields the infinite sequence of all prime
+numbers.\\
+Table~\ref{tab:api_ctors} gives an overview of all available constructors. \\
+Code examples and more information about the constructors deliver the
+appendices~\ref{sub:appendix_constructors} and
+\ref{sub:appendix_special_constructors}.
+
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{| l | X |} \hline
+    \textbf{Name} & \textbf{Description} \\ \hline
+    \texttt{Sequence} & Creates a new Sequence based on a start \texttt{value}, \texttt{incrFn} and \texttt{stopFn}. \\ \hline
+    \texttt{PureSequence} & Creates a Sequence which contains just the given value. \\ \hline
+    \texttt{repeat} & Returns a Sequene that will repeatedly yield the value of \texttt{arg} when iterated over. \texttt{repeat} will never be exhausted. \\ \hline
+    \texttt{replicate} & \texttt{replicate(n)(x)} creates a Sequence of length \texttt{n} with \texttt{x} the value of every element. \\ \hline
+    \texttt{StackSequence} & Creates a \texttt{SequenceType} on top of the given \texttt{stack}. \\ \hline
+    \texttt{TupleSequence} & Constructs a new \texttt{SequenceType} based on the given tuple. \\ \hline
+    \texttt{AngleSequence} & Creates a Sequence which generates evenly spaced angles between 0 and 360. \\ \hline
+    \texttt{FibonacciSequence} & Generates the Fibonacci sequence. \\  \hline
+    \texttt{PrimeNumberSequence} & Generates the sequence of prime numbers. \\ \hline
+    \texttt{SquareNumberSequence} & Generates the sequence of square numbers. \\ \hline
+  \end{tabularx}
+  \caption{The available constructors in the Sequence library}
+  \label{tab:api_ctors}
+\end{table}
+% section Constructors (end)
+
+
