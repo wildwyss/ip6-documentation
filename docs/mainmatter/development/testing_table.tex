@@ -81,6 +81,7 @@ Description of the functionalities:
 
 
 \subsubsection{Assertion for Iterables}
+\label{subsub:Assertion for Iterables}
 Assert functions in the Kolibri Test Framework execute tests by comparing
 two values and store the result in the summary collection of the |TestSuite|.
 Listing~\ref{lst:testsuit_demo} shows the comparison of two |boolean|s using
@@ -249,6 +250,7 @@ operators and constructors of the Sequence Library:
 
 
 \subsubsection{The Function to Run the Tests}
+\label{subsub:The Function to Run the Tests}
 |addToTestingTable| inserts the tests of the |testingTable| into the |TestSuite| for a
 specific configuration. Visible on line~\ref{line:add_to_testsuite}. 
 Since the configuration runs all tests of the |testingTable| by default, it
@@ -281,6 +283,7 @@ const addToTestingTable = testSuite => config => {
 \end{lstlisting}
 
 \subsubsection{The Configuration}
+\label{subsub:The Configuration}
 
 To test operators and constructors with the |testingTable|, they must implement 
 a test configuration.
@@ -322,11 +325,10 @@ On line~\ref{line:createTestConfig}, the function |createTestConfig| ensures
 that required properties are set using notation. Furthermore, it sets default
 values of configuration properties to simplifying the code.
 
-The following Table~\ref{tbl:testing_table} shows which configuration 
+The following Table~\ref{tab:testing_table} shows which configuration 
 properties are available and the purpose of it:
 
 
-\renewcommand{\arraystretch}{1.5}
 \begin{table}[H]
   \center
   \begin{tabular}{ l m{10cm} c}
@@ -367,11 +369,12 @@ properties are available and the purpose of it:
                     \\
   \end{tabular}
   \caption{Properties of Configuration Object}
-\label{tbl:testing_table}
+\label{tab:testing_table}
 \end{table}
 
 
 \subsection{A Kind of Property based Testing}
+\label{sub:A Kind of Property based Testing}
 John Huges and Carl Claessen wrote to following sentence in the paper
 "Quickcheck, A Lighweight Tool for Random Testing of Haskell Programms":
 \textit{
@@ -471,9 +474,9 @@ This allows for testing many cases written in a few lines of code.
 \label{subsub:An advanced Example}
 We will look at another example in the following. Because Sequence is a Monoid,
 its laws also apply to Sequence implementations. A
-prominent one is the identity law\cite{haskell_monoid}. mconcat is such a function
+prominent one is the identity law~\cite{quickcheck_hughes}. mconcat is such a function
 that satisfies these rules. |mconcat| flattens a list of |Iterable|s to one
-|Iterable|. Since Sequence is a Monoid, the empty Sequence is also defined. So
+|Iterable|. Since Sequence is a Monoid~\cite{haskell_monoid}, the empty Sequence is also defined. So
 we can check the following law in Listing~\ref{lst:lr_identity_mconcat}:
 
 \begin{lstlisting}[
