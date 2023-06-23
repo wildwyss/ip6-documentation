@@ -1,14 +1,35 @@
 \section{Introduction} % (fold)
 \label{sec:Introduction}
 
-\subsection{Sequence Library Overview} % (fold)
+\subsection{Library Overview} % (fold)
 \label{sub:Sequence Library Overview}
-
+This library consists of several parts. Table~\ref{tab:library_overview} gives a brief
+overview of each of those. The following sections discuss these different
+aspects.
 % subsection Sequence Library Overview (end)
 
-\subsection{Including the Sequence Library in a Project} % (fold)
-\label{sub:Including the Sequence Library in a Project}
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{| l | X |} \hline
+    \textbf{Part} & \textbf{Description} \\ \hline
+    Sequence library & The Sequence library provides operations for processing \lstinline{Iterable}s. Additionally, there are constructors to create Sequences.\\ \hline 
+    JINQ & A range generates a sequence of numbers. \\ \hline 
+    FocusRing & A FocusRing is an immutable data structure, whose elements are arranged in a ring. \\ \hline 
+    Range & A Range generates a sequence of numbers. \\ \hline 
+  \end{tabularx}
+  \caption{The available operators in the Sequence library}
+  \label{tab:library_overview}
+\end{table}
+
+\textit{Note:} The Range and the FocusRing are the results of the predecessor
+project IP5 and are only listed here for completeness. You can find more
+information in the IP5 documentation~\cite{wild_ip5_2023}. 
+
+\subsection{Including the Library in a Project} % (fold)
+This library is part of the Kolibri project and uses many of its
+functionalities. The Kolibri ships this library, therefore. The Kolibri
+is available on GitHub and can be included directly in existing projects via
+the ES6 module system.
+\label{sub:Including the Library in a Project}
 % subsection Including the Sequence Library in a Project (end)
-
-
 % section Introduction (end)
