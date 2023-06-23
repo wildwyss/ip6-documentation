@@ -1,4 +1,6 @@
 \chapter{API}
+\label{chap:API}
+
 \newcommand{\passthrough}[1]{#1}
 
 \providecommand{\tightlist}{%
@@ -8,7 +10,7 @@
 \section{Sequence Library}\label{api}}
 
 \hypertarget{fa229d10-532a-4f04-9805-8fdc4881587a}{%
-\subsection{Constructors}\label{fa229d10-532a-4f04-9805-8fdc4881587a}}
+\subsection{Constructors}\label{sub:appendix_constructors} }
 
 All functions listed below create new
 \passthrough{\lstinline!Sequence!}s from non-sequence values. They are
@@ -287,8 +289,8 @@ console.log(...tupleSequence);
 \end{lstlisting}
 
 \hypertarget{ed041adb-4774-4c16-a585-05c2eaf8e235}{%
-\subsection{Special
-constructors}\label{ed041adb-4774-4c16-a585-05c2eaf8e235}}
+\subsection{Special Constructors}\label{sub:appendix_special_constructors}}
+
 
 \hypertarget{68f6afbc-de45-4843-9b8c-ab5ca8806c10}{%
 \subsubsection{AngleSequence}\label{68f6afbc-de45-4843-9b8c-ab5ca8806c10}}
@@ -380,7 +382,7 @@ console.log(...result);
 \end{lstlisting}
 
 \hypertarget{569b08a0-06b3-45e3-b4e9-576f534c5301}{%
-\subsection{Operators}\label{569b08a0-06b3-45e3-b4e9-576f534c5301}}
+\subsection{Operators}\label{sub:appendix_operators} }
 
 All of the following functions operate on
 \passthrough{\lstinline!Sequence!}s and
@@ -1132,10 +1134,9 @@ console.log(...zipped);
 \end{lstlisting}
 
 \hypertarget{fe5771c4-997c-4878-97c6-42d757c1418a}{%
-\subsection{Terminal
-operations}\label{fe5771c4-997c-4878-97c6-42d757c1418a}}
+\subsection{Terminal Operations}\label{sub:appendix_terminal_operations}}
 
-All of the following operations transform an
+All the following operations transform an
 \passthrough{\lstinline!Iterable!} into a single value.
 
 \hypertarget{bd20be56-f445-48bf-bdf2-a716e1236a4d}{%
@@ -1144,7 +1145,7 @@ All of the following operations transform an
 Checks the equality of two
 non-infinite\passthrough{\lstinline!Iterable!}s.
 
-\emph{Note}: Two iterables are considered as equal if they contain or
+\emph{Note:} Two iterables are considered as equal if they contain or
 create the exactly same values in the same order. Use
 \passthrough{\lstinline!["=="]!} defined on the SequencePrototype to
 perform a comparison in a more readable form.

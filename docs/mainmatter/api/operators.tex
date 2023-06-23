@@ -1,1 +1,34 @@
-\section{Operators}
+\section{Operators} % (fold)
+\label{sec:Operators}
+Operators are all functions that operate on an existing |Sequence| and create a
+new |Sequence| from it. \\
+Table~\ref{tab:api_operators} gives an overview of all available operators.\\
+Code examples and more information about the constructors delivers the
+appendix~\ref{sub:appendix_operators}.
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{| l | X |} \hline
+    \textbf{Name} & \textbf{Description} \\ \hline
+    \texttt{bind} & Applies the given function to each element of the \texttt{Iterable} and flats it afterward. Note This operation adds a monadic API to the \texttt{SequenceType}. \\ \hline 
+    \texttt{catMaybes} & The catMaybes function takes an \texttt{Iterable} of \texttt{MaybeType}s and returns a \texttt{SequenceType} of all the Just's values. \\ \hline 
+    \texttt{concat} & Adds the second iterable to the first iterables end. \\ \hline 
+    \texttt{cons} & Adds the given element to the front of an iterable. \\ \hline 
+    \texttt{cycle} & Ties a finite \texttt{Iterable} into a circular one, or equivalently, the infinite repetition of the original \texttt{Iterable}. \\ \hline 
+    \texttt{drop} & Jumps over so many elements. \\ \hline 
+    \texttt{dropWhile} & Discards all elements until the first element does not satisfy the predicate anymore. \\ \hline 
+    \texttt{map} & Transforms each element using the given function. \\ \hline 
+    \texttt{mconcat} & Flatten an \texttt{Iterable} of \texttt{Iterable}s. \\ \hline 
+    \texttt{pipe} & Transforms the given \texttt{Iterable} using the passed operators. \\ \hline 
+    \texttt{rejectAll} & Only keeps elements which does not fulfill the given predicate. \\ \hline 
+    \texttt{retainAll} & Only keeps elements which fulfill the given predicate. \\ \hline 
+    \texttt{reverse\$} & Processes the \texttt{Iterable} backwards. \\ \hline 
+    \texttt{snoc} & Adds the given element to the end of the \texttt{Iterable}. \\ \hline 
+    \texttt{take} & Stop after so many elements. \\ \hline 
+    \texttt{takeWhile} & Proceeds with the iteration until the predicate becomes true. \\ \hline 
+    \texttt{zip} & Zip takes two \texttt{Iterable}s and returns an \texttt{Iterable} of corresponding \texttt{Pair}s. \\ \hline 
+    \texttt{zipWith} & Generalises \texttt{zip} by zipping with the function given as the first argument. \\ \hline 
+  \end{tabularx}
+  \caption{The available operators in the Sequence library}
+  \label{tab:api_operators}
+\end{table}
+% section Operators (end)
