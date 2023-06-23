@@ -1,0 +1,50 @@
+\section{Sequence Builder}
+\label{sec:Sequence Builder}
+A mutable builder for a |SequenceType|.
+\newline
+|SequenceBuilder| allows the creation of a |SequenceType| by generating elements individually 
+and adding them to the |SequenceBuilder| (without the call stack overhead when doing so
+with |cons|).
+
+\subsection{Functions}
+\label{sub:sb_Functions}
+
+|SequenceBuilder| provides the following functions:
+
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{| l | X |} \hline
+    \textbf{Name}    & \textbf{Description} \\ \hline
+    \texttt{prepend} & Adds one or more elements to the beginning of the texttt{Sequence}\\ \hline 
+    \texttt{append}  & Adds one or more elements to the end of the texttt{Sequence} \\ \hline 
+    \texttt{build}   & The built phase and returns a texttt{SequenceType} which iterates over the added elements. \\ \hline 
+   \end{tabularx}
+  \caption{SequenceBuilder functions}
+  \label{tab:sb_functions}
+\end{table}
+
+\subsection{Examples}
+\label{sub:sb_Examples}
+Creating a Sequence from different values and |Iterable|s:
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=SequenceBuilder example,
+  label={lst:sb_example}
+  ]
+import * as _              from "./src/sequence/sequence.js"
+import { SequenceBuilder } from "./src/sequence/SequenceBuilder.js";
+import { Range }           from "./src/range/range.js";
+
+const range = Range(1, 3);
+
+const result = SequenceBuilder()
+.append(range)
+.append(4)
+.prepend(0)
+.append(5,6,7)
+.build();
+
+console.log(_.show(result));
+// => Logs '[0,1,2,3,4,5,6,7]'
+\end{lstlisting}

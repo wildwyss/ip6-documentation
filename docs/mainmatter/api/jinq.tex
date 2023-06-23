@@ -10,6 +10,7 @@ Chapter~\ref{sec:Monads in JavaScript}.%TODO
 
 
 \subsection{Functions}
+\label{sub:JINQ_Functions}
 JINQ provides the following functions:
 
 \begin{table}[H]
@@ -25,13 +26,15 @@ JINQ provides the following functions:
     \texttt{result}     & Returns the result of this query\\ \hline 
 
   \end{tabularx}
-  \caption{JINQ Functions}
+  \caption{JINQ functions}
   \label{tab:jinq_functions}
 \end{table}
 
 \subsection{Examples}
+\label{sub:JINQ_Examples}
 
 \subsubsection{Even Numbers}
+\label{subsub:JINQ_Even Numbers}
 Generating a Sequence of even numbers using JINQ and a Range as data source:
 \newline
 \textit{Note:} Since |result| returns a |MonadType|, casting is needed
@@ -58,6 +61,7 @@ console.log(_.show(/** @type SequenceType */ result));
 
 
 \subsubsection{Pythagorean Triple}
+\label{subsub:JINQ_Pythagorean Triple}
 Searching for all Pythagorean triple between 1 and 10.
 
 \begin{lstlisting}[
