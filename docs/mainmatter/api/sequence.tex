@@ -51,11 +51,15 @@ Listing~\ref{lst:api_endl_seq_eval} shows an example for that:
 ]
 import * as _ from "./sequence/sequence.js"
 
-const seq = _.Sequence(0, _ => true, x => x + 1); *'\label{line:api_endl_seq_eval1}'*
+const seq      = _.Sequence(0, _ => true, x => x + 1); *'\label{line:api_endl_seq_eval1}'*
+const part     = _.take(5)(seq); *'\label{line:api_endl_seq_eval2}'*
+
+const reversed = _.reverse$(part);
+
+console.log(...reversed);
 
 console.log(
-  _.reverse$(_.take(5)(seq)) *'\label{line:api_endl_seq_eval2}'*
-);  
+  _.reverse$(_.take(5)(seq)) );  
 // => Logs '4, 3, 2, 1, 0'
 \end{lstlisting}
 

@@ -1,4 +1,21 @@
-\chapter{Development}
+\chapter{Development} % (fold)
+\label{chap:development}
+
+\section*{Reader Guidance} % (fold)
+\label{sec:dev_reader_guidance}
+This chapter describes in detail the concepts behind the results of this
+thesis. In contrast to Chapter~\ref{chap:api}, it is not a matter of defining
+the whole API of this library in breadth but of presenting the background and
+considerations understandably. \\
+The first part of this chapter describes how Iterables work in JavaScript and
+what a Sequence is in the context of this project. Then it shows how to use the
+decorator pattern to build functions available to all Iterables. \\ 
+The second part shows how programs can be better structured using approaches
+found in functional programming languages. These approaches allow the adoption
+of abstract and strong concepts from Haskell to JavaScript. \\ 
+The final part is devoted to testing - how to test different functions with
+similar requirements safely and why tests based on invariants are helpful.
+% section Reader Guidance (end)
 \input{./mainmatter/development/basics_iterable_protocol}
 \input{./mainmatter/development/decorating_sequences}
 \input{./mainmatter/development/iterables_everywhere}
@@ -8,3 +25,4 @@
 \input{./mainmatter/development/power_of_the_dot}
 \input{./mainmatter/development/testing_table}
 \input{./mainmatter/development/naming}
+% chapter development (end)
