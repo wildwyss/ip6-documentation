@@ -100,7 +100,7 @@ const mapIterator = () => {
   return createMonadicSequence(mapIterator);
 };
 
-const sequence = Sequence(0, x => x < 10, x => x++);*'\label{line:seq_definition}'*
+const sequence = Sequence(0, x => x < 10, x => x + 1);*'\label{line:seq_definition}'*
 const mapped   = map(x => x * 2)(sequence);*'\label{line:obj_mapped}'*
 \end{lstlisting}
 
@@ -192,7 +192,7 @@ uses the same |Iterable|. Line~\ref{line:scen1_output} shows an expected result.
   caption=Scenario 1 - Example usage,
   label={lst:scen_1_demo}
   ]
-const seq = SampleIterable(0, x => x < 5, x => x++); // [0, 1, 2, 3, 4]
+const seq = SampleIterable(0, x => x < 5, x => x + 1); // [0, 1, 2, 3, 4]
 const mapped = map(id)(seq); *'\label{line:scen1_map}'*
 
 for (const elem of mapped) {

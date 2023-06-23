@@ -1,1 +1,536 @@
-\section{Testing Table}
+\section{Testing}
+\label{sec:Testing}
+This chapter discusses the test strategy of the Sequence Library. The start
+explains which instruments are already available from the Kolibri framework and
+how we used them. After that, we focus on the |testingTable|. 
+This is the core of our test framework, and exciting details are covered in
+depth. At the end of the chapter, we will look at some advanced concepts
+regarding property-based testing.
+
+\subsection{Motivation}
+\label{sub:Motivation}
+When implementing a library, testing is an essential task. With the constant
+increase of functionalities, the number of tests also grows. Therefore, it
+brings many benefits to implementing tests in a standardized and generalized
+way. This leads to a robust and
+leakless testing framework and, thus, a solid code base.
+We called our implementation of the generalization |testingTable|.
+An explanation in detail follows in Chapter~\ref{sub:Testing Table}.
+Such a testing strategy has significant advantages. 
+The following non-concluding list shows an excerpt of the most important:
+
+\begin{itemize}
+  \item{Ensuring high code quality}
+  \item{Avoid incompleteness - prevent missing test cases}
+  \item{Prevent code duplication}
+  \item{Less effort in writing tests}
+  \item{Better overview of the code base}
+  \item{Easier to understand test cases}
+\end{itemize}
+
+The generalization of testing enables to write configurations for functions
+under test, which are checked against different rules. Suppose a new particular case, probably a bug, is
+discovered during the development that has to be handled. In that case, it can
+be tested in a central location and easily checked against all configurations.
+
+\subsection{Kolibri Test Framework}
+\label{sub:Kolibri Test Framework}
+This Section gives an overview of the Kolibri Test Framework. It was already
+part of the Toolkit. Therefore, we do not dive deep but still want to cover
+certain aspects. Additionally, we extended the Framework with some |Iterable|
+specific functionalities for easier handling of our implementations.
+
+\subsubsection{Parts of the Framework}
+\label{subsub:Parts of the Framework}
+The |TestSuite| is the core element of the Testing Framework. Typically, a
+|TestSuite| includes several tests, whereas a Test Framework can consist of
+several suites. Executing the |TestSuit|s generates a test report in HTML.
+An example of a summary report shows Figure~\ref{fig:test_report}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{mainmatter/pictures/test_report.png}
+    \caption{Example Test Report}
+    \label{fig:test_report}
+\end{figure}
+
+
+To demonstrate how to work with the |TestSuite|, we examine the following Listing~\ref{lst:testsuit_demo}.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=TestSuite demonstration,
+  label={lst:testsuit_demo}
+  ]
+const suite = TestSuite("The truth");
+  suite.add("test if true really true", assert => {
+      assert.is(true, true);
+ });
+ suite.run();
+\end{lstlisting}
+
+Description of the functionalities: 
+
+\begin{itemize}
+  \item{|TestSuit|: A |TestSuit| contains the test cases and is identified by a
+    name. This name represents the suite on the summary page when executing.}
+  \item{|run|: executes all tests containing the |TestSuite|.}
+  \item{|add|: A function for including a test case into |TestStuite|. Its
+      parameters are a string |name| and a callback |assert|.}
+\end{itemize}
+
+
+\subsubsection{Assertion for Iterables}
+Assert functions in the Kolibri Test Framework execute tests by comparing
+two values and store the result in the summary collection of the |TestSuite|.
+Listing~\ref{lst:testsuit_demo} shows the comparison of two |boolean|s using
+|assert.is(...)| function.
+This function compares an |actual| and an |expected| value. These two values
+must match. Otherwise, the test fails.
+\newline
+Comparing |Iterable| is slightly more complicated. For this reason, we have 
+written an additional assert function that compares two arbitrary |Iterable|s.
+Listing~\ref{lst:iterableEq} shows the usage of the |iterableEq| function.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Usage of iterableEq,
+  label={lst:iterableEq}
+  ]
+testSuite.add("demo iterableEq", assert => {
+
+  const sequence = Sequence(0, x => x < 2, x => x +1);
+  assert.iterableEq(sequence, [0,1]);
+  assert.iterableEq(sequence, Pair(0)(1));
+  assert.iterableEq(sequence, Range(1));
+});  
+\end{lstlisting}
+
+The implementation of |iterableEq| is capable of all different 
+|Iterable|s. Listing~\ref{lst:impl_iterableEq} shows the
+implementation of |iterableEq|. 
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Implementation of iterableEq,
+  label={lst:impl_iterableEq}
+  ]
+...
+iterableEq: (actual, expected, maxElementsToConsume = 1_000) => { *'\label{line:signature_iterableEq}'*
+
+    if (actual[Symbol.iterator]   === undefined) error("..."); *'\label{line:check_iterable}'*
+    if (expected[Symbol.iterator] === undefined) error("...");
+
+    const actualIt     = actual[Symbol.iterator]();
+    const expectedIt   = expected[Symbol.iterator]();
+
+    let iterationCount = 0;
+    let testPassed     = true;
+    let message        = "";
+
+    while (true) {
+     const { value: actualValue,   done: actualDone  } = actualIt.next();
+     const { value: expectedValue, done: expectedDone } = expectedIt.next();
+
+     const oneIteratorDone      = actualDone || expectedDone;
+     const bothIteratorDone     = actualDone && expectedDone;
+     const tooManyIterations    = iterationCount > maxElementsToConsume;
+
+     ... error handling omitted ...
+
+     iterationCount++;
+    }
+    if (!testPassed) error(message);
+    results.push(testPassed);*'\label{line:write_result_to_summary}'*
+    messages.push(message);
+}
+\end{lstlisting}
+
+The implementation checks on line~\ref{line:check_iterable} if both values are
+|Iterable|s. If this is the case, each value of the two |Iterables| is compared
+in order using a |while| loop. On line~\ref{line:write_result_to_summary}, the
+test stores the result into the summary collection of the corresponding |TestSuite|.
+\newline
+Since an |Itearble| can be endless, |iterableEq| defines a default maximum
+iteration amount on line~\ref{line:signature_iterableEq}.  This is necessary because it is often the case that an
+|Iterable| runs infinitely while something goes wrong.
+
+
+\subsection{Testing Table}
+\label{sub:Testing Table}
+This Chapter describes the realization of the |testingTable|. Therefore, we
+examine the architecture of it and how it works for a particular operation. We
+cover the config-based testing approach, which enables generalizing test cases
+for the Sequence Library.
+
+The architecture consists of three main parts:
+\begin{itemize}
+  \item{A table containing all test functions.}
+  \item{Configuration objects to define test properties.}
+  \item{A function |addToTestingTable| which includes all tests from the Testing
+    Table into a given |TestSuite|.}
+\end{itemize}
+
+Each constructor and operation of the Sequence Library has its configuration
+that specifies the test behavior. Likewise, each has its |TestSuite|. 
+The following sections address the different parts separately.
+
+
+\subsubsection{The Table}
+\label{subsub:The Table}
+The central feature of the |testingTable| is an array (table) containing test objects.
+Each object has a name and a function. Listing~\ref{lst:testing_table} shows a 
+part of the implementation.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Testing Table,
+  label={lst:testing_table}
+  ]
+const testingTable = [];
+testingTable.push({ name: TESTS.TEST_SIMPLE    , test: testSimple});
+testingTable.push({ name: TESTS.TEST_PURITY    , test: testPurity});
+testingTable.push({ name: TESTS.TEST_PROTOTYPE , test: testPrototype});
+testingTable.push({ name: TESTS.TEST_INVARIANTS, test: testInvariants});
+...
+\end{lstlisting}
+
+An object in the table includes two properties:
+\begin{itemize}
+\item{A string representing its name. The name is important for displaying an accurate error message if the test fails.}
+\item{A function to test a behavior of a test candidate}
+\end{itemize}
+
+Each function of the |testingTable| expects as argument a test configuration
+object of type |SequenceTestConfigType|.
+Listing~\ref{lst:test_simple} demonstrate exemplary the
+implementation of |testSimple|.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Implementaion Test Simple,
+  label={lst:test_simple}
+  ]
+/**
+ * @type {
+ *             (config: SequenceTestConfigType)
+ *          => (assert: AssertType)
+ *          => void
+ *       }
+ */
+const testSimple = config => assert => {
+  const { iterable, operation, evalFn, expected, param } = config;*'\label{line:test_config_destructuring}'*
+  const baseIterable = iterable(); *'\label{line:test_config_iterable}'*
+  const operated     = operation(param)(baseIterable);*'\label{line:test_config_operated}'*
+  evaluate(expected, operated, assert, evalFn);*'\label{line:test_config_eval}'*
+};
+\end{lstlisting}
+
+The function |simpleTest| executes the following tasks:
+\begin{itemize}
+  \item{Line~\ref{line:test_config_iterable} executes the iterable function to get an |Iterable| to work whit}
+  \item{Line~\ref{line:test_config_operated} executes the operation by passing
+    the required parameters. This is an optional configuration parameter |param| like a predicate and an |Iterable|.}
+  \item{Line~\ref{line:test_config_eval} compares the |actual| and |expected| value with a given eval function. } 
+\end{itemize}
+
+The |testingTable| includes test functions to test the following behaviors of
+operators and constructors of the Sequence Library:
+
+\begin{itemize}
+  \item{\textbf{testSimple} checks if a typical case works properly.}
+  \item{\textbf{testPurity} checks if an |operator| makes some side effects.}
+  \item{\textbf{testCBNotCalledAfterDone} checks if a given callback of an
+    |operator| will be called when the |Iterable| is exhausted.}
+  \item{\textbf{testPrototype} checks if the SequencePrototype is set.}
+  \item{\textbf{testInvariants} checks if an invariant holds by applying different parameters.}
+  \item{\textbf{testIterateMultipleTimes} checks if an |Iterable| produces the same output twice.}
+\end{itemize}
+
+
+\subsubsection{The Function to Run the Tests}
+|addToTestingTable| inserts the tests of the |testingTable| into the |TestSuite| for a
+specific configuration. Visible on line~\ref{line:add_to_testsuite}. 
+Since the configuration runs all tests of the |testingTable| by default, it
+must provide an option to exclude tests for exceptional cases. 
+Line~\ref{line:filtering_tests} filters out all excluded tests.
+Specific tests do not make sense for particular operators and constructors.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=The addToTestingTable Function,
+  label={lst:impl_addToTestingTable}
+  ]
+export { addToTestingTable }
+...
+/**
+ * @type {
+ *       (testSuite: TestSuiteType)
+ *    => (config: SequenceTestConfigType)
+ *    => void
+ * }
+ */
+const addToTestingTable = testSuite => config => {
+  const { excludedTests } = config;
+
+  testingFunctions
+    .filter (({ name })        => !excludedTests.includes(name)) *'\label{line:filtering_tests}'*
+    .forEach(({ name, test })  => 
+         testSuite.add(`${name}: ${config.name}`, test(config)));*'\label{line:add_to_testsuite}'*
+};
+\end{lstlisting}
+
+\subsubsection{The Configuration}
+
+To test operators and constructors with the |testingTable|, they must implement 
+a test configuration.
+Listing~\ref{lst:config_reduce} shows the configuration of |reduce|. 
+Each configuration has its own |TestSuite|. Therefore, it is possible to add
+some tests for special cases not covered by the table on line~\ref{line:additional_test_cases}.
+Line 3 to 5 defines the test configuration for |reduce|. 
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Test Configuration Reduce,
+  label={lst:config_reduce}
+  ]
+const testSuite = TestSuite("Sequence: terminal operation reduce$");
+
+addToTestingTable(testSuite)(*'\label{line:start_test_config}'*
+  createTestConfig({*'\label{line:createTestConfig}'*
+    name:      "reduce$",
+    iterable:  () => newSequence(UPPER_SEQUENCE_BOUNDARY),
+    operation: () => reduce$((acc, cur) => acc + cur, 0),
+    expected:  10,
+    evalFn:    expected => actual => expected === actual,
+    excludedTests: [TESTS.TEST_CB_NOT_CALLED_AFTER_DONE]
+  })
+);*'\label{line:end_test_config}'*
+
+
+testSuite.add("test: special case", assert =>
+{*'\label{line:additional_test_cases}'*
+  // Given
+  // When
+  // Then
+});
+
+testSuite.run();
+\end{lstlisting}
+
+On line~\ref{line:createTestConfig}, the function |createTestConfig| ensures
+that required properties are set using notation. Furthermore, it sets default
+values of configuration properties to simplifying the code.
+
+The following Table~\ref{tbl:testing_table} shows which configuration 
+properties are available and the purpose of it:
+
+
+\renewcommand{\arraystretch}{1.5}
+\begin{table}[H]
+  \center
+  \begin{tabular}{ l m{10cm} c}
+    \textbf{Property} & \textbf{Description} & \textbf{Required}\\
+    \hline
+    name            & The name of the |Iterable| under test for meaningful 
+                      report messages. 
+                    & y 
+                    \\ 
+    iterable        & A function that constructs a new |Iterable| to apply the 
+                      operation to. 
+                    & y 
+                    \\  
+    expected        & The expected result of the operation applied to the |Iterable|
+                      defined in property |iterable|.
+                    & 
+                    y  \\ 
+    excludedTests   & An optional array of |TestingFunction| to exclude tests
+                      in |testingTable|. 
+                    & n 
+                    \\
+    operation       & The operation to test. The value passed in |param| is
+                      passed as an argument (leave this empty for constructor 
+                      tests since they do not take an inner iterator). 
+                    & n 
+                    \\
+    param           & A parameter passed to this |operation|. If it is a
+                      function, some extra tests will be performed. 
+                    & n
+                    \\ 
+    invariants      & An optional array of |InvariantCallback|. The invariant 
+                      must hold tests against different lists. 
+                    & n
+                    \\
+    evalFn          & An optional function that takes |expected| and the |actual| 
+                      in curried style. The default is |iterableEq|.
+                    & n 
+                    \\
+  \end{tabular}
+  \caption{Properties of Configuration Object}
+\label{tbl:testing_table}
+\end{table}
+
+
+\subsection{A Kind of Property based Testing}
+John Huges and Carl Claessen wrote to following sentence in the paper
+"Quickcheck, A Lighweight Tool for Random Testing of Haskell Programms":
+\textit{
+Despite anecdotal evidence that functional programs require somewhat less
+testing (`Once it type-checks, it usually works'), in practice it is still a 
+major part of functional program development.}
+If these programming icons claim it takes many tests even in a strongly typed 
+language, how many does it take in JavaScript? Of course, enough.
+
+\subsubsection{Invariant Testing}
+\label{subsub:Invariant Testing}
+We added another kind of test to increase the Sequence Library's robustness -
+invariant testing. Some aspects of this testing are leaned on the Quickcheck
+approach of the paper mentioned before. We concentrated on only some essential
+parts since we cannot implement a whole Quickcheck framework in this work.
+\newline
+In the test configuration object
+is a property |invariant|s available. It allows defining of some invariants, which are
+tested with different parameters. Quickcheck does this with randomly generated
+data. Our data is fixed and includes a mix of typical a special cases.
+\newline
+Listing~\ref{lst:test_config_reverse} show the test configuration of |reverse|.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Test Configuration reverse,
+  label={lst:test_config_reverse}
+  ]
+const testSuite = TestSuite("Sequence: operation reverse$");
+
+addToTestingTable(testSuite)(
+  createTestConfig({
+    name:      "reverse$",
+    iterable:  () => newSequence(UPPER_SEQUENCE_BOUNDARY),
+    operation: () => reverse$,
+    expected:  [4, 3, 2, 1, 0],
+    invariants: [
+    it => reverse$(reverse$(it)) ["=="] (it), *'\label{line:reverse_law}'*
+    ]
+  })
+);
+
+testSuite.run();
+\end{lstlisting}
+On line~\ref{line:reverse_law} in Listing~\ref{lst:test_config_reverse} we can 
+see the definition of an invariant. This statement defines that an iterable must be 
+equal to the original when reversed two times.
+\newline
+The |testingTable| contains a test function |testInvariants|. This function is on
+Listing~\ref{lst:invariant_penetration} below.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Implementation invariant penetration,
+  label={lst:invariant_penetration}
+  ]
+/**
+ * Applies a series of lists to a given invariant.
+ * @template _T_
+ * @type {
+ *            (invariants: InvariantCallback)
+ *         => (assert: AssertType)
+ *         => void
+ *       }
+ */
+const invariantPenetration = invariant => assert => {
+  const testingLists = [ *'\label{line:list_of_parameters}'*
+    // edge case
+    nil,                                                   
+    // edge case, done calculated
+    newSequence(1),                                        
+    // typical number
+    newSequence(3),                                        
+
+    // no big iterable, needs extra test
+
+    // edge case, done set explicitly
+    PureSequence("testString"),                            
+    // mixing types
+    ['a', 'b', 'c', 1, 2, 3, Nothing, Just("testString")], 
+    // iterable of iterables
+    [PureSequence(1), newSequence(4), '#', "abc", 1]       
+  ];
+
+  for (const list of testingLists) {
+    const result = invariant(list);
+    assert.isTrue(result);
+  }
+};
+\end{lstlisting}
+
+Line~\ref{line:list_of_parameters} defines a list with several parameters of
+type |Iterable|. Each parameter tests the invariant of |reverse| holds. 
+This allows for testing many cases written in a few lines of code.
+
+\subsubsection{An advanced Example}
+\label{subsub:An advanced Example}
+We will look at another example in the following. Because Sequence is a Monoid,
+its laws also apply to Sequence implementations. A
+prominent one is the identity law\cite{haskell_monoid}. mconcat is such a function
+that satisfies these rules. |mconcat| flattens a list of |Iterable|s to one
+|Iterable|. Since Sequence is a Monoid, the empty Sequence is also defined. So
+we can check the following law in Listing~\ref{lst:lr_identity_mconcat}:
+
+\begin{lstlisting}[
+  style=Haskell,
+  caption=Left and right identity of mconcat,
+  label={lst:lr_identity_mconcat}
+]
+-- left identity
+x <> mempty = x
+-- right identity
+mempty <> x = x
+\end{lstlisting}
+
+The |<>| operator is defined on the Semigroup, a Monoid subset. The binary 
+operator |<>| is associative and under lists concatenation. Listing~\ref{lst:lr_identity_mconcat} 
+demonstrates that a list $x$ concatenated with |nil|, the empty list, equals the original 
+one. With our implementation of the invariants, we can now represent and 
+test the laws similarly. Listing~\ref{lst:mconcat_invariant} shows the
+implementation.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Invariants of mconcat,
+  label={lst:mconcat_invariant}
+  ]
+addToTestingTable(testSuite)(
+  createTestConfig({
+    name:       "mconcat",
+    iterable:   () => 
+      toMonadicIterable([ newSequence(2), newSequence(2), newSequence(2) ]),
+    operation:  () => mconcat,
+    expected:   [0, 1, 2, 0, 1, 2, 0, 1, 2],
+    invariants: [
+      it => mconcat([nil, it]) ["=="] (it),*'\label{line:mconcat_first_invariant}'*
+      it => mconcat([it, nil]) ["=="] (it),*'\label{line:mconcat_second_invariant}'*
+      it => [...mconcat([PureSequence(1),it])].length > [...it].length,
+    ],
+  })
+)
+\end{lstlisting}
+
+Let us focus on line~\ref{line:mconcat_first_invariant} and 
+\ref{line:mconcat_second_invariant}.
+The property |invariants| expect an array of functions. Each of these
+functions represents a law. Therefore, the function injects an arbitrary list
+called it, and the law must hold for |it|. In the same way, it provides the
+ability to check other implementation-specific behavior
+of any constructor or operation of the Sequence Library.
+
+\subsection{Conclusion}
+\label{sub:Conclusion}
+When implementing large code bases, it is crucial to have a stable test
+framework. This framework has to be continuously extended and improved during
+development. With increasing complexity, a solid test base is essential. The
+test framework has proven to be particularly useful for modifications or
+refactorings.
+\newline
+The standardization and generalization of tests using a |testingTable| imply that
+writing tests for new functionalities takes less time and ensures better
+quality.
