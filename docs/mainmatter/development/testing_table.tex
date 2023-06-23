@@ -322,11 +322,10 @@ On line~\ref{line:createTestConfig}, the function |createTestConfig| ensures
 that required properties are set using notation. Furthermore, it sets default
 values of configuration properties to simplifying the code.
 
-The following Table~\ref{tbl:testing_table} shows which configuration 
+The following Table~\ref{tab:testing_table} shows which configuration 
 properties are available and the purpose of it:
 
 
-\renewcommand{\arraystretch}{1.5}
 \begin{table}[H]
   \center
   \begin{tabular}{ l m{10cm} c}
@@ -367,7 +366,7 @@ properties are available and the purpose of it:
                     \\
   \end{tabular}
   \caption{Properties of Configuration Object}
-\label{tbl:testing_table}
+\label{tab:testing_table}
 \end{table}
 
 
@@ -471,9 +470,9 @@ This allows for testing many cases written in a few lines of code.
 \label{subsub:An advanced Example}
 We will look at another example in the following. Because Sequence is a Monoid,
 its laws also apply to Sequence implementations. A
-prominent one is the identity law\cite{haskell_monoid}. mconcat is such a function
+prominent one is the identity law~\cite{quickcheck_hughes}. mconcat is such a function
 that satisfies these rules. |mconcat| flattens a list of |Iterable|s to one
-|Iterable|. Since Sequence is a Monoid, the empty Sequence is also defined. So
+|Iterable|. Since Sequence is a Monoid~\cite{haskell_monoid}, the empty Sequence is also defined. So
 we can check the following law in Listing~\ref{lst:lr_identity_mconcat}:
 
 \begin{lstlisting}[
