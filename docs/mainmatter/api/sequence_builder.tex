@@ -5,6 +5,9 @@ A mutable builder for a |SequenceType|.
 |SequenceBuilder| allows the creation of a |SequenceType| by generating elements individually 
 and adding them to the |SequenceBuilder| (without the call stack overhead when doing so
 with |cons|).
+\newline
+\textit{Note:} It is strongly recommended to use |StringBuilder| for creating
+|Sequences| with more den 1000 elements when adding them individually.
 
 \subsection{Functions}
 \label{sub:sb_Functions}

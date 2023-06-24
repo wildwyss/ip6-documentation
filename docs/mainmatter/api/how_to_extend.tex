@@ -1,1 +1,167 @@
-\section{How to extend}
+\section{How to Extend the Library}
+\label{sec:How to Extend the Library}
+This Chapter gives a quick start to extending the Sequence Library. Because
+applications are versatile, you may want to add further functionality to the
+Library. Therefore, this Chapter explains the relevant steps to simplify the entry.
+\newline
+Whether you want to add a constructor, an operator, or a terminal operation is
+similar. Below is an example of an operator. You can adapt the procedure for
+the others.
+
+\subsection{Adding a new Operator}
+\label{sub:Adding a new Operator}
+In this scenario, we include |concat| to the Sequence Library. |concat| is the
+operation that appends one |Iterable| to another.
+
+\subsubsection{Kind of the Operation}
+The library distinguishes between operators and terminal operations. The
+difference depends on the return type. If a function returns an |Iterable|, it
+is an operator. It is a terminal operation if it produces a different type than an
+|Iterable|, such as |isEmpty|.
+Since |concat| returns an |Iterable|, we include the related files into the
+operations folder.
+
+\subsubsection{Directory Structure}
+\label{subsub:Directory Structure}
+|concat| has its folder in the operations directory. Therefore, we create a
+|concat.js| and a |concatTest.js| file in the folder |concat|. The reasoning for 
+splitting tests into a separate file is that it leads to a better overview and faster
+navigation between the particular functionalities. Figure~\ref{fig:concat_dir}
+shows the relevant directories.
+
+\begin{figure}[H]
+\dirtree{%
+  .1 src .
+  .2 sequence .
+  .3 operators .
+  .4 concat .
+  .5 concat.js .
+  .5 concatTest.js .
+  .4 \ldots .
+  .4 operators.js .
+  .4 operatorsTest.js .
+  .3 \ldots .
+  .2 AllTests.html .
+  .2 \ldots .
+  }
+  \caption{concat directory structure}
+  \label{fig:concat_dir}
+\end{figure}
+
+\subsubsection{Exports and Imports}
+All artifacts of the Sequence Library are available via the |sequence.js| file.
+To make |concat| support this, we export it via the |operators.js| file.
+Listings~\ref{lst:concat_export} and \ref{lst:concat_export_operators} shows the corresponding statements.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=export of concat,
+  label={lst:concat_export}
+  ]
+// concat.js
+
+export { concat }
+\end{lstlisting}
+
+
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=export of concat in operator.js,
+  label={lst:concat_export_operators}
+  ]
+// operators.js
+...
+export * from "./concat/concat.js"
+\end{lstlisting}
+
+The same principle applies to the test files. Importing the |concatTest.js| in
+|operatorsTest.js| enables to run of the test cases.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=export of concat in operator.js,
+  label={lst:concat_import_operators}
+  ]
+// operatorsTest.js
+...
+import "./concat/concat.js"
+\end{lstlisting}
+
+\subsection{Implementing a new Operator}
+\label{subsub:Implementing a new Operator}
+Now we're getting down to the nitty-gritty.
+Because great software engineers start with the tests, we do that first.
+
+\subsubsection{Write the Tests}
+\label{subsub:Write the Tests}
+Chapter~\ref{sec:Testing} has already explained testing in detail. Therefore, we will only deal 
+with the practical part here.
+\newline
+Let us start with the imports. For testing reasons, you need the following
+functionalities:
+
+\begin{itemize}
+  \item{TestSuite}
+  \item{addToTestingTable}
+  \item{createTestConfig}
+\end{itemize}
+
+You may need additional imports to implement the tests.
+\newline
+Now you are ready to create a test config and, optionally, some special cases.
+Creating a test config requires the following steps:
+
+\begin{itemize}
+  \item{Create a |TestSuite| with a meaningful name corresponding to the function you are implementing.}
+  \item{|createTestConfig| expects an object of type |SequenceTestConfigType|. Have a look
+    to this type or to Chapter~\ref{subsub:The Configuration} to get the information about the available properties. }
+      \item{If neccessary, add some further test cases using the same TestSuite.}
+  \item{run the |TestSuite| by calling the |run()| function at the end of the file. }
+\end{itemize}
+
+Listing~\ref{lst:concat_test_import} shows a scaffold of a test file. 
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Imports of concatTest.js,
+  label={lst:concat_test_import}
+  ]
+import { addToTestingTable }  from "../../util/testingTable.js";
+import { TestSuite }          from "../../../test/test.js";
+import { createTestConfig }   from "../../util/testUtil.js";
+import { concat }             from "../../sequence.js";
+...
+
+const testSuite = TestSuite("Name of the TestSuite");
+
+addToTestingTable(testSuite)(
+  createTestConfig({
+      ...
+    })
+);
+
+testSuite.add("test special case", assert => {
+  \\ Given
+  ...
+  \\ When
+  ...
+  \\ Then
+  ...
+});
+
+testSuite.run();
+\end{lstlisting}
+
+Run the |AllTests.html| file, and you should see that your tests are failing.
+If so, then everything is fine.
+
+\textit{Note:} While running the tests, always watch the console.
+
+\subsubsection{Write the Functionality}
+Now you are in a comfortable position to implement the function against tests.
+For this, we create a function |concat| in the file |concat.js|.
+Probably, you can use existing functionalities to implement them. A list of all
+provided functionality is in Chapter~\ref{sub:Constructors} - \ref{sub:Terminal Operations}.
+\newline
+Again, run the tests and be proud if everything is running!
