@@ -100,6 +100,7 @@ appendices~\ref{sub:appendix_constructors} and
   \label{tab:api_ctors}
 \end{table}
 % subsection Constructors (end)
+
 \subsection{Operators} % (fold)
 \label{sub:api_Operators}
 Operators are all functions that operate on an existing |Sequence| and create a
@@ -133,6 +134,50 @@ appendix~\ref{sub:appendix_operators}.
   \caption{The available operators in the Sequence library}
   \label{tab:api_operators}
 \end{table}
+
+\subsubsection{Using the pipe Operator} % (fold) \label{subsub:Using the pipe Operator}
+The operator |pipe|, is unique because it provides no new functionality but is
+pure syntactic sugar. It offers the possibility of combining several operators.
+Lines~\ref{line:api_pipe1}~-~\ref{line:api_pipe2} of Listing~\ref{lst:api_pipe}
+show a nesting of multiple operators. Readability suffers very much from this.
+In comparison, it is easier to read the code 
+lines~\ref{line:api_pipe3}~-~\ref{line:api_pipe4}, combining multiple operators
+using |pipe|.
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=pipe combines multiple operators,
+  label={lst:api_pipe}
+]
+import * as _ from "./src/sequence/sequence.js"
+
+const seq = _.Sequence(0, _ => true, x => x + 1);
+
+const mySequence = _.take(5)( *'\label{line:api_pipe1}'*
+  _.retainAll(x => x > 50)(
+    _.map(x => 2 * x)(
+      _.rejectAll(x => x % 2 === 1)(seq)
+    )
+  )
+);*'\label{line:api_pipe2}'*
+
+console.log(...mySequence);
+// => Logs '52, 56, 60, 64, 68'
+
+const mySequence2 = _.pipe(*'\label{line:api_pipe3}'*
+  _.rejectAll(x => x % 2 === 1),
+  _.map(x => 2 * x),
+  _.retainAll(x => x > 50),
+  _.take(5)
+)(seq); *'\label{line:api_pipe4}'*
+
+console.log(...mySequence2);
+// => Logs '52, 56, 60, 64, 68'
+
+\end{lstlisting}
+
+
+% subsubsection Using the pipe Operator (end)
 % section Operators (end)
 
 \subsection{Terminal Operations} % (fold)
