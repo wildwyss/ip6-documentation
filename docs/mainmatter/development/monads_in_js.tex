@@ -535,7 +535,7 @@ This code does the following:
     |Maybe| again, the result of |mapper| gets wrapped with |Just|.
 \end{itemize}
 
-Since both |Just(value)| and |Nothing| are functions, they must provide the respective
+Both |Just(value)| and |Nothing| must provide the respective
 operations as properties. In JavaScript, where functions are objects, you can
 define their properties and modify or override existing ones. \\
 Listing~\ref{lst:proto_maybe_js} now sets the prototype to the two functions
