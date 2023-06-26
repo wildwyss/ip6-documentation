@@ -1,0 +1,66 @@
+\section{Extension of the Kolibri Standard Library}
+From this project's findings, some existing functionalities of the Kolibri
+could also be improved or extended. This section describes those extensions.
+
+\subsection{Extensions to Maybe} % (fold)
+\label{sub:Extensions to Maybe}
+The existing |Maybetype| has been extended to support monadic operations.
+Analogous to the Sequence, |Maybe| has a prototype, providing the monadic
+functions. \\ 
+Listing~\ref{lst:monadic_ops_maybe_in_action} shows these monadic operations on
+Maybe in action:
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=The monadic operations of Maybe in action,
+  label={lst:monadic_ops_maybe_in_action}
+]
+import { Nothing, Just } from "stdlib/maybe.js";
+
+/** Prints the value of a Maybe if it exists */
+const evalMaybe = maybe =>
+  maybe
+    (_ => console.log("There was no value!"))
+    (x => console.log(x));
+
+const just    = Just(5);
+const nothing = Nothing;
+
+// fmap 
+const justMapped    = just   .fmap(x => 2*x); // results in 10
+const nothingMapped = nothing.fmap(x => 2*x); // Mapping Nothing - nothing happens!
+evalMaybe(justMapped);      // => Logs '10'
+evalMaybe(nothingMapped);   // => Logs 'There was no value!' 
+
+// and
+const justAnd    = just   .and(x => nothing); // Turns this value into Nothing
+const nothingAnd = nothing.and(x => just);    // Can't change Nothing
+evalMaybe(justAnd);         // => Logs 'There was no value!'
+evalMaybe(nothingAnd);      // => Logs 'There was no value!' 
+
+// pure
+evalMaybe(just.pure(2));    // => Logs '2', Same as Just(2)
+evalMaybe(nothing.pure(2)); // => Logs '2', Same as Just(2)
+
+// empty
+evalMaybe(just.empty());    // => Logs 'There was no value!', Same as Nothing
+evalMaybe(nothing.empty()); // => Logs 'There was no value!', Same as Nothing
+\end{lstlisting}
+% subsection Extensions to Maybe (end)
+
+\subsection{Extensions to Pair} % (fold)
+\label{sub:Extensions to Pair}
+Section~\ref{sec:Iterables Everywhere} describes the |Pair| as an immutable
+data structure. To access its values simpler, it is now iterable.
+Listing~\ref{lst:api_it_pair} shows these advantages:
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=Iterable Pair,
+  label={lst:api_it_pair}
+]
+const pair = Pair(1)(2);
+console.log(...pair);
+// => Logs '1, 2'
+\end{lstlisting}
+% subsection Extensions to Pair (end)
