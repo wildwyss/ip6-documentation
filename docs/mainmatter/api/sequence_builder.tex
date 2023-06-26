@@ -37,9 +37,8 @@ Creating a Sequence from different values and |Iterable|s:
   ]
 import * as _              from "./src/sequence/sequence.js"
 import { SequenceBuilder } from "./src/sequence/SequenceBuilder.js";
-import { Range }           from "./src/range/range.js";
 
-const range = Range(1, 3);
+const range = _.Range(1, 3);
 
 const result = SequenceBuilder()
 .append(range)

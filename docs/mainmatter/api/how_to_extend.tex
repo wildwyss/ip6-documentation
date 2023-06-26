@@ -127,10 +127,10 @@ Listing~\ref{lst:concat_test_import} shows a scaffold of a test file.
   caption=Imports of concatTest.js,
   label={lst:concat_test_import}
   ]
-import { addToTestingTable }  from "../../util/testingTable.js";
-import { TestSuite }          from "../../../test/test.js";
-import { createTestConfig }   from "../../util/testUtil.js";
-import { concat }             from "../../sequence.js";
+import { addToTestingTable }  from "./src/sequence/util/testingTable.js";
+import { TestSuite }          from "./src/sequence/test/test.js";
+import { createTestConfig }   from "./src/sequence/util/testUtil.js";
+import { concat }             from "./src/sequence/sequence.js";
 ...
 
 const testSuite = TestSuite("Name of the TestSuite");
