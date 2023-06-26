@@ -1,1 +1,41 @@
-\section{Comparable Works}
+\section{Comparable Works} % (fold)
+\label{sec:Comparable Works}
+
+\subsection{Lodash} % (fold)
+\label{sub:Lodash}
+Lodash~\cite{lodash_2023} is a modern JavaScript utility library that brings many solutions
+similar to this project. Nevertheless, there are some differences:
+\begin{itemize}
+  \item Functions in Lodash do not take their parameters curried.
+  \item Functions in Lodash do not have the receiver at the end.
+\end{itemize}
+Section~\ref{subsub:Placing the Receiver at the End} describes how these two
+ideas (and some more) are essential when writing reusable code. However, Lodash
+also provides a functional programming first module that supports the
+above.\footnote{https://github.com/lodash/lodash/wiki/FP-Guide}
+Nevertheless, the documentation for this is much less extensive than that of
+the regular Lodash module. \\ 
+The Sequence library supports the monadic
+operations described in Section~\ref{subsub:Which operations fit JavaScript?}.
+Thus, the Sequence library allows generic functionalities based on the monadic
+API, such as JINQ, to be used.
+% subsection Lodash (end)
+
+\subsection{rxjs} % (fold)
+\label{sub:rxjs}
+rxjs~\cite{rxjs_2023} offers very similar functions to the Sequence Library.
+However, these functions work with an asynchronous data structure called
+|Observable|. Nevertheless, rxjs served several times as a good template for
+design decisions. The idea to combine multiple operations using |pipe| comes
+from rxjs.
+% subsection rxjs (end) section Comparable Works (end)
+
+\subsection{Lambda Calculus for Practical JavaScript} % (fold)
+\label{sub:Lambda Calculus for Practical JavaScript}
+"Lambda Calculus for Practical JavaScript"~\cite{andermatt_lambda_2022}
+provides an introduction and some applications of lambda calculus in
+JavaScript. Things like Pair, the commonly used function id, or even the
+implementation of the Immutable data structure "Stack" come from this project
+work. The constructor "StackSequence" provides by the Sequence library offers
+the possibility to make a stack iterable. 
+% subsection Lambda Calculus for Practical JavaScript (end)
