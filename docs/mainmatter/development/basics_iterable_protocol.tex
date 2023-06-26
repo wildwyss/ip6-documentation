@@ -1,14 +1,14 @@
 \section{Sequence and Iterable in General}
 \label{sec:Sequence and Iterable in General}
-This section explains the concept of iterable and iterator objects and points
+This section explains the concept of |Iterable| and |Iterator| objects and points
 out features and characteristics of it. |Sequence| is one implementation of
-an iterable and represents the core functionality of the Sequence Library. The following
+an |Iterable| and represents the core functionality of the Sequence Library. The following
 discussion covers challenges and solutions for creating a robust and
 user-friendly API.
 
 \subsection{What is an Iterator?}
 \label{sub:What is an Iterator?}
-In computer science, iterators are a popular concept. An iterator is a mechanism 
+In computer science, |Iterator|s are a popular concept. An |Iterator| is a mechanism 
 to access elements of any data structure. It uses a function call to return the 
 next element and either acts on a data structure in memory or compute the 
 elements lazily when queried. Iterators are an essential part of this work. Therefore, 
@@ -18,17 +18,17 @@ this topic in depth.
 % \subsection{Iteration Protocols in JavaScript}
 \subsection{Exploring the Meaning of Protocols}
 \label{sub:Exploring the Meaning of Protocols}
-In JavaScript, an |iterable| is an object that implements the JavaScript iterator
-and iterable protocols \cite{mdn_protocols}
-(henceforth called JS iteration protocols). An |iterable| iterates only once 
-over a set of data. After that, the |iterable| is exhausted. Further operations 
+In JavaScript, an |Iterable| is an object that implements the JavaScript |Iterator|
+and |Iterable| protocols \cite{mdn_protocols}
+(henceforth called JS iteration protocols). An |Iterable| iterates only once 
+over a set of data. After that, the |Iterable| is exhausted. Further operations 
 will only perform on a new instance of it.
 \newline
-To create an iterator, implementing the two following protocols is required.
+To create an |Iterator|, implementing the two following protocols is required.
 
 \subsubsection{The Iterable Protocol}
 \label{subsub:The Iterable Protocol}
-An object is an iterable according to the JS iterable protocol if it has a
+An object is an |Iterable| according to the JS iteration protocol if it has a
 property with the name |[Symbol.iterator]|. This property defines the iteration
 behavior of the object. Such an object is of type |Iterable<T>|.
 All objects in JavaScript that implement this property can be processed using 
@@ -37,7 +37,7 @@ expression that allows you to extract array items or object properties into
 individual variables.} and |for...of| loop. 
 Listing \ref{lst:iterable_protocols} demonstrates how an object defines a
 |[Symbol.iterator]| property.
-This property's value is a function that must adhere to the iterator protocol.
+This property's value is a function that must adhere to the |Iterator| protocol.
 It is content of the next section.
 
 \begin{lstlisting}[
@@ -54,12 +54,12 @@ It is content of the next section.
 
 \subsubsection{The Iterator Protocol}
 \label{subsub:The Iterator Protocol}
-Invoking the |[Symbol.iterator]| property obtains an iterator object.
+Invoking the |[Symbol.iterator]| property obtains an |Iterator| object.
 This protocol defines the structure of such an object. It must 
 implement a function |next|, which defines how and which values are returned 
 when iterating.
-Each iteration on an |iterator| calls the function |next|. |next| returns an object, which must
-include two properties according to the iterator protocol: |value| and |done|.
+Each iteration on an |Iterator| calls the function |next|. |next| returns an object, which must
+include two properties according to the |Iterator| protocol: |value| and |done|.
 Therefore, the property |value| contains the current value of the iteration,
 while |done| represents the information on whether the end of the iteration has 
 been reached. The following code \ref{lst:iterator_protocol} shows a simple 
@@ -102,7 +102,7 @@ is |Iterable<Number>|.
 \end{lstlisting}
 
 Because |SampleIterator| adheres to the JS iteration protocols, it is now 
-possible to create iterable objects. Language features like |for..of| and 
+possible to create |Iterable| objects. Language features like |for..of| and 
 destructuring (|...|) can now process these objects. However, beware of this 
 case. This would lead to an infinite loop because the property |done| never 
 becomes |true|. Therefore, the iteration never ends. We will see examples 
@@ -157,8 +157,8 @@ interface IteratorReturnResult<TReturn> {
 
 \begin{itemize}
   \item{Line~\ref{line:start_iteration_types}~-~\ref{line:end_iteration_types}: 
-      An iterable is of type |Iterable<T>|, whereas the object returned by the property
-      |[Symbol.Iterator]| is of type |Iterator<...>|. An iterator requires having a property |next|. 
+      An |Iterable| is of type |Iterable<T>|, whereas the object returned by the property
+      |[Symbol.Iterator]| is of type |Iterator<...>|. An |Iterator| requires having a property |next|. 
       This is the function that returns values when iterating. These values must be 
       of type |IteratorResult<...>.|
     }
@@ -184,7 +184,7 @@ can be seen on line~\ref{line:iteration_return_result_done}.
 \subsection{Illustration of the JS Iteration Protocol}
 \label{sub:Illustration of the JS Iteration Protocol}
 Following an example scenario in Listing~\ref{lst:example_js_iteration_protocol}
-to illustrate the behavior of the JS iterable protocol more clearly.
+to illustrate the behavior of the JS iteration protocol more clearly.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -203,7 +203,7 @@ iterator.next(); // returns { done: true,  value: 2 }
 On line~\ref{line:illustraion_create_iterator}, invoking |[Symbol.iterator]|
 returns an instance of an |Iterator| of the |Iterable| |seq|. 
 After that, we call |next| four times directly on the |Iterator|. 
-This leads to the following diagram~\ref{fig:js_iterable_protocol} shown below. 
+This leads to the following diagram~\ref{fig:js_iteration_protocol} shown below. 
 
 \begin{figure}[H]
   \centering
@@ -227,8 +227,8 @@ This leads to the following diagram~\ref{fig:js_iterable_protocol} shown below.
     \begin{call}{client}{next()}{iterator}{returns IteratorReturndResult<TReturn>}                                  
     \end{call}                                                                    
   \end{sequencediagram}    
-  \caption{JS iterable protocol procedure}
-  \label{fig:js_iterable_protocol}
+  \caption{JS iteration protocol procedure}
+  \label{fig:js_iteration_protocol}
 \end{figure}
 
 Since |SampleSequence| only contains three elements, the third
@@ -236,9 +236,9 @@ and fourth element is of type |IteratorReturnResult<TReturn>|.
 
 \subsection{Building custom Series of Data}
 \label{sub:Building custom Series of Data}
-The last Chapter has shown how to make an object iterable. By exploring the 
+The last Chapter has shown how to make an object |Iterable|. By exploring the 
 protocols discussed so far, this chapter showcases the ability to create 
-powerful concepts. Based on these abstractions, an endless iterator that always
+powerful concepts. Based on these abstractions, an endless |Iterator| that always
 returns |1| served as an illustration. The true power of |Iterable|s is 
 unleashed, when they create more meaningful data series
 \subsubsection{Sequence - The Name of connected Data}
