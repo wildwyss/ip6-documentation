@@ -4,9 +4,10 @@ could also be improved or extended. This section describes those extensions.
 
 \subsection{Extensions to Maybe} % (fold)
 \label{sub:Extensions to Maybe}
-The existing |Maybetype| has been extended to support monadic operations.
-Analogous to the Sequence, |Maybe| has a prototype, providing the monadic
-functions. \\ 
+The data structure |Maybe| introduced in Section~\ref{sub:Wrapping values in a
+context} was already part of the Kolibri before this project work. Now it also
+supports monadic operations.to the Sequence, |Maybe| has a prototype, providing
+the monadic functions. \\ 
 Listing~\ref{lst:monadic_ops_maybe_in_action} shows these monadic operations on
 Maybe in action:
 
@@ -15,7 +16,7 @@ Maybe in action:
   caption=The monadic operations of Maybe in action,
   label={lst:monadic_ops_maybe_in_action}
 ]
-import { Nothing, Just } from "stdlib/maybe.js";
+import { Nothing, Just } from "./src/stdlib/maybe.js";
 
 /** Prints the value of a Maybe if it exists */
 const evalMaybe = maybe =>
@@ -59,8 +60,28 @@ Listing~\ref{lst:api_it_pair} shows these advantages:
   caption=Iterable Pair,
   label={lst:api_it_pair}
 ]
+import { Pair } from "./src/stdlib/pair.js"
+
 const pair = Pair(1)(2);
 console.log(...pair);
 // => Logs '1, 2'
 \end{lstlisting}
+
+Since the |Pair| is iterable, it is also compatible with all operations defined
+for sequences:
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=Transforming a \lstinline{Pair} using \lstinline{map},
+  label={lst:Mapping the values of a Pair}
+]
+import { Pair } from "./src/stdlib/pair.js"
+import { map }  from "./src/sequence/sequence.js"
+
+const pair = Pair(1)(2);
+console.log(...map(x => 2*x)(pair));
+// => Logs '2, 4'
+\end{lstlisting}
+
+
 % subsection Extensions to Pair (end)
