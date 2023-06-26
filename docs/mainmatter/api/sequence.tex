@@ -1,6 +1,7 @@
 \section{Sequence Library} % (fold)
 A Sequence is a lazy data structure. This section overviews which operations
-exist to create and modify sequences. An in-depth view of how a Sequence works
+exist to create and modify sequences and how to import this library into your
+own project. An in-depth view of how a Sequence works
 internally gives Chapter~\ref{sec:Sequence and Iterable in General}.
 
 \subsection{Getting Started} % (fold)
@@ -71,14 +72,14 @@ evaluates |5| elements.
 % subsubsection Conventions (end)
 \label{sec:api_sequences}
 \subsection{Constructors} % (fold)
-\label{sub:Constructors}
+\label{sub:api_Constructors}
 A constructor is anything that builds a |Sequence| without depending on another
 one. So they serve as an entry point to the Sequence library. Some of these
 constructors create a specific series of values, including, for example, the
 |PrimeNumberSequence| which yields the infinite sequence of all prime
 numbers.\\
-Table~\ref{tab:api_ctors} gives an overview of all available constructors. \\
-Code examples and more information about the constructors deliver the
+Table~\ref{tab:api_ctors} gives an overview of all available constructors. Code
+examples and more information about the constructors deliver the
 appendices~\ref{sub:appendix_constructors} and
 \ref{sub:appendix_special_constructors}.
 
@@ -96,13 +97,14 @@ appendices~\ref{sub:appendix_constructors} and
     \texttt{FibonacciSequence} & Generates the Fibonacci sequence. \\  \hline
     \texttt{PrimeNumberSequence} & Generates the sequence of prime numbers. \\ \hline
     \texttt{SquareNumberSequence} & Generates the sequence of square numbers. \\ \hline
+    \texttt{Range} & Generates a sequence of numbers. \\ \hline
   \end{tabularx}
   \caption{The available constructors in the Sequence library}
   \label{tab:api_ctors}
 \end{table}
 % subsection Constructors (end)
 \subsection{Operators} % (fold)
-\label{sub:Operators}
+\label{sub:api_Operators}
 Operators are all functions that operate on an existing |Sequence| and create a
 new |Sequence| from it. \\
 Table~\ref{tab:api_operators} gives an overview of all available operators.\\
@@ -137,7 +139,7 @@ appendix~\ref{sub:appendix_operators}.
 % section Operators (end)
 
 \subsection{Terminal Operations} % (fold)
-\label{sub:Terminal Operations}
+\label{sub:api_Terminal Operations}
 Terminal operations are all functions that operate on an existing |Sequence|
 and do not necessarily create a new |Sequence| from it. In other words,
 terminal operations evaluate a |Sequence|.\\ 
@@ -167,6 +169,56 @@ appendix~\ref{sub:appendix_terminal_operations}.
   \label{tab:api_term_ops}
 \end{table}
 % section Terminal Operations (end)
+\subsection{Sequence Prototype} % (fold)
+\label{sub:Sequence Prototype}
+The prototype of the Sequence provides some operations as well. This improves
+code readability in some situations. The monadic operations are also available
+on the prototype of the Sequence. Thus, it is compatible with all functions
+that expect a monad as a parameter.
+
+\subsubsection{Verify the Prototype} % (fold)
+\label{subsub:Verify the Prototype}
+Listing 3 shows how to query the prototype of any object using the function
+|Object.getPrototypeOf|. Applying this to any sequence will return
+|SequencePrototype|.
+
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=The Prototype of a \lstinline{Sequence},
+  label={lst:proto_seq_query}
+]
+import { Sequence, SequencePrototype } from "sequence/sequence.js";
+
+const seq          = Sequence(0, _ => true, i => i + 1);
+const seqPrototype = Object.getPrototypeOf(seq);
+
+console.log(seqPrototype === SequencePrototype);
+// => Logs 'true'
+\end{lstlisting}
+
+% subsubsection Verify the Prototype (end)
+
+\subsubsection{The operations on the Prototype} % (fold)
+\label{subsub:The operations on the Prototype}
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{| l | X |} \hline
+    \textbf{Name} & \textbf{Description} \\ \hline
+    \texttt{fmap} & Is the same as \lstinline{map} described in Section~\ref{sub:api_Operators}\\ \hline 
+    \texttt{and} & Is the same as \lstinline{bind} described in Section~\ref{sub:api_Operators}\\ \hline 
+    \texttt{pure} & Is the same as \lstinline{PureSequence} described in Section~\ref{sub:api_Constructors}\\ \hline 
+    \texttt{empty} & Is the same as \lstinline{nil} described in Section~\ref{sub:api_Constructors}\\ \hline 
+    \texttt{["=="]} & Is the same as \lstinline{eq$} described in Section~\ref{sub:api_Terminal Operations}\\ \hline 
+    \texttt{toString} & Is the same as \lstinline{show} described in Section~\ref{sub:api_Terminal Operations}\\ \hline 
+    \texttt{pipe} & Is the same as \lstinline{pipe} described in Section~\ref{sub:api_Operators}\\ \hline 
+  \end{tabularx}
+  \caption{The operations served on the prototype of the \lstinline{Sequence}}
+  \label{tab:api_term_ops}
+\end{table}
+
+% subsubsection The operations on the Prototype (end)
+% subsection Sequence Prototype (end)
 % section Sequence (end)
 
 
