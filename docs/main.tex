@@ -107,6 +107,14 @@ a4paper                     %a4 format
 \addcontentsline{toc}{chapter}{List of Tables}
 \listoftables
 
+
+%LISTINGSVERZEICHINS
+\cleardoublepage
+\phantomsection
+\renewcommand\lstlistlistingname{List of Listings}
+\addcontentsline{toc}{chapter}{List of Listings}
+\lstlistoflistings
+
 %Mainmatter                                             \chapter \section \subsection \subsubsection 
 \mainmatter	                                            %arabische Seitenzahlen
 \include{./mainmatter/theory/theory}
