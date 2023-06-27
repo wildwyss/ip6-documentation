@@ -11,6 +11,7 @@
 \usepackage{array,dcolumn}	                                                %Tabellen,mit Zahlen am Komma ausrichten
 \usepackage{calc}			                                                      %operationen mit Längen und Massen
 \usepackage{amssymb,amsmath,amsfonts,dsfont,fourier}                        %mathematiksymbole
+\usepackage{pgfplots}                                                       % Diagramme
 \usepackage{scrhack}
 \clubpenalty = 5000		                                                      % keine einzelne zeile anfangs seite; max 10000
 \widowpenalty = 5000 		                                                    % keine einzelne zeile ende seite; max 10000
@@ -49,7 +50,7 @@ threshold=0                                                                 %blo
 \usepackage{float}                                                          %bildposition erzwingen
 \usepackage{wrapfig}                                                        %Bilder umfliessen
 
-\usepackage[pdftex]{graphicx}                                               %import graphics
+\usepackage{graphicx}                                               %import graphics
 \usepackage{epstopdf}                                                       %import eps graphics
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 \usepackage[margin=10pt,font=small,labelfont=bf,format=plain]{caption}		            %Package für kleinere Schrift unter den Bildern
@@ -88,7 +89,7 @@ threshold=0                                                                 %blo
 %\setkomafont{pagefoot}{\bfseries}											%schrift in footer anpassen
 
 
-\usepackage[usenames,dvipsnames]{xcolor}                                    % verwendung von Farben
+\usepackage{xcolor}                                    % verwendung von Farben
 \definecolor{black}{rgb}{0,0,0}		                                        %Farb Definition
 \definecolor{red}{rgb}{0.8,0,0}	
 \definecolor{green}{rgb}{0.07,0.53,0.03}	
