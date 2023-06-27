@@ -112,7 +112,7 @@ We decided to include following findings into JINQ:
     better understanding (text answer~\ref{sub:ut_q13}).
     \item \textbf{Not exactly the same as SQL}: Two people needed help with
       JINQ not writing exactly like SQL (handed in code). An SQL query
-      |Select NAME from~PERSON where AGE > 18| is translated into JINQ via
+      |Select NAME from PERSON where AGE > 18| is translated into JINQ via
       |from(PERSON).where(p => p.age > 18).select(p => p.name);| So the order
       of |select| and |where| is reversed. So the JSDoc of JINQ needs to
       mention more clearly that working with JINQ is different than working
