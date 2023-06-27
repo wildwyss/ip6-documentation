@@ -29,7 +29,7 @@ Contract:
 \tightlist
 \item
   \passthrough{\lstinline!incrementFunction!} \&
-  \passthrough{\lstinline!untilFunction!} should not refer to any
+  \passthrough{\lstinline!whileFunction!} should not refer to any
   mutable state variable (because of side effect) in the closure.
 \end{itemize}
 
@@ -54,7 +54,7 @@ Name & Type & Description \\
 \endlastfoot
 \passthrough{\lstinline!start!} & \passthrough{\lstinline!Number!} & the
 first value to be returned by this sequence \\
-\passthrough{\lstinline!untilFuncion!} &
+\passthrough{\lstinline!whileFuncion!} &
 \passthrough{\lstinline!(\_T\_) => Boolean!} & returns false if the
 iteration should stop \\
 \passthrough{\lstinline!incrementFunction!} &
@@ -66,9 +66,9 @@ on the previous \\
 
 \begin{lstlisting}[label=559ccb9f-6cec-4f05-b202-041bc70395bf]
 const start      = 0;
-const untilF     = x => x < 3;
+const whileF     = x => x < 3;
 const incrementF = x => x + 1;
-const sequence   = Sequence(start, untilF, incrementF);
+const sequence   = Sequence(start, whileF, incrementF);
                                                        
 console.log(...sequence);
 // => Logs '0, 1, 2'
