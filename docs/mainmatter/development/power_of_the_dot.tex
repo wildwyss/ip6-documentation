@@ -33,13 +33,13 @@ import { Sequence } from "../src/sequence/sequence.js"; *'\label{line:js_module_
 export { endlessSeq }
 
 const incrFn     = i => i + 1;
-const untilFn    = _ => true;
-const endlessSeq = Sequence(0, untilFn, incrFn);
+const whileFn    = _ => true;
+const endlessSeq = Sequence(0, whileFn, incrFn);
 \end{lstlisting}
 
 Listing~\ref{lst:js_module_example} imports the constructor |Sequence| and
 becomes a module. It exports |endlessSeq|, which then becomes available in
-other modules. |incrFn| and |untilFn| are not exported and, therefore, only
+other modules. |incrFn| and |whileFn| are not exported and, therefore, only
 available in this module.
 % subsection The JavaScript Module System (end)
 

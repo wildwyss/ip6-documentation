@@ -276,7 +276,7 @@ To keep the focus on the core elements of the Sequence, some functionality in
 listing \ref{lst:sequence} is discussed later. The |next| function, explained in 
 the Iterator Protocol section~\ref{subsub:The Iterator Protocol}, 
 is on lines~\ref{line:start_protocol}~-~\ref{line:end_protocol}. It contains the 
-logic to return the next object of an iteration. First, it uses |untilFunction| 
+logic to return the next object of an iteration. First, it uses |whileFunction| 
 to check if the Sequence has finished. If this is not the case, the
 |incrementFunction| calculates the next element, which afterward will be
 returned.
@@ -287,7 +287,7 @@ returned.
   label={lst:sequence}
   ]
 // Sequence.js
-const Sequence = (start, untilFunction, incrementFunction) => {*'\label{line:seq_args}'*
+const Sequence = (start, whileFunction, incrementFunction) => {*'\label{line:seq_args}'*
 
   const iterator = () => {
     let value = start;
@@ -298,7 +298,7 @@ const Sequence = (start, untilFunction, incrementFunction) => {*'\label{line:seq
      */
     const next = () => {*'\label{line:start_protocol}'*
       const current = value;
-      const done = !untilFunction(current);
+      const done = !whileFunction(current);
       if (!done) value = incrementFunction(value);
       return { done, value: current };*'\label{line:end_protocol}'*
     };
@@ -321,10 +321,10 @@ numbers smaller than ten and how to use it.
   label={lst:even-sequence}
   ]
 const startValue        = 0;
-const untilFunction     = x => x < 10;
+const whileFunction     = x => x < 10;
 const incrementFunction = x => x + 2;
 
-const seq = Sequence(startValue, untilFunction, incrementFunction);
+const seq = Sequence(startValue, whileFunction, incrementFunction);
 
 for (const elem of seq) {
   console.log(elem);
