@@ -29,47 +29,45 @@ and their answers.
 % subsection Introduction (end)
 \subsection{Findings for the Sequence library} % (fold)
 \label{sub:Findings for the sequence library}
-\subsubsection{General findings and improvements} % (fold)
-\label{subsub:Numerical Differentiation Sequence library}
+\subsubsection{Findings and Improvements} % (fold)
+\label{subsub:seq_findings_and_improvements}
 We decided to include following findings in the Sequence library:
 \begin{itemize}
   \item \textbf{Renaming untilFunction}: Creating sequences using the sequence
     constructor worked well for everyone. The meaning of the parameters was
-    clear to all. (\ref{sub:ut_q3}) However, a suggestion for a meaningful
+    clear to all (\ref{sub:ut_q3}). However, a suggestion for a meaningful
     optimization from two participants was to rename the |untilFunction| to
     |whileFunction|. This name states clearer that the function should return
     |false| when the sequence ends. (This suggestion was handed in by a
     solution)
   \item \textbf{Better type documentation in JSDoc}: The IDEs have problems
     correctly displaying type information for curried functions (Ref. 2).
-    Therefore, the already often used JSDoc annotation "@haskell" , which
+    Therefore, the already often used JSDoc annotation |@haskell| , which
     describes the type signature of a function as in Haskell, is added
     everywhere.
 \end{itemize}
 The following are great ideas but are beyond the scope of this project to
-implement. Find detailed information about all of them in the Section~\ref{futu}
+implement. Find detailed information about all of them in the
+Section~\ref{}. %TODO link future features
 \begin{itemize}
-  \item \textbf{unfoldr}: The Future Features section explains this
-    function. (This suggestion was handed in by a solution)
-  \item \textbf{uncons with empty Lists}: as for now, |uncons| is not able to
-    handle empty sequences.
+  \item \textbf{unfoldr}: This suggestion was handed in by a solution
+  \item \textbf{uncons with empty sequences}: This suggestion was handed in by a solution
 \end{itemize}
+
 \subsubsection{Conclusion} % (fold)
-\label{subsub:Conclusion}
 
 Almost everyone uses operators as |map|, |filter|, |take|, |reduce|
 frequently when working with lists. So the Sequence library brings much-needed
 functions. (\ref{sub:ut_q2}) \\ 
-
 Figure~\ref{fig:usertest_q1} concludes the overall opinion about the Sequence
 library very well. It shows that most users think that it can be an
 advantage in their next project.
-\begin{figure}
+\begin{figure}[H]
 \begin{tikzpicture}
 \begin{axis}[
 % instead of scaling
 width=\textwidth / 2, % Breite des Charts
-title={Ich kann mir vorstellen, in einem zukünftigen Projekt das Sequenzframework zu verwenden.},
+title={"I can imagine using the Sequence framework in a future project."(~\ref{sub:ut_q4})},
 ybar,  % Art des Charts                                            
 ymin=0, % y min
 ymax=10, % y max
@@ -82,17 +80,47 @@ major grid style={line width=.2pt,draw=gray!50},
 minor y tick num=4,
 xtick=data,
 % use explicit ticklabels instead of symbolc x coords
-xticklabels={Trifft zu, Trifft eher zu, Trifft eher nicht zu, Trifft nicht zu},
+xticklabels={Strongly Agree, Agree, Disagree, Strongly Disagree},
 xticklabel style={ rotate=-20 },
 ]
 \addplot[black,fill=blue!30!white]
 coordinates{ (1,6) (2,4) (3,2) (4,1) };
 \end{axis}
 \end{tikzpicture}
-\caption{Responses to "Ich kann mir vorstellen, in einem zukünftigen Projekt
-das Sequenzframework zu verwenden."}
+\caption{Responses to "I can imagine using the Sequence framework in a future project."}
 \label{fig:usertest_q1}
 \end{figure}
 % subsubsection Conclusion (end)
 % subsection Findings Sequence library(end)
+\subsection{Findings for JINQ} % (fold)
+\label{sub:Findings for JINQ}
+\subsubsection{Findings and Improvements} % (fold)
+\label{subsub:jinq_finding_and_imrpovements}
+
+We decided to include following findings into JINQ:
+\begin{itemize}
+  \item \textbf{Better Introduction to JINQ}: Two people suggest using
+    |JSONMonad()| directly inside of |from| (text answer, \ref{sub:ut_q13}).
+    However, this makes no sense since JINQ can handle arbitrary monads. Thus,
+    the documentation provided did not provide a sufficient overview.
+    Therefore, the JSDoc of JINQ must give a better introduction to the topic.
+    Additional examples should show the usage using different monads.
+  \item \textbf{Revise JSDoc (functions and examples)}: Nearly a quarter of the participants found JINQ
+    challenging (\ref{sub:ut_q8}). This shows that these concepts needed to be
+    sufficiently well introduced. From the solutions given to us, it is evident
+    that more JSDoc was required. In addition, more examples would coin to a
+    better understanding (text answer, \ref{sub:ut_q13}).
+\end{itemize}
+
+The following are great ideas but are beyond the scope of this project to
+implement. Find detailed information about all of them in the
+Section~\ref{}. %TODO link future features
+
+% subsubsection Findings and Improvements (end)
+\subsubsection{Conclusion} % (fold)
+\label{sec:Conclusion}
+
+
+% subsubsection Conclusion (end)
+% subsection Findings for JINQ (end)
 % section User Test Evaluation (end)
