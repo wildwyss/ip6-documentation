@@ -48,7 +48,7 @@ We decided to include following findings in the Sequence library:
 \end{itemize}
 The following are great ideas but are beyond the scope of this project to
 implement. Find detailed information about all of them in the
-Section~\ref{}. %TODO link future features
+Section~\ref{sub:Operators and Operations}.
 \begin{itemize}
   \item \textbf{unfoldr}: This suggestion was handed in by a solution
   \item \textbf{uncons with empty sequences}: This suggestion was handed in by a solution
@@ -67,7 +67,7 @@ advantage in their next project.
 \begin{axis}[
 % instead of scaling
 width=\textwidth / 2, % Breite des Charts
-title={"I can imagine using the Sequence framework in a future project."(~\ref{sub:ut_q4})},
+title={"I can imagine using the Sequence framework in a future project."~(\ref{sub:ut_q4})},
 ybar,  % Art des Charts                                            
 ymin=0, % y min
 ymax=10, % y max
@@ -100,7 +100,7 @@ coordinates{ (1,6) (2,4) (3,2) (4,1) };
 We decided to include following findings into JINQ:
 \begin{itemize}
   \item \textbf{Better Introduction to JINQ}: Two people suggest using
-    |JSONMonad()| directly inside of |from| (text answer, \ref{sub:ut_q13}).
+    |JSONMonad()| directly inside of |from| (text answer~\ref{sub:ut_q13}).
     However, this makes no sense since JINQ can handle arbitrary monads. Thus,
     the documentation provided did not provide a sufficient overview.
     Therefore, the JSDoc of JINQ must give a better introduction to the topic.
@@ -109,18 +109,64 @@ We decided to include following findings into JINQ:
     challenging (\ref{sub:ut_q8}). This shows that these concepts needed to be
     sufficiently well introduced. From the solutions given to us, it is evident
     that more JSDoc was required. In addition, more examples would coin to a
-    better understanding (text answer, \ref{sub:ut_q13}).
+    better understanding (text answer~\ref{sub:ut_q13}).
+    \item \textbf{Not exactly the same as SQL}: Two people needed help with
+      JINQ not writing exactly like SQL (handed in code). An SQL query
+      |Select~NAME~from~PERSON~where~AGE~>~18| is translated into JINQ via
+      |from(PERSON).where(p~=>~p.age~>~18).select(p~=>~p.name);| So the order
+      of |select| and |where| is reversed. So the JSDoc of JINQ needs to
+      mention more clearly that working with JINQ is different than working
+      with SQL.
 \end{itemize}
 
 The following are great ideas but are beyond the scope of this project to
 implement. Find detailed information about all of them in the
-Section~\ref{}. %TODO link future features
-
+Section~\ref{sub:JINQ Functions}.
+\begin{itemize}
+  \item \textbf{Error handling}: Several people had trouble with null values,
+    mainly when, for example, when calling a  function on a non-existent object
+    property in a |select| or a |where| (text answer~\ref{sub:ut_q13}, and
+    handed in solution). In the discussion, the idea came up to
+    provide functions like |notNull|, |safeWhere| or |safeMap| to catch this.
+\end{itemize}
 % subsubsection Findings and Improvements (end)
 \subsubsection{Conclusion} % (fold)
 \label{sec:Conclusion}
+Although JINQ still has room for improvement, the general feedback is very
+good. Almost all find it helpful to search JSON structures using JINQ
+(\ref{sub:ut_q10}). The majority already found the current state of JINQ easy
+to use \ref{sub:ut_q8}.
 
-
+As Figure 3 shows, most people think that JINQ can be an asset in a future
+project:
+\begin{figure}[H]
+\begin{tikzpicture}
+\begin{axis}[
+% instead of scaling
+width=\textwidth / 2, % Breite des Charts
+title={"JINQ could be a benefit in a future project."~(\ref{sub:ut_q12})},
+ybar,  % Art des Charts                                            
+ymin=0, % y min
+ymax=10, % y max
+bar width=20, % Breite der Balken (in points)
+nodes near coords, % Labels oberhalb der Bars
+ylabel={Number of mentions},
+grid=both, % Zeilen ds Grids
+grid style={line width=.1pt, draw=gray!10},
+major grid style={line width=.2pt,draw=gray!50},
+minor y tick num=4,
+xtick=data,
+% use explicit ticklabels instead of symbolc x coords
+xticklabels={Strongly Agree, Agree, Disagree, Strongly Disagree},
+xticklabel style={ rotate=-20 },
+]
+\addplot[black,fill=blue!30!white]
+coordinates{ (1,9) (2,3) (3,0) (4,1) };
+\end{axis}
+\end{tikzpicture}
+\caption{Responses to "JINQ could be a benefit in a future project."}
+\label{fig:usertest_q1}
+\end{figure}
 % subsubsection Conclusion (end)
 % subsection Findings for JINQ (end)
 % section User Test Evaluation (end)
