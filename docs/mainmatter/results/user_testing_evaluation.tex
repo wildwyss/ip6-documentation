@@ -68,23 +68,26 @@ advantage in their next project.
 % instead of scaling
 width=\textwidth / 2, % Breite des Charts
 title={"I can imagine using the Sequence framework in a future project."~(\ref{sub:ut_q4})},
-ybar,  % Art des Charts                                            
-ymin=0, % y min
-ymax=10, % y max
+xbar,  % Art des Charts                                            
+xmin=0, % y min
+xmax=12, % y max
+%ylabel style={color=darkgray},
+ticklabel style={font=\small},
+label style={font=\small},
+nodes near coords style={font=\small},
 bar width=20, % Breite der Balken (in points)
 nodes near coords, % Labels oberhalb der Bars
-ylabel={Number of mentions},
+xlabel={Number of mentions},
 grid=both, % Zeilen ds Grids
 grid style={line width=.1pt, draw=gray!10},
 major grid style={line width=.2pt,draw=gray!50},
-minor y tick num=4,
-xtick=data,
+minor x tick num=1,
+ytick=data,
 % use explicit ticklabels instead of symbolc x coords
-xticklabels={Strongly Agree, Agree, Disagree, Strongly Disagree},
-xticklabel style={ rotate=-20 },
+yticklabels={Strongly Agree, Agree, Disagree, Strongly Disagree},
 ]
 \addplot[black,fill=blue!30!white]
-coordinates{ (1,6) (2,4) (3,2) (4,1) };
+coordinates{ (6,4) (4,3) (2,2) (1,1) };
 \end{axis}
 \end{tikzpicture}
 \caption{Responses to "I can imagine using the Sequence framework in a future project."}
@@ -145,23 +148,26 @@ project:
 % instead of scaling
 width=\textwidth / 2, % Breite des Charts
 title={"JINQ could be a benefit in a future project."~(\ref{sub:ut_q12})},
-ybar,  % Art des Charts                                            
-ymin=0, % y min
-ymax=10, % y max
+xbar,  % Art des Charts                                            
+xmin=0, % y min
+xmax=12, % y max
+%ylabel style={color=darkgray},
+ticklabel style={font=\small},
+label style={font=\small},
+nodes near coords style={font=\small},
 bar width=20, % Breite der Balken (in points)
 nodes near coords, % Labels oberhalb der Bars
-ylabel={Number of mentions},
+xlabel={Number of mentions},
 grid=both, % Zeilen ds Grids
 grid style={line width=.1pt, draw=gray!10},
 major grid style={line width=.2pt,draw=gray!50},
-minor y tick num=4,
-xtick=data,
+minor x tick num=1,
+ytick=data,
 % use explicit ticklabels instead of symbolc x coords
-xticklabels={Strongly Agree, Agree, Disagree, Strongly Disagree},
-xticklabel style={ rotate=-20 },
+yticklabels={Strongly Agree, Agree, Disagree, Strongly Disagree},
 ]
 \addplot[black,fill=blue!30!white]
-coordinates{ (1,9) (2,3) (3,0) (4,1) };
+coordinates{(9,4) (3,3) (0,2) (1,1)};
 \end{axis}
 \end{tikzpicture}
 \caption{Responses to "JINQ could be a benefit in a future project."}
@@ -178,38 +184,71 @@ find this useful. Most participants used IntelliJ or WebStorm for testing
 makes sense to write a detailed JSDoc. Code navigation, code completion, etc.,
 are also popular with users in JavaScript. With the right IDEs, this also works
 very well.
+%\begin{figure}[H]
+%\begin{tikzpicture}
+%\begin{axis}[
+%% instead of scaling
+%width=\textwidth / 2, % Breite des Charts
+%title={"My IDE provided me with helpful support during the user test." (\ref{sub:ut_q16})},
+%ybar,  % Art des Charts                                            
+%ymin=0, % y min
+%ymax=12, % y max
+%%ylabel style={color=darkgray},
+%%xlabel style={font=\small},
+%bar width=20, % Breite der Balken (in points)
+%nodes near coords, % Labels oberhalb der Bars
+%ylabel={Number of mentions},
+%grid=both, % Zeilen ds Grids
+%grid style={line width=.1pt, draw=gray!10},
+%major grid style={line width=.2pt,draw=gray!50},
+%minor y tick num=4,
+%xtick=data,
+%% use explicit ticklabels instead of symbolc x coords
+%xticklabels={Strongly Agree, Agree, Disagree, Strongly Disagree},
+%xticklabel style={ rotate=-20 },
+%]
+%\addplot[black,fill=blue!30!white]
+%coordinates{ (1,10) (2,2) (3,1) (4,0) };
+%\end{axis}
+%\end{tikzpicture}
+
 \begin{figure}[H]
 \begin{tikzpicture}
 \begin{axis}[
 % instead of scaling
 width=\textwidth / 2, % Breite des Charts
 title={"My IDE provided me with helpful support during the user test." (\ref{sub:ut_q16})},
-ybar,  % Art des Charts                                            
-ymin=0, % y min
-ymax=12, % y max
+xbar,  % Art des Charts                                            
+xmin=0, % y min
+xmax=12, % y max
+%ylabel style={color=darkgray},
+ticklabel style={font=\small},
+label style={font=\small},
+nodes near coords style={font=\small},
 bar width=20, % Breite der Balken (in points)
 nodes near coords, % Labels oberhalb der Bars
-ylabel={Number of mentions},
+xlabel={Number of mentions},
 grid=both, % Zeilen ds Grids
 grid style={line width=.1pt, draw=gray!10},
 major grid style={line width=.2pt,draw=gray!50},
-minor y tick num=4,
-xtick=data,
+minor x tick num=1,
+ytick=data,
 % use explicit ticklabels instead of symbolc x coords
-xticklabels={Strongly Agree, Agree, Disagree, Strongly Disagree},
-xticklabel style={ rotate=-20 },
+yticklabels={Strongly Agree, Agree, Disagree, Strongly Disagree},
 ]
 \addplot[black,fill=blue!30!white]
-coordinates{ (1,10) (2,2) (3,1) (4,0) };
+coordinates{ (10,4) (2,3) (1,2) (0,1) };
 \end{axis}
 \end{tikzpicture}
 \caption{Responses to "My IDE provided me with helpful support during the user
 test. (Code Completion, Inline Docs, Code Navigation, Errors/Warnings)"}
 \label{fig:usertest_q3}
 \end{figure}
+
 % subsection General Findings (end)
 \subsection{Conclusion} % (fold)
 \label{sub:Conclusion}
+
 This user test shows that the features this library brings are beneficial. In
 addition, it offers some improvement points of the API. Implementing the
 documented hints improves the quality and usability of this library even more.
