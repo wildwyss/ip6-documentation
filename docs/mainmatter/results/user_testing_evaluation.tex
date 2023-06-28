@@ -137,7 +137,7 @@ good. Almost all find it helpful to search JSON structures using JINQ
 (\ref{sub:ut_q10}). The majority already found the current state of JINQ easy
 to use \ref{sub:ut_q8}.
 
-As Figure 3 shows, most people think that JINQ can be an asset in a future
+As Figure~\ref{fig:usertest_q2} shows, most people think that JINQ can be an asset in a future
 project:
 \begin{figure}[H]
 \begin{tikzpicture}
@@ -165,8 +165,47 @@ coordinates{ (1,9) (2,3) (3,0) (4,1) };
 \end{axis}
 \end{tikzpicture}
 \caption{Responses to "JINQ could be a benefit in a future project."}
-\label{fig:usertest_q1}
+\label{fig:usertest_q2}
 \end{figure}
 % subsubsection Conclusion (end)
 % subsection Findings for JINQ (end)
+\subsection{General Findings} % (fold)
+\label{sub:General Findings}
+The questionnaire concludes with general questions. Among other things, the
+closing explains how effectively IDEs support JSDoc and whether the testers
+find this useful. Most participants used IntelliJ or WebStorm for testing
+(~\ref{sub:ut_q15}). Figure~\ref{fig:usertest_q3} shows that the IDE was an excellent help for this test. Thus, It
+makes sense to write a detailed JSDoc. Code navigation, code completion, etc.,
+are also popular with users in JavaScript. With the right IDEs, this also works
+very well.
+\begin{figure}[H]
+\begin{tikzpicture}
+\begin{axis}[
+% instead of scaling
+width=\textwidth / 2, % Breite des Charts
+title={"My IDE provided me with helpful support during the user test." (\ref{sub:ut_q16})},
+ybar,  % Art des Charts                                            
+ymin=0, % y min
+ymax=12, % y max
+bar width=20, % Breite der Balken (in points)
+nodes near coords, % Labels oberhalb der Bars
+ylabel={Number of mentions},
+grid=both, % Zeilen ds Grids
+grid style={line width=.1pt, draw=gray!10},
+major grid style={line width=.2pt,draw=gray!50},
+minor y tick num=4,
+xtick=data,
+% use explicit ticklabels instead of symbolc x coords
+xticklabels={Strongly Agree, Agree, Disagree, Strongly Disagree},
+xticklabel style={ rotate=-20 },
+]
+\addplot[black,fill=blue!30!white]
+coordinates{ (1,10) (2,2) (3,1) (4,0) };
+\end{axis}
+\end{tikzpicture}
+\caption{Responses to "My IDE provided me with helpful support during the user
+test. (Code Completion, Inline Docs, Code Navigation, Errors/Warnings)"}
+\label{fig:usertest_q3}
+\end{figure}
+% subsection General Findings (end)
 % section User Test Evaluation (end)
