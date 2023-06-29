@@ -188,7 +188,8 @@ JS iteration protocol more clearly using a sample scenario:
   caption=Example: JS Iteration Protocol,
   label={lst:example_js_iteration_protocol}
   ]
-const seq = Sequence(0, x => x < 2, x =>  x + 1); 
+// Generates the values 0, 1. Sequence is discussed in the next section.
+const seq = Sequence(0, x => x < 2, x =>  x + 1);
 const iterator = seq[Symbol.iterator]();*'\label{line:illustraion_create_iterator}'*
 
 iterator.next(); // returns { done: false, value: 0 }
