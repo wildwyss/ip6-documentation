@@ -2,43 +2,42 @@
 \label{sec:Sequence and Iterable in General}
 This section explains the concept of |Iterable| and |Iterator| objects and points
 out features and characteristics of it. |Sequence| is one implementation of
-an |Iterable| and represents the core functionality of the Sequence Library. The following
+an |Iterable| and represents the core functionality of the Sequence library. The following
 discussion covers challenges and solutions for creating a robust and
 user-friendly API.
 
 \subsection{What is an Iterator?}
 \label{sub:What is an Iterator?}
-In computer science, |Iterator|s are a popular concept. An |Iterator| is a mechanism 
-to access elements of any data structure. It uses a function call to return the 
-next element and either acts on a data structure in memory or compute the 
-elements lazily when queried. Iterators are an essential part of this work. Therefore, 
-the fundamentals are essential to understand. The following sections cover
-this topic in depth.
+In Computer Science, iterators are a popular concept. An iterator provides
+access to elements of a data structure. It does not matter if the iterator
+accesses a data structure fully kept in memory (like arrays) or if it computes
+the elements lazily when queried. In both ways, a function call on the iterator
+retrieves the next value. Iterators are an essential part of this work.
+Therefore, it is crucial to understand the fundamentals of this concept. The
+following sections cover this topic in depth.
+% subsection{Iteration Protocols in JavaScript}
 
-% \subsection{Iteration Protocols in JavaScript}
-\subsection{Exploring the Meaning of Protocols}
+\subsection{The JS Iteration Protocols}
 \label{sub:Exploring the Meaning of Protocols}
-In JavaScript, an |Iterable| is an object that implements the JavaScript |Iterator|
-and |Iterable| protocols \cite{mdn_protocols}
-(henceforth called JS iteration protocols). An |Iterable| iterates only once 
-over a set of data. After that, the |Iterable| is exhausted. Further operations 
-will only perform on a new instance of it.
-\newline
-To create an |Iterator|, implementing the two following protocols is required.
+In JavaScript, an |Iterable| is an object that implements the JavaScript
+iteration protocols \cite{mdn_protocols} (subsequently called JS
+iteration protocols). An |Iterable| provides an |Iterator| which traverses
+each of its elements. An |Iterator| in JavaScript cannot access the previous
+element but only the next. Therefore, when the last value of a data
+structure is reached, the |Iterator| is exhausted. To iterate again, request a
+new |Iterator| from the |Iterable|.
 
 \subsubsection{The Iterable Protocol}
 \label{subsub:The Iterable Protocol}
-An object is an |Iterable| according to the JS iteration protocol if it has a
-property with the name |[Symbol.iterator]|. This property defines the iteration
-behavior of the object. Such an object is of type |Iterable<T>|.
-All objects in JavaScript that implement this property can be processed using 
+According to the JS iteration protocols, an object is an |Iterable| if it has a
+property named |["Symbol.iterator"]|. This property defines the iteration
+behavior of the object. Such an object is of type |Iterable<T>|. All objects in
+JavaScript that implement this property can be processed using
 destructuring\footnote{The destructuring assignment syntax is a JavaScript
-expression that allows you to extract array items or object properties into
-individual variables.} and |for...of| loop. 
-Listing \ref{lst:iterable_protocols} demonstrates how an object defines a
-|[Symbol.iterator]| property.
-This property's value is a function that must adhere to the |Iterator| protocol.
-It is content of the next section.
+expression that allows to extract items of iterables into individual
+variables.} and |for...of| loops. Listing \ref{lst:iterable_protocols}
+demonstrates object defining a |[Symbol.iterator]| property. This
+property's value is a function that must adhere to the |Iterator| protocol.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -47,24 +46,23 @@ It is content of the next section.
   ]
   return {
     [Symbol.iterator]: () => {
-      return { next: next }; *' defined in~\ref{subsub:The Iterator Protocol}'*
+      return { next: next }; *'// next is defined in~\ref{lst:iterator_protocol}'*
     }
   }
 \end{lstlisting}
 
 \subsubsection{The Iterator Protocol}
 \label{subsub:The Iterator Protocol}
-Invoking the |[Symbol.iterator]| property obtains an |Iterator| object.
-This protocol defines the structure of such an object. It must 
-implement a function |next|, which defines how and which values are returned 
-when iterating.
-Each iteration on an |Iterator| calls the function |next|. |next| returns an object, which must
-include two properties according to the |Iterator| protocol: |value| and |done|.
-Therefore, the property |value| contains the current value of the iteration,
-while |done| represents the information on whether the end of the iteration has 
-been reached. The following code \ref{lst:iterator_protocol} shows a simple 
-implementation of it. Each call on |next| returns an object with the |value| 
-|1|. |done| is always |false|, so the iteration never ends. 
+Invoking the |[Symbol.iterator]| property obtains an |Iterator| object
+complying to the iterator protocol. It must implement a function |next|, which
+defines how and which values are returned when iterating. Each iteration on an
+|Iterator| calls this function. |next| returns an object, which must
+include two properties: |value| and |done|. The property |value|
+contains the current value of the iteration, while |done| represents the
+information on whether the end of the iteration has been reached. The following
+code \ref{lst:iterator_protocol} shows a simple implementation of it. Each call
+on |next| returns an object with the |value 1|. |done| is always |false|, so
+the iteration never ends. 
 
 \begin{lstlisting}[
   style=ES6, caption=Iterator protocol,
@@ -77,11 +75,11 @@ implementation of it. Each call on |next| returns an object with the |value|
 
 \subsubsection{Creating Iterables}
 \label{subsub:Creating Iterables}
-By combining the two protocols, the result could look like listing
-\ref{lst:protocols}. The constructor |SampleIterable| on line 1 wraps the two previously
-defined implementations of the protocols. Objects returned by this constructor 
-are now |Iterables|. Since the return value is always a |Number|, the object type
-is |Iterable<Number>|.
+By combining these two protocols, the result could look like Listing
+\ref{lst:protocols}. The constructor |SampleIterable| on line 1 wraps the two
+previously defined implementations. This constructor therefore returns iterable
+objects. Since the return value is always a |Number|, this is an iterable of
+type |Iterable<Number>|.
 
 \begin{lstlisting}[
   style=ES6, caption=Iterable and iterator protocol,
@@ -102,27 +100,26 @@ is |Iterable<Number>|.
 \end{lstlisting}
 
 Because |SampleIterator| adheres to the JS iteration protocols, it is now 
-possible to create |Iterable| objects. Language features like |for..of| and 
-destructuring (|...|) can now process these objects. However, beware of this 
+possible to create iterable objects. Language features like |for..of| and 
+destructuring (|...|) can process these objects. However, beware of this 
 case. This would lead to an infinite loop because the property |done| never 
 becomes |true|. Therefore, the iteration never ends. We will see examples 
-with non-endless |Iterable|s later in this work. 
+with non-endless iterables later in this work. 
 For now, the focus here is on the protocols. Therefore, this 
 example is sufficient at this point.
 \newline
-Such protocols make it possible to build your customized |Iterable|s and
+Such protocols make it possible to build customized iterables and
 collections. This opens new possibilities. Various programming tasks can have 
 different, more straightforward solving approaches in a more declarative way to
 write.
-There are already some JavaScript |Iterable|s present. |array|s and
-|HTML Collection|s are probably the most prominent of these.
+There are already some JavaScript iterables present. Arrays and
+|HTMLCollection|s are probably the most prominent of these.
 
 \subsection{Types of Iterables}
 \label{sub:Types of Iterables}
-Previously we saw a distinction between 
-|Iterable|s~\ref{subsub:Creating Iterables} and 
-|Iterator|s~\ref{subsub:The Iterator Protocol}. These abstractions also have their 
-types. Listing \ref{lst:iterable_types} shows an excerpt of the relevant types.
+Previously we saw a distinction between iterables and iterators. These abstractions
+also have their types. Listing \ref{lst:iterable_types} shows an excerpt of the
+relevant types.
 
 \begin{lstlisting}[
   style=ES6, caption=Types of iterables,
@@ -183,8 +180,8 @@ can be seen on line~\ref{line:iteration_return_result_done}.
 
 \subsection{Illustration of the JS Iteration Protocol}
 \label{sub:Illustration of the JS Iteration Protocol}
-Following an example scenario in Listing~\ref{lst:example_js_iteration_protocol}
-to illustrate the behavior of the JS iteration protocol more clearly.
+Listing~\ref{lst:example_js_iteration_protocol} illustrates the behavior of the
+JS iteration protocol more clearly using a sample scenario:
 
 \begin{lstlisting}[
   style=ES6, 
@@ -201,7 +198,7 @@ iterator.next(); // returns { done: true,  value: 2 }
 \end{lstlisting}
 
 On line~\ref{line:illustraion_create_iterator}, invoking |[Symbol.iterator]|
-returns an instance of an |Iterator| of the |Iterable| |seq|. 
+returns |Iterator| of the |Iterable| |seq|. 
 After that, we call |next| four times directly on the |Iterator|. 
 This leads to the following diagram~\ref{fig:js_iteration_protocol} shown below. 
 
@@ -221,10 +218,10 @@ This leads to the following diagram~\ref{fig:js_iteration_protocol} shown below.
     \begin{call}{client}{next()}{iterator}{returns IteratorYieldResult<T>}                                  
     \end{call}                                                                    
 
-    \begin{call}{client}{next()}{iterator}{returns IteratorReturndResult<TReturn>}                                  
+    \begin{call}{client}{next()}{iterator}{returns IteratorReturnResult<TReturn>}                                  
     \end{call}                                                                    
 
-    \begin{call}{client}{next()}{iterator}{returns IteratorReturndResult<TReturn>}                                  
+    \begin{call}{client}{next()}{iterator}{returns IteratorReturnResult<TReturn>}                                  
     \end{call}                                                                    
   \end{sequencediagram}    
   \caption{JS iteration protocol procedure}
@@ -236,47 +233,47 @@ is of type |IteratorReturnResult<TReturn>|.
 
 \subsection{Building custom Series of Data}
 \label{sub:Building custom Series of Data}
-The last Chapter has shown how to make an object |Iterable|. By exploring the 
-protocols discussed so far, this chapter showcases the ability to create 
-powerful concepts. Based on these abstractions, an endless |Iterator| that always
-returns |1| served as an illustration. The true power of |Iterable|s is 
-unleashed, when they create more meaningful data series
+The last Section has shown how to make an object iterable, using an Iterable
+always returning |1| as an example. This Section explains how to build more
+powerful data structures based on these protocols by creating meaningful data
+series.
+
 \subsubsection{Sequence - The Name of connected Data}
 \label{subsub:Sequence - The Name of connected Data}
-In computer science, naming elements accurately poses a significant challenge 
+In Computer Science, naming elements accurately poses a significant challenge 
 when aiming to develop sustainable and robust code. We decided to name series
-of data a "Sequence". It has been influenced by several factors:
+of data a "sequence". It has been influenced by several factors:
 
 \begin{itemize}
-  \item{Sequences are not conventional lists known from other programming languages}
-  \item{It contains interrelated data}
-  \item{Having the courage to introduce an unfamiliar name, with the risk of increasing the barrier to use}
+  \item Sequences are not conventional lists known from other programming
+    languages.
+\item The name sequence is already known from mathematics.
+\item Giving this data structure a more familiar name, for example "list",
+  leads to wrong assumptions. 
+\item A sequence produces interrelated data.
 \end{itemize}
-
-The name "Sequence" avoids making incorrect assumptions about the nature of
-this data structure.
-\newline
-What distinguishes the object generated by the Sequence from conventional list
-is the fact, that it needs almost no memory since values are generated. At the 
-same time, you have the impression that you are dealing with huge amounts of data.
-So the constructor |Sequence| emerged, which generates such connected data.
+What distinguishes the object generated by the sequence from the conventional
+list is that a sequence generates its values when they are requested.
+Therefore, it needs almost no memory. At the same time, you have the impression
+that you are dealing with vast amounts of data. So the constructor |Sequence|
+emerged, which generates such connected data.
 
 \subsubsection{Components of a Sequence}
 \label{subsub:Components of a Sequence}
-Defining a Sequence requires specifying three essential points:
+Defining a sequence requires specifying three essential points:
 \begin{enumerate}
-  \item{A fixed starting value for the Sequence} 
-  \item{A function that determines whether the Sequence should still generate
-    some values} 
-  \item{A function to calculate the next element based on its predecessor} 
+  \item{A fixed starting value for the sequence} 
+  \item{A function that determines whether the sequence should generate
+    further values} 
+  \item{A function to calculate the next value based on its predecessor} 
 \end{enumerate}
-These three elements define the Sequence. Listing \ref{lst:sequence} on
-line~\ref{line:seq_args} shows the passing arguments to the constructor.
-To keep the focus on the core elements of the Sequence, some functionality in 
-listing \ref{lst:sequence} is discussed later. The |next| function, explained in 
-the Iterator Protocol section~\ref{subsub:The Iterator Protocol}, 
-is on lines~\ref{line:start_protocol}~-~\ref{line:end_protocol}. It contains the 
-logic to return the next object of an iteration. First, it uses |whileFunction| 
+These three elements define the sequence. Listing \ref{lst:sequence} on
+line~\ref{line:seq_args} shows the passing of these three elements as arguments
+to the constructor. To keep the focus on the core elements of the sequence,
+some functionality in listing \ref{lst:sequence} is omitted and discussed later.
+The |next| function, explained Section~\ref{subsub:The Iterator Protocol}, is on
+lines~\ref{line:start_protocol}~-~\ref{line:end_protocol}. It contains the
+logic to return the next value in an iteration. First, it uses |whileFunction|
 to check if the Sequence has finished. If this is not the case, the
 |incrementFunction| calculates the next element, which afterward will be
 returned.
@@ -329,16 +326,14 @@ const seq = Sequence(startValue, whileFunction, incrementFunction);
 for (const elem of seq) {
   console.log(elem);
 }
-
 // => Logs '0, 2, 4, 6, 8' *'\label{line:demo_output}'*
 \end{lstlisting}
 
-The |for..of| loop iterates over each
-element until |done| is true. Meanwhile, |console.log| writes the elements out 
-to the console. Line~\ref{line:demo_output} shows the output produced.
-\newline
+The |for..of| loop iterates over the sequence until |done| is true. Meanwhile,
+|console.log| writes the elements to the console.
+Line~\ref{line:demo_output} shows the output produced.
 
 Now, we discussed the ability to generate arbitrary sequences of data. However, 
 just creation is often not enough as there is a need to manipulate the data or 
-introduce additional levels of abstraction. In the upcoming chapter, we will 
+introduce additional levels of abstraction. In the upcoming Chapter, we will 
 delve into processing such Sequences.
