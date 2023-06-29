@@ -1,17 +1,16 @@
 \section{Iterables Everywhere}
 \label{sec:Iterables Everywhere}
-This chapter concerns the implications of the previous findings for other
-data structures.
-Some immutable collections are already implemented in the Kolibri Web UI
+This Section concerns the implications of the previous findings for other
+data structures. Some of them are already implemented in the Kolibri Web UI
 Toolkit~\cite{kolibri}. The Pair example demonstrates the advantages of 
-iterating existing implementations in the following section.
+iterating existing implementations.
 
 \subsection{Making immutable Data Structures iterable}
 \label{sub:Making immutable Data Structures iterable}
-In the following, we will examine the implementation the immutable data structure |Pair|. 
 Among other immutable data structures, the Kolibri Web UI Toolkit provides an
-implementation for |Pair|. 
-Listing~\ref{lst:pair_non_iterable} shows how to create and use a Pair.
+implementation for |Pair|. In the following, we will examine its
+implementation. Listing~\ref{lst:pair_non_iterable} shows how to create and use
+a Pair.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -37,21 +36,21 @@ console.log(one + " " + two);
 // => Logs '1 2'
 \end{lstlisting}
 
-The only way to make a Pair immutable is to build it using functions. The type 
+The only way to make a |Pair| immutable is to build it using functions. The type 
 signature on line~\ref{line:start_pair_type}~-~\ref{line:end_pair_type} shows 
-that the first two arguments are arbitrary values. Pair stores these two values
+that the first two arguments are arbitrary values. |Pair| stores these two values
 in its closure scope. 
 Selector functions named |fst| on line~\ref{line:fst_pair} and |snd| on 
 line~\ref{line:snd_pair} grant access to these values. However, |Pair| offers
-no way to modify these values. Listing~\ref{lst:pair_non_iterable} shows that handling a Pair can be tedious. 
-It would be great to use the built-in JavaScript language features to access 
-the content of a Pair. 
+no way to modify these values. Listing~\ref{lst:pair_non_iterable} shows that
+handling a |Pair| can be tedious. It would be great to use the built-in
+JavaScript language features to access the content of a |Pair|. 
 
 \subsubsection{Iterable Pair}
 \label{subsub:Iterable Pair}
 Listing~\ref{lst:pair_iterable} demonstrates the implementation of an iterable 
-Pair. Still, Pair operates only with functions. However, it additionally defines the
-|[Symbol.iterator]| property.
+|Pair|. Still, |Pair| operates only with functions. However, it additionally defines the
+|[Symbol.iterator]| property:
 
 \begin{lstlisting}[
   style=ES6, 
@@ -73,13 +72,13 @@ const Pair = x => y => {
 
 Line~\ref{line:pair_symbol_iterator} shows that 
 this property defines a function, which only returns the |[Symbol.iterator]| 
-property of array. The array stores the values of the Pair. With that, |Pair|
-is an |Iterable|. Therefore, all iterable functions are now available to Pair.
-Listing~\ref{lst:handling_pair_iterable} shows the usage of the iterable Pair. 
-Line~\ref{line:pair_destructuring} shows the deconstruction of a Pair in the same way as an array. 
+property of array. The array stores the values of the |Pair|. With that, |Pair|
+is an |Iterable|. Therefore, all iterable functions are now available to |Pair|.
+Listing~\ref{lst:handling_pair_iterable} shows the usage of the iterable |Pair|. 
+Line~\ref{line:pair_destructuring} shows the deconstruction of a |Pair| in the same way as an array. 
 This access option is more convenient than in Listing~\ref{lst:pair_non_iterable}. 
 Line~\ref{line:show_pair} demonstrates the use of operations from the Sequence 
-Library. |show| converts an iterable into a string, analogous to how |toString|
+library. |show| converts an iterable into a string, analogous to how |toString|
 works.
 
 \begin{lstlisting}[

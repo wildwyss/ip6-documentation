@@ -4,13 +4,13 @@ This section explains how to break down programs and functions into small,
 reusable pieces using lazy evaluation and higher-order functions. The start
 shows how Haskell implements these concepts. The subsequent discussion covers
 the application and limitations of these concepts in JavaScript before showing
-how the Sequence Library overcomes these limitations, providing valuable tools
+how the Sequence library overcomes these limitations, providing valuable tools
 for writing reliable and reusable code.
 
 \subsection{Gluing Programs together} % (fold)
 \label{sub:Gluing Programs together}
 John Hughes argues that functional programming languages provide two extra ways
-to better partition programs and easily combine them later. He refers to these
+to better partition programs and easily combine them later. He refers to them
 as "glues". These are, on the one hand, higher-order functions and, on the
 other hand, lazy evaluation. \cite[p.3]{hughes_why_1989}
 % subsection Gluing Programs together (end)
@@ -46,7 +46,7 @@ Code is easily reusable since |map| can be parametrized with a function.
 \label{subsub:Evaluation}
 Lazy evaluation describes a concept where a program only evaluates as many
 statements as required. This concept makes it possible to work with lists that
-have an infinite amount of values. Again, an example best explains the concept:
+have an infinite amount of values. Again, an example explains the concept best:
 
 \begin{lstlisting}[
   style=Haskell,
@@ -63,7 +63,7 @@ Line~\ref{line:lazy_eval_haskell_1} of Listing~\ref{lst:lazy_eval_haskell}
 defines a list with infinite values. Then the function |double|, defined in
 Listing ~\ref{lst:hof_haskell}, is applied to this list. Since the list has
 infinite elements, eagerly evaluating it would take forever. But since Haskell
-evaluates its statements lazily, Nothing happens on line
+evaluates its statements lazily, nothing happens on line
 line~\ref{line:lazy_eval_haskell_2}. Haskell applies |double| not before line
 ~\ref{line:lazy_eval_haskell_3} where |print| evaluates a part of the list (the
 first four elements). Even then, Haskell exclusively uses |double| on those
@@ -181,7 +181,7 @@ example defined in Listing~\ref{lst:lazy_eval_haskell} to JavaScript:
   caption=Process infinite sequences in JavaScript,
   label={lst:inf_seq_js}
 ]
-const seq = Sequence(1, _ => true, x => x + 1);*'\label{line:inf_seq_js_1}'*
+const seq     = Sequence(1, _ => true, x => x + 1);*'\label{line:inf_seq_js_1}'*
 const doubles = map(double)(seq);
 
 console.log(...take(4)(doubles));
@@ -217,7 +217,7 @@ console.log(i);
 console.log(...take(2)(mapped);
 // => Logs '2, 4' 
 console.log(i);
-// => Logs 2 i has only been incremented two times
+// => Logs '2' i has only been incremented two times
 \end{lstlisting}
 
 It is impossible to conclude from the length of the list how often a function
@@ -231,9 +231,9 @@ It is tough to make assumptions about |i|, because:
 \end{itemize}
 This example shows that lazy evaluation and side effects almost exclude each
 other. Therefore, omitting side effects when working with lazy evaluation makes
-sense. In Haskell, where the type system can exclude side effects per function,
-this is not a problem. Since side effects often make a program harder to
-understand, getting rid of it feels even more natural.
+sense. In Haskell, where the type system can exclude side effects per function
+definition, this is not a problem. Since side effects often make a program
+harder to understand, getting rid of it feels even more natural.
 % subsection Lazy evaluation and side effects (end)
 
 \subsubsection{Placing the Receiver at the End} % (fold)
@@ -268,7 +268,7 @@ This paradigm allows it also to link existing functions together using the |.|
   label={lst:fn_comp_hs}
 ]
 -- "sum" sums up all elements in the list
-doubleAndSum = sum . doubleAll // *' doubleAll defined in Listing~\ref{lst:precon_fs_hs}'*
+doubleAndSum = sum . doubleAll -- *' doubleAll defined in Listing~\ref{lst:precon_fs_hs}'*
 
 print $ doubleAndSum [1,2,3,4]
 -- Prints '20'
@@ -318,7 +318,7 @@ parameter naming is needed here.
 \label{subsub:modularizing_programs_conclusion}
 Higher-order functions and lazy evaluation are powerful glues to compose
 smaller parts into a bigger program. Haskell provides a good reference for
-this. In JavaScript, higher-order functions are familiar. However, JavaScript
+this. In JavaScript, higher-order functions are familiar. However, it
 offers less support for lazy evaluation - it eagerly evaluates arrays and their
 operations. The Sequence library closes this gap because sequences work
 similarly to Haskell lists. Thus, the Sequence library allows using both types
