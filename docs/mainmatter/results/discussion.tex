@@ -1,7 +1,7 @@
 \section{Discussion}
 \label{sec:Discussion}
 This chapter discusses the achieved results of the Thesis. Following, we have a look at the
-Standard Library and the most important aspects of it. Subsequent sections
+Functional Standard Library and the most important aspects of it. Subsequent sections
 discuss the findings we have made in this Thesis. The end describes the
 findings from the user test. 
 
@@ -9,26 +9,26 @@ findings from the user test.
 \label{sub:Functional Standard Library}
 In this work, the goal was to build a Functional Standard Library for the
 Kolibri Web Ui Toolkit~\cite{kolibri}. We achieved
-this goal. The Library offers all the necessary functionalities to implement
+this goal. The Library offers a lot of the necessary functionalities to implement
 various applications. As we have seen in the Examples Chapter~\ref{sec:Examples}, one can implement
-even complex algorithms such as the alpha-beta. We implemented not only the functional aspects but
-also the non-functional ones extensively. The library is fully described with
-jsDoc, explained with examples, and typed by jsDoc~\cite{jsdoc_use_2023}. This represents the maximum that can
+even complex algorithms such as the alpha-beta. We implemented also the
+non-functional aspects of the Functional Standard Library. The library is fully
+documented with jsDoc, explained with examples, and typed by jsDoc~\cite{jsdoc_use_2023}. 
+This represents the maximum that can
 be done in JavaScript to minimize errors in the application.
 
 \subsection{Similarity to Haskell}
 \label{sub:Similarity to Haskell}
 Because Haskell is a widely used and established functional language, we have
-increasingly aligned implementations of the Sequence Library with Haskell. For
-example, the immutability of Sequences or the functions stand alone and pass
-the receiver as an argument. Likewise, we could build the Sequence Library
-lazy, as is also the case in Haskell. These concepts are precious and
-beneficial in each implementation using the Sequence Library.
+aligned implementations of the Sequence Library with Haskell. For
+example the functions are stand alone and the receiver is passed as argument. 
+Likewise, we build the Sequence Library lazy, as is also the case in Haskell. 
+These concepts are precious and beneficial in each implementation using the Sequence Library.
 
-\subsubsection{Comparion - Haskell vs. Sequence Library}
+\subsubsection{Comparison - Haskell vs. Sequence Library}
 \label{Comparion - Haskell vs. Sequence Library}
-Listings~\ref{lst:comparing_with_javascript} and~\ref{lst:comparing_with_haskell} 
-shows the similarities of Haskell and the Sequence Library:
+For visualization, listings~\ref{lst:comparing_with_javascript} and~\ref{lst:comparing_with_haskell} 
+shows example similarities of Haskell and the Sequence Library:
 
 \begin{lstlisting}[
   style=Haskell, 
@@ -77,7 +77,8 @@ could have been |Iterable|. Such a situation requires type-casting.
 With |JINQ|~\ref{sec:Query different Data Structures}, we have realized an
 implementation based on monadic types. Thus, we could show that it is also
 possible and valuable to implement such concepts in JavasScript.
-This opens numerous possibilities for extensions that act on monadic types.
+This opens numerous possibilities for extensions that act on monadic types in
+JavaScript.
 
 \subsubsection{Testing}
 \label{subsub:Testing}
@@ -87,7 +88,7 @@ solid test framework. The Sequence Library has become stable through the
 functionality and test cases, the library's core became more and more robust.
 In addition, new test concepts have been added during development. One example
 is the invariant tests~\ref{subsub:Invariant Testing}. These ensure even more
-behaviors of functionality by testing in another way.
+behaviors of functionalities by testing in various ways.
 
 \subsubsection{Library Organization}
 \label{subsub:Library Organisation}

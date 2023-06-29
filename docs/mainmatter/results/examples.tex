@@ -6,7 +6,9 @@ of the section, the examples become more sophisticated.
 
 \subsection{Fibonacci Sequence}
 \label{sub:Fibonacci Sequence}
-Listing~\ref{lst:fibonacci_sequence} shows the implementation of the Fibonacci Sequence.
+This is an example of a specialized sequence constructor.
+Listing~\ref{lst:fibonacci_sequence} shows the implementation of the Fibonacci 
+Sequence. 
 
 \begin{lstlisting}[
   style=ES6, 
@@ -34,7 +36,7 @@ const FibonacciSequence = () => {
   return createMonadicSequence(fibonacciIterator);
 };
 \end{lstlisting}
-Line~\ref{line:start_next} to \ref{line:end_next} shows the |next| function. |next| is responsible for calculating an
+On line~\ref{line:start_next} to \ref{line:end_next}, |next| is responsible for calculating an
 element based on the previous. As we see on line~\ref{line:fibonacci_calc}, the current element is the
 sum of the last and the second last, which represents the Fibonacci sequence.
 
