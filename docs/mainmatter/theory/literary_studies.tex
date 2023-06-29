@@ -1,59 +1,59 @@
 \section{Literary and Studies}
 \label{sec:Literary and Studies}
-This chapter is about formative sources for this thesis. In the following, the
-sources are briefly introduced and explained as to their use for this work.
+This chapter is about formative sources for this thesis. The following briefly
+introduces the sources and explains their meaning for this work.
 
 \subsection{Why Functional Programming Matters}
 \label{sub:Functional Programming Matters}
-Why Functional Programming Matters~\cite{hughes_why_1989} by John Hughes gives an 
-impressive insight into the world of functional
-programming. Mainly higher-order functions and laziness are discussed
-intensively. In development, we could reproduce specific applications from this
-paper in analog form using the Sequence Library. This gave us confidence that
-we were on the right track because the concepts discussed in this paper have
-been proven for a long time. In addition, we implemented a user test based on
-examples from this paper to obtain feedback on the Sequence Library.
-\newline
-Furthermore, this paper has improved our understanding of function composition
-and partial application. Therefore, this paper has enhanced the quality and
-robustness of the Sequence Library. Chapter~\ref{sec:Modularizing Programs} 
-deals with this topic in depth.
+
+Why Functional Programming Matters~\cite{hughes_why_1989} by John Hughes gives
+an impressive insight into functional programming, mainly higher-order
+functions, and laziness is discussed intensively. The Sequence library, part of
+the functional standard library, enables to rebuild many examples described in
+this paper using JavaScript. This paper strongly influenced the development of
+the standard library, as the described concepts had already been proven a long
+time ago. In addition, the user test is based on an example of this paper. \\
+Furthermore, this paper has improved the understanding of function composition,
+partial application, and laziness. Therefore, this paper has enhanced the
+quality and robustness of the Sequence library. Chapter~\ref{sec:Modularizing
+Programs} deals with this topic in depth.
 
 \subsection{Frege Goodness}
 \label{sub:Frege Goodness}
-Frege Goodness~\cite{frege_goodness} by Prof. Dierk König is a book about Frege, a functional
-programming language for the JVM. This book contains examples and
-explanations of various applications. Based on these, we gained new insights and inspiration for
-implementation examples. We treated individual chapters more intensively, such
-as \textit{The Power of the Dot}. The insights gained helped us to make far-reaching
-decisions for the Sequence Library. You find more details about that in
-Chapter~\ref{sec:The Power of the Dot}.
+Frege Goodness~\cite{frege_goodness} by Prof. Dierk König is a book about
+Frege, a functional programming language for the JVM. This book contains
+examples and explanations of various applications. We gained new insights and
+inspiration for implementations and examples based on these. We treated
+individual chapters more intensively, such as \textit{The Power of the Dot}.
+The insights gained helped to make far-reaching decisions for the Sequence
+library. Chapter~\ref{sec:The Power of the Dot} describes more details about
+that.
 
 \subsection{Quickcheck}
 \label{sub:Quickcheck}
-QuickCheck: A Lightweight Tool for Random Testing
-of Haskell Programs~\cite{quickcheck_hughes} by Koen Claessen and John Hughes describes how
-property-based testing is applied in Haskell. We were able to adapt specific
-exciting approaches from this paper. This has additionally enabled us to
-improve our testing base. Even though we could only use minor implementations
-based on this paper. However, further implementations in this direction are
-possible. Chapter~\ref{sub:A Kind of Property based Testing} discusses the
-adapted concepts in more detail. 
+QuickCheck: A Lightweight Tool for Random Testing of Haskell
+Programs~\cite{quickcheck_hughes} by Koen Claessen and John Hughes describes
+how property-based testing works in Haskell. The adaption of specific
+approaches described by this paper improved the code quality of the Sequence
+library. Since this project did not focus on this topic, we only took over a few
+ideas. However, further implementations in this direction are possible.
+Chapter~\ref{sub:A Kind of Property based Testing} discusses the adapted
+concepts in more detail. 
 
 \subsection{MDN - Iteration Protocols}
 \label{sub:MDN - Iteration Protocols}
-The Mozilla Firefox page of iteration protocols~\cite{mdn_protocols} is the basis for developing the
-Sequence Library. The page contains all relevant facts about Iterable and
-Iterators. Chapter~\ref{sec:Sequence and Iterable in General} explains the
-implementation of protocols.
+The Mozilla Firefox page describing the iteration
+protocols~\cite{mdn_protocols} is the basis for developing the Sequence
+library. The page contains all relevant facts about Iterable and Iterators.
+Chapter~\ref{sec:Sequence and Iterable in General} explains the implementation
+of protocols.
 
 \subsection{LINQ}
 \label{sub:LINQ}
-LINQ (Language integrated queries)~\cite{billwagner_language-integrated_2023} 
-is a widely used concept for querying data. It enables to process of any data
-in a fluent and declarative way. Using this to solve problems is convenient and
-easy to read and understand afterward.
-We have built our implementation JINQ analogously. Therefore,
-we have kept the functionalities and naming of existing implementations as much 
-as possible to help users become familiar with 
+LINQ (Language integrated queries)~\cite{billwagner_language-integrated_2023}
+is a widely used concept for querying data. It enables to process differentd
+data sources in a fluent and declarative way. Using this to solve problems is
+convenient and easy to read and understand afterward. JINQ, which emerged in
+this project, is based on the same ideas. LINQ heavily inspired the naming and
+the scope of JINQ, enabling users familiar with LINQ to use JINQ immediately.
 Chapter~\ref{sec:Query different Data Structures} discusses JINQ in detail.
