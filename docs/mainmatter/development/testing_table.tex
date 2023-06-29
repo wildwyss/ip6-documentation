@@ -1,23 +1,22 @@
 \section{Testing}
 \label{sec:Testing}
-This chapter discusses the test strategy of the Sequence Library. The start
+This chapter discusses the test strategy of the Sequence library. The start
 explains which instruments are already available from the Kolibri Toolkit and
-how we used them. After that, we focus on the |testingTable|. 
-This is the core of our test framework, and exciting details are covered in
-depth. At the end of the chapter, we will look at some advanced concepts
-regarding property-based testing.
+how we used them. After that, we focus on the testing table. 
+This is the core of the implemented testing framework during this project,
+exciting details are covered in depth. The end of the Chapter discusses some
+advanced concepts regarding property-based testing.
 
 \subsection{Motivation}
 \label{sub:Motivation}
 When implementing a library, testing is an essential task. With the constant
 increase of functionalities, the number of tests also grows. Therefore, it
 brings many benefits to implementing tests in a standardized and generalized
-way. This leads to a robust and
-leakless testing framework and, thus, a solid code base.
-We called our implementation of the generalization |testingTable|.
-An explanation in detail follows in Chapter~\ref{sub:Testing Table}.
-Such a testing strategy has significant advantages. 
-The following non-concluding list shows an excerpt of the most important:
+way. This leads to a robust and leakless testing framework and, thus, a solid
+code base. We called our implementation of the generalization testing table
+An explanation in detail follows in Section~\ref{sub:Testing Table}. \\
+Such a testing strategy has significant advantages. The following
+non-concluding list shows an excerpt of the most important:
 
 \begin{itemize}
   \item{Ensuring high code quality}
@@ -28,23 +27,25 @@ The following non-concluding list shows an excerpt of the most important:
   \item{Easier to understand test cases}
 \end{itemize}
 
-The generalization of testing enables to write configurations for functions
-under test, which are checked against different rules. Suppose a new particular case, probably a bug, is
+The generalization of testing is possible for function which fulfill similar
+rules. This enables to write configurations for such functions
+under test, which are checked against these rules. Suppose a new particular case, probably a bug, is
 discovered during the development that has to be handled. In that case, it can
-be tested in a central location and easily checked against all configurations.
+be added to these rules and thus be tested in a central location and easily
+checked against all configurations.
 
-\subsection{Kolibri Test Framework}
+\subsection{Kolibri Testing Framework}
 \label{sub:Kolibri Test Framework}
-This Section gives an overview of the Kolibri Test Framework. It was already
-part of the Toolkit. Therefore, we do not dive deep but still want to cover
-certain aspects. Additionally, we extended the Framework with some |Iterable|
+This Section gives an overview of the Kolibri testing framework. It was already
+part of the toolkit. Therefore, we do not dive deep but still want to cover
+certain aspects. Additionally, we extended the framework with some iterable
 specific functionalities for easier handling of our implementations.
 
 \subsubsection{Parts of the Framework}
 \label{subsub:Parts of the Framework}
-The |TestSuite| is the core element of the Testing Framework. Typically, a
-|TestSuite| includes several tests, whereas a Test Framework can consist of
-several suites. Executing the |TestSuit|s generates a test report in HTML.
+The |TestSuite| is the core element of the testing framework. Typically, a
+|TestSuite| includes several tests, whereas a testing framework can consist of
+several suites. Executing the |TestSuite|s generates a test report in HTML.
 An example of a summary report shows Figure~\ref{fig:test_report}.
 
 \begin{figure}[H]
@@ -55,7 +56,8 @@ An example of a summary report shows Figure~\ref{fig:test_report}.
 \end{figure}
 
 
-To demonstrate how to work with the |TestSuite|, we examine the following Listing~\ref{lst:testsuit_demo}.
+To demonstrate how to work with the |TestSuite|, examine the following
+Listing~\ref{lst:testsuit_demo}:
 
 \begin{lstlisting}[
   style=ES6, 
@@ -63,35 +65,37 @@ To demonstrate how to work with the |TestSuite|, we examine the following Listin
   label={lst:testsuit_demo}
   ]
 const suite = TestSuite("The truth");
-  suite.add("test if true really true", assert => {
-      assert.is(true, true);
- });
- suite.run();
+suite.add("true is really true", assert => {
+  assert.is(true, true);
+});
+suite.run();
 \end{lstlisting}
 
 Description of the functionalities: 
 
 \begin{itemize}
   \item{|TestSuite|: A |TestSuite| contains the test cases and is identified by a
-    name. This name represents the suite on the summary page when executing.}
+    name. This name represents the suite on the summary page on
+  Figure~\ref{fig:test_report}when executing.}
   \item{|run|: executes all tests containing the |TestSuite|.}
-  \item{|add|: A function for including a test case into |TestStuite|. Its
-      parameters are a string |name| and a callback |assert|.}
+  \item{|add|: A function for including a test case into the |TestStuite|. Its
+      parameters are a string |name| and a callback which provides the test.}
 \end{itemize}
 
 
 \subsubsection{Assertion for Iterables}
 \label{subsub:Assertion for Iterables}
-Assert functions in the Kolibri Test Framework execute tests by comparing
+Assert functions in the Kolibri testing framework execute tests by comparing
 two values and store the result in the summary collection of the |TestSuite|.
 Listing~\ref{lst:testsuit_demo} shows the comparison of two |boolean|s using
 |assert.is(...)| function.
 This function compares an |actual| and an |expected| value. These two values
 must match. Otherwise, the test fails.
 \newline
-Comparing |Iterable| is slightly more complicated. For this reason, we have 
-written an additional assert function that compares two arbitrary |Iterable|s.
-Listing~\ref{lst:iterableEq} shows the usage of the |iterableEq| function.
+Comparing iterables is slightly more complicated. For this reason, we extended
+the testing frameowrk with an additional assert function that compares two
+arbitrary iterables. Listing~\ref{lst:iterableEq} shows the usage of this
+funciton called |iterableEq|:
 
 \begin{lstlisting}[
   style=ES6, 
@@ -99,17 +103,16 @@ Listing~\ref{lst:iterableEq} shows the usage of the |iterableEq| function.
   label={lst:iterableEq}
   ]
 testSuite.add("demo iterableEq", assert => {
-
   const sequence = Sequence(0, x => x < 2, x => x +1);
+
   assert.iterableEq(sequence, [0,1]);
   assert.iterableEq(sequence, Pair(0)(1));
   assert.iterableEq(sequence, Range(1));
 });  
 \end{lstlisting}
 
-The implementation of |iterableEq| is capable of all different 
-|Iterable|s. Listing~\ref{lst:impl_iterableEq} shows the
-implementation of |iterableEq|. 
+The implementation of |iterableEq| is capable of all different iterables.
+Listing~\ref{lst:impl_iterableEq} shows the implementation of |iterableEq|:
 
 \begin{lstlisting}[
   style=ES6, 
@@ -148,38 +151,38 @@ iterableEq: (actual, expected, maxElementsToConsume = 1_000) => { *'\label{line:
 \end{lstlisting}
 
 The implementation checks on line~\ref{line:check_iterable} if both values are
-|Iterable|s. If this is the case, each value of the two |Iterables| is compared
-in order using a |while| loop. On line~\ref{line:write_result_to_summary}, the
+iterable. If this is the case, each value of the two iterables is compared
+using a |while| loop. On line~\ref{line:write_result_to_summary}, the
 test stores the result into the summary collection of the corresponding |TestSuite|.
 \newline
 Since an |Itearble| can be endless, |iterableEq| defines a default maximum
-iteration amount on line~\ref{line:signature_iterableEq}.  This is necessary because it is often the case that an
-|Iterable| runs infinitely while something goes wrong.
+iteration amount on line~\ref{line:signature_iterableEq}.  This is handy
+because it is often the case that an |Iterable| runs infinitely while something
+goes wrong. If an iterable exceeds this limit, the test fails.
 
 
 \subsection{Testing Table}
 \label{sub:Testing Table}
-This Chapter describes the realization of the |testingTable|. Therefore, we
-examine the architecture of it and how it works for a particular operation. We
-cover the config-based testing approach, which enables generalizing test cases
-for the Sequence Library.
+This Section describes the realization of the testing table. It examines the
+architecture of it and how it works for a particular operation. It covers the
+config-based testing approach, which enables generalizing test cases for the
+Sequence library.
 
 The architecture consists of three main parts:
 \begin{itemize}
-  \item{A table containing all test functions.}
+  \item{A table containing all testing functions.}
   \item{Configuration objects to define test properties.}
-  \item{A function |addToTestingTable| which includes all tests from the Testing
-    Table into a given |TestSuite|.}
+  \item{A function |addToTestingTable| which includes all tests from the testing
+    table into a given |TestSuite|.}
 \end{itemize}
 
-Each constructor and operation of the Sequence Library has its configuration
+Each constructor and operator of the Sequence library has its configuration
 that specifies the test behavior. Likewise, each has its |TestSuite|. 
 The following sections address the different parts separately.
 
-
 \subsubsection{The Table}
 \label{subsub:The Table}
-The central feature of the |testingTable| is an array (table) containing test objects.
+The testing table is just an array (table) containing test objects.
 Each object has a name and a function. Listing~\ref{lst:testing_table} shows a 
 part of the implementation.
 
@@ -202,7 +205,7 @@ An object in the table includes two properties:
 \item{A function to test a behavior of a test candidate}
 \end{itemize}
 
-Each function of the |testingTable| expects as argument a test configuration
+Each function of the testing table expects as argument a test configuration
 object of type |SequenceTestConfigType|.
 Listing~\ref{lst:test_simple} demonstrate exemplary the
 implementation of |testSimple|.
@@ -229,13 +232,14 @@ const testSimple = config => assert => {
 
 The function |simpleTest| executes the following tasks:
 \begin{itemize}
-  \item{Line~\ref{line:test_config_iterable} executes the iterable function to get an |Iterable| to work whit}
+  \item{Line~\ref{line:test_config_iterable} executes the iterable function to
+    get an |Iterable| to work with}
   \item{Line~\ref{line:test_config_operated} executes the operation by passing
     the required parameters. This is an optional configuration parameter |param| like a predicate and an |Iterable|.}
   \item{Line~\ref{line:test_config_eval} compares the |actual| and |expected| value with a given eval function. } 
 \end{itemize}
 
-The |testingTable| includes test functions to test the following behaviors of
+The testing table includes test functions to test the following behaviors of
 operators and constructors of the Sequence Library:
 
 \begin{itemize}
@@ -251,9 +255,9 @@ operators and constructors of the Sequence Library:
 
 \subsubsection{The Function to Run the Tests}
 \label{subsub:The Function to Run the Tests}
-|addToTestingTable| inserts the tests of the |testingTable| into the |TestSuite| for a
+|addToTestingTable| inserts the tests of the testing table into the |TestSuite| for a
 specific configuration. Visible on line~\ref{line:add_to_testsuite}. 
-Since the configuration runs all tests of the |testingTable| by default, it
+Since the configuration runs all tests of the testing table by default, it
 must provide an option to exclude tests for exceptional cases. 
 Line~\ref{line:filtering_tests} filters out all excluded tests.
 Specific tests do not make sense for particular operators and constructors.
@@ -285,7 +289,7 @@ const addToTestingTable = testSuite => config => {
 \subsubsection{The Configuration}
 \label{subsub:The Configuration}
 
-To test operators and constructors with the |testingTable|, they must implement 
+To test operators and constructors with the testing table, they must implement 
 a test configuration.
 Listing~\ref{lst:config_reduce} shows the configuration of |reduce|. 
 Each configuration has its own |TestSuite|. Therefore, it is possible to add
@@ -347,7 +351,7 @@ properties are available and the purpose of it:
                     & 
                     y  \\ 
     excludedTests   & An optional array of |TestingFunction| to exclude tests
-                      in |testingTable|. 
+                      in testing table. 
                     & n 
                     \\
     operation       & The operation to test. The value passed in |param| is
@@ -423,7 +427,7 @@ On line~\ref{line:reverse_law} in Listing~\ref{lst:test_config_reverse} we can
 see the definition of an invariant. This statement defines that an iterable must be 
 equal to the original when reversed two times.
 \newline
-The |testingTable| contains a test function |testInvariants|. This function is on
+The testing table contains a test function |testInvariants|. This function is on
 Listing~\ref{lst:invariant_penetration} below.
 
 \begin{lstlisting}[
@@ -534,6 +538,6 @@ development.
 Handling a rising number of cases during development leads to testing the core
 functionality in various ways, making the core even more stable.
 \newline
-The standardization and generalization of tests using a |testingTable| imply that
+The standardization and generalization of tests using a testing table imply that
 writing tests for new functionalities takes less time and ensures better
 quality.
