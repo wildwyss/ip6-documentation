@@ -1,1 +1,125 @@
-\section{User Test Evaluation}
+\section{Discussion}
+\label{sec:Discussion}
+This chapter discusses the achieved results of the Thesis. Following, we have a look at the
+Standard Library and the most important aspects of it. Subsequent sections
+discuss the findings we have made in this Thesis. The end describes the
+findings from the user test. 
+
+\subsection{Functional Standard Library}
+\label{sub:Functional Standard Library}
+In this work, the goal was to build a Functional Standard Library for the
+Kolibri Web Ui Toolkit~\cite{kolibri}. We achieved
+this goal. The Library offers all the necessary functionalities to implement
+various applications. As we have seen in the Examples Chapter~\ref{sec:Examples}, one can implement
+even complex algorithms such as the alpha-beta. We implemented not only the functional aspects but
+also the non-functional ones extensively. The library is fully described with
+jsDoc, explained with examples, and typed by jsDoc~\cite{jsdoc_use_2023}. This represents the maximum that can
+be done in JavaScript to minimize errors in the application.
+
+\subsection{Similarity to Haskell}
+\label{sub:Similarity to Haskell}
+Because Haskell is a widely used and established functional language, we have
+increasingly aligned implementations of the Sequence Library with Haskell. For
+example, the immutability of Sequences or the functions stand alone and pass
+the receiver as an argument. Likewise, we could build the Sequence Library
+lazy, as is also the case in Haskell. These concepts are precious and
+beneficial in each implementation using the Sequence Library.
+
+\subsubsection{Comparion - Haskell vs. Sequence Library}
+\label{Comparion - Haskell vs. Sequence Library}
+Listings~\ref{lst:comparing_with_javascript} and~\ref{lst:comparing_with_haskell} 
+shows the similarities of Haskell and the Sequence Library:
+
+\begin{lstlisting}[
+  style=Haskell, 
+  caption=Haskell code for comparison, 
+  label={lst:comparing_with_javascript}
+  ]
+-- Creating a list from 0 to 4
+let list = unfoldr (\x -> if x < 5 then Just(x, x + 1) else Nothing) 0
+
+-- mapping the list
+map (\x -> x * 2) list 
+\end{lstlisting}
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=JavaScript code for comparison,
+  label={lst:comparing_with_haskell}
+  ]
+// Creating a list from 0 to 4
+const list = Sequence(0, x => x < 5, x => x + 1);
+
+// mapping the list
+map(x => x * 2)(list)
+\end{lstlisting}
+
+\subsection{Findings}
+\label{sub:Findings}
+This section highlights the main findings of the Thesis.
+
+\subsubsection{Robust Programming in JavaScript}
+\label{subsub:Robust Programming in JavaScript}
+Strange situations arise in JavaScript more often than in other programming
+languages. One of the reasons for this is the type system. However, in this
+thesis, we have shown that a reasonably robust way of programming is possible
+using functional programming concepts. The prerequisite for this is the
+functional aspects implemented in the language, such as higher-order functions
+and partial application. However, it must also be clearly said that we have
+reached the limits. Particularly in connection with the type-system,
+not all desired behaviors can be achieved.
+An example is the combination of a |MonadType|, which is also an |Iterable|
+type. If a function returns a |MonadType|, one loses the information that this
+could have been |Iterable|. Such a situation requires type-casting.
+
+\subsubsection{Monadic Structures}
+\label{subsub:Monadic Structures}
+With |JINQ|~\ref{sec:Query different Data Structures}, we have realized an
+implementation based on monadic types. Thus, we could show that it is also
+possible and valuable to implement such concepts in JavasScript.
+This opens numerous possibilities for extensions that act on monadic types.
+
+\subsubsection{Testing}
+\label{subsub:Testing}
+A recipe for the success of a robust and sustainable implemented library is a
+solid test framework. The Sequence Library has become stable through the
+|TestingTable| and configured Test Objects~\ref{sec:Testing}. By incrementally adding
+functionality and test cases, the library's core became more and more robust.
+In addition, new test concepts have been added during development. One example
+is the invariant tests~\ref{subsub:Invariant Testing}. These ensure even more
+behaviors of functionality by testing in another way.
+
+\subsubsection{Library Organization}
+\label{subsub:Library Organisation}
+While developing a larger application, we also scrutinized non-functional
+aspects repeatedly. We have adjusted the organization of how the project is set up
+in development. So we came to the current state, where each
+functionality is in a separate file. Such a project structure has an excellent
+impact on the overview and navigability of the project. In addition, it helps
+to create a good order, which also helps to improve the code quality.
+
+\subsubsection{Code Quality}
+\label{subsub:Code Quality}
+By maintaining a high code quality standard, we created a clear and consistent
+code base. We paid attention to the following points:
+
+\begin{itemize}
+  \item{No code duplications}
+  \item{Good naming}
+  \item{Standardized formatting}
+  \item{Only necessary exports of functions}
+  \item{Appropriate comments}
+  \item{Project organization and structure}
+\end{itemize}
+
+Strict adherence to these principles makes development easier for us and helps
+library users find their way around more quickly. Additionally, it facilitates
+future developers to learn how to add new functionalities.
+
+\subsection{User Testing}
+\label{sub:User Testing}
+The user testing~\ref{sub:User Testing} helped us to improve the Sequence Library further. It was also
+valuable to gain insight into what other programmers without prior knowledge of
+the library think. We were able to implement certain things immediately after
+the test using the results. Others we added to the list of possible enhancements described in
+Chapter~\ref{sec:Future Features}.
