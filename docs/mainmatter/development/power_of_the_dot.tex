@@ -46,11 +46,11 @@ available in this module.
 \subsection{IDE support through modules} % (fold)
 \label{sub:IDE support through modules}
 The module system now offers several possibilities to bring autocompletion to
-the IDE using the point.
+the IDE using the dot.
 \subsubsection{Named Imports} % (fold)
 \label{sec:Named Imports}
 The sequence library offers many loose functions. To use them, you need to know
-their names. This isn't easy, especially for the beginner, and reduces the
+their names. This is not easy, especially for beginners, and reduces the
 development speed. Fortunately, this can be solved using named imports.
 Line~\ref{line:named_imports_js1} in Listing~\ref{lst:named_imports_js} imports
 the sequence library named |_|:
@@ -89,7 +89,7 @@ module names as Listing~\ref{lst:destr_named_import} shows:
   label={lst:destr_named_import}
 ]
 import *'\colorbox{code-highlight}{* as \_}'* from "../src/sequence/sequence.js" 
-const { Sequence } = *'\colorbox{code-highlight}{\_.}'*; *'\label{line:destr_named_import1}'*
+const { Sequence } = *'\colorbox{code-highlight}{\_}'*; *'\label{line:destr_named_import1}'*
 
 const seq = Sequence(0, i => i < 5, i => i + 1); *'\label{line:destr_named_import3}'*
 \end{lstlisting}
@@ -110,7 +110,7 @@ that should have the same interface as the production services that access an
 API. The Namespace Object pattern solves this problem!
 
 Listing~\ref{lst:namespace_object} defines a service with two methods. The
-object Service gathers these two methods into a single namespace. This object
+object |Service| gathers these two methods into a single namespace. This object
 is the only thing that the module exports.
 
 \begin{lstlisting}[
@@ -126,7 +126,8 @@ const getById = id => { /* <omitted> */ };
 const Service = { getAll, getById };
 \end{lstlisting}
 
-A user of this service can now import it very easily, as Listing 3 shows:
+A user of this service can now import it very easily, as
+Listing~\ref{lst:import_namespace_obj} shows:
 
 \begin{lstlisting}[
   style=ES6,
