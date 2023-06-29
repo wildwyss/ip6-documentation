@@ -6,57 +6,71 @@ Furthermore, the end of the chapter discusses to whom such a Toolkit could be of
 
 \subsection{Functional Programming in JavaScript}
 \label{sub:Functional Programming in JavaScript}
-JavaScript is omnipresent on the web client side. 
-In many aspects, JavaScript differs from other programming
-languages. Sometimes it has the reputation of being a bit strange.
-Nevertheless, the language offers some excellent language concepts of
-functional programming. For example, in JavaScript, functions are ordinary
-objects. Also, it is possible to define the parameters of functions in a
-curried style. Such concepts are very powerful, and we will explore this in
-more depth in this paper. Among other things, writing more robust code in
-JavaScript is possible with functional concepts. And that's where the Kolibri
-Toolkit comes in. You'll learn more about the Kolibri Toolkit in the next
-section.
+JavaScript is omnipresent on the web client side. In many aspects, JavaScript
+differs from other programming languages. Sometimes it has the reputation of
+being a bit strange. Nevertheless, the language offers some excellent concepts
+which enable functional programming. For example, in JavaScript, functions are
+ordinary objects. \\
+As Listing~\ref{lst:curried_fn_in_js} shows, defining functions receiving their
+parameters in a curried style is also possible. This means, passing one
+argument to a function taking two parameters returns a new function just taking
+one parameter. \\ 
+This paper explores these powerful concepts in depth. Among other things,
+writing more robust code in JavaScript is possible with functional concepts.
+And that’s where the Kolibri Toolkit comes in. You’ll learn more about the
+Kolibri Toolkit in the next section.
+
+\begin{lstlisting}[
+  style=ES6,
+  caption=Curried functions in JavaScript,
+  label={lst:curried_fn_in_js}
+]
+const plus = a => b => a + b; // A function taking two params
+const plusOne = plus(1);      // plus(1) returns a new function taking 1 param
+
+console.log(plusOne(5));      // applying another param calculates the result
+// => Logs '6'
+\end{lstlisting}
+
 
 \subsection{The Kolibri Web UI Toolkit}
 \label{The Kolibri Web UI Toolkit}
-On the main page of Kolibri it says, "Kolibri wants to be a sustainable, high
-quality Toolkit"~\cite{kolibri}, - and it is.
+The web page of the Kolibri describes the toolkit as, "Kolibri wants to be a
+sustainable, high quality Toolkit"~\cite{kolibri}, - and it is.
 The Kolibri Web UI Toolkit is a collection of implementations. Experts test all
 components, which must satisfy high functional and non-functional standards. An
-essential part of the Toolkit is the dependency-less implementation. Thus, it
-represents a certain antithesis to the frameworks dominated by npm Libraries.
-This is important to fulfill the quality requirements in the long term.
-
-The Toolkit is under continuous development. Mainly from student work, each
-focuses on one topic area. Functional Standard Library is the focus of this
-work. The implementations provide examples in each case, making adaptations and
-use possible without an intensive training period.
+essential part of the toolkit is the dependency-less implementation. Thus, it
+represents a certain antithesis to the frameworks dominated by |npm| libraries.
+This is important to fulfill the quality requirements in the long term.\\
+The toolkit is under continuous development. Mainly from student work, each
+focuses on one topic. Implementing a standard library based on functional
+concepts, is the focus of this work. \\ 
+The implementations provide examples in each case, making adaptations and use
+possible without an intensive training period.
 
 \subsection{The Root of the Project}
 \label{The Root of the Project}
-This work is a continuation of our previous project from the fifth semester of
-computer science studies. Thus, we have already dealt with the topic before
-this thesis, but on a smaller scale. We implemented a Logging Framework for the
-Kolibri Toolkit and a first version of the Functional Standard Library. Based
-on these results we were able to further develop the Library to its current
-state. By researching the literature and trying out different approaches, we
-have now managed to create a versatile and robust implementation of a
-Functional standard Library.
+This work continues the previous project from the fifth semester of Computer
+Science studies. Thus, we have already dealt with the topic before this thesis,
+but on a smaller scale. This predecessor project includes a Logging Framework
+for the Kolibri toolkit and the first version of the functional standard
+library. These results made it possible to develop the library to its current
+state further. By researching the literature and trying different approaches, a
+versatile and robust implementation of a functional standard library emerged.
 
 \subsection{Role of the Standard Library}
 \label{sub:Role of the Standard Library}
-The Functional Standard Library is a part of the Toolkit. With
-this realization, future implementations may base on it. However, independent
-use of the Sequence Library is also possible. The current state of the Sequence 
-Library covers the basic needs. But such a Library has enormous expansion capabilities.
-Chapter~\ref{sec:Future Features} describes an excerpt the possibilities of extending the Library.
+The Kolibri toolkit ships the standard library. The current state of the
+library already covers many needs. Section~\ref{sec:Examples} shows that it is
+possible to create stunning projects based on it. But such a library has
+enormous expansion capabilities. Chapter~\ref{sec:Future Features} describes
+the possibilities of extending the library.
 
 \subsection{Who is the Toolkit for?}
 \label{sub:Who is the Toolkit for?}
-The Toolkit is for anyone who wants to implement sustainable applications on
-in Web and does not want to be exposed to the hell of dependencies and dangers
-of packet managers. It is an open-source project that
-anyone can use. The basic idea is that you copy the Toolkit into your project.
+The toolkit is for anyone who wants to implement sustainable web applications 
+and does not want to be exposed to the hell of dependencies and dangers
+of vulnerabilities in various packages. It is an open-source project that
+anyone can use. The basic idea is that you copy the toolkit into your project.
 Then you can use the things you need. Of course, everyone is free to adapt
-things for his purposes or to add new implementations.
+things for their purposes or to add new implementations.
