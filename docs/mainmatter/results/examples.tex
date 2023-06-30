@@ -1,15 +1,16 @@
 \section{Examples} % (fold)
 \label{sec:Examples}This section shows some examples implemented with the
-Sequence Library. This is to show the variable usage of the Sequence Library.
-In the beginning, the examples are relatively easy to understand. In the course
-of the section, the examples become more sophisticated.
+Sequence library to demonstrate the variable usage.
+The following section covers easy-to-understand and more sophisticated
+examples. Consider consulting the listed sources to understand the applications
+thoroughly.
 
 \subsection{Fibonacci Sequence}
 \label{sub:Fibonacci Sequence}
 This is an example of a specialized sequence constructor.
 Listing~\ref{lst:fibonacci_sequence} shows the implementation of the Fibonacci 
 Sequence. 
-
+%S36
 \begin{lstlisting}[
   style=ES6, 
   caption=Fibonacci Sequence,
@@ -43,10 +44,10 @@ sum of the last and the second last, which represents the Fibonacci sequence.
 \subsection{Fizz Buzz}
 \label{sub:Fizz Buzz}
 FizzBuzz is a children's game that also serves as a programming task. Frege
-Goodness~\cite{frege_goodness} includes a detailed description of the game.
+Goodness~\cite{frege_goodness} includes a detailed explanation of the game.
 It is about adding rules to a sequence of numbers, where if there is a multiple
 of a number, the number is replaced by a word. Listing 3 shows a part of the
-implementation with the Sequence Library.
+implementation with the Sequence library.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -289,6 +290,365 @@ Listing~\ref{lst:impl_within} defines the following implementations:
 \end{itemize}
 
 
-\subsection{Alpha - Beta Algorithm}
+\subsection{Tic Tac Toe with a Kind of AI}
 \label{Alpha - Beta Algorithm}
+This example includes the implementation of the alpha-beta heuristic, an
+algorithm for games such as tic-tac-toe. The algorithm looks ahead to make the
+optimal move. The implementation is adapted from the paper "Why Funcitonal
+Programming Matters"~\cite{hughes_why_1989} to prove that even advanced 
+applications in JavaScript can
+be implemented with the Sequence library. For a deeper understanding of the
+algorithm, you can either consult the paper mentioned before or the section
+"Incremental Development" in Frege Goodness~\cite{frege_goodness}.
+
+\subsubsection{The Required Types}
+\label{subsub:The Required Types}
+Listing~\ref{lst:tictactoe_types} shows the required types for the game
+implementation.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Tic Tac Toe Types,
+  label={lst:tictactoe_types}
+  ]
+/**
+ * @template _T_
+ * @typedef {SequenceType<Tree<_T_>>} TreeSequence
+ */
+
+/**
+ * @template _T_
+ * @typedef { PairSelectorType<_T_, TreeSequence<_T_>> } Tree
+ */
+
+
+/**
+ * @typedef { "Computer" | "Human" | "NoPlayer" } Player
+ */
+
+/**
+ * @typedef { 1 | -1 | 0 } Stone
+ */
+
+/**
+ * @typedef Board
+ * @property { Player } whosTurn
+ * @property { Iterable<Stone>} fields - A board has fields from 0 to 8.
+ */
+\end{lstlisting}
+
+Listing~\ref{lst:tictactoe_players} includes the definition of the players and some
+functions used in the game process. Since JavaScript does not support pattern
+matching, the functions |opponent| and |stone| uses a workaround via an object.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=The players and some helper functions,
+  label={lst:tictactoe_players}
+  ]
+/** @type { Player } */
+const Computer = "Computer";
+
+/** @type { Player } */
+const Human = "Human";
+
+/** @type { Player } */
+const NoPlayer = "NoPlayer";
+
+/**
+ * Returns the opponent of a given player.
+ * @param { Player } player
+ * @return Player
+ */
+const opponent = player => {
+  const pairings = {
+    "Computer" : Human,
+    "Human"    : Computer,
+    "NoPlayer" : NoPlayer,
+  };
+  return pairings[player];
+};
+
+/**
+ * Returns the stone number of a given player.
+ * @param { Player } player
+ * @returns Stone
+ */
+const stone = player => {
+  const pairings = {
+    "Computer" :  1,
+    "Human"    : -1,
+    "NoPlayer" :  0,
+  };
+ return pairings[player];
+};
+
+/**
+ * Transforms each board element using the given function f.
+ * @template _T_, _U_
+ * @type {
+ *         (f: (Board) => _T_)
+ *      => (tree: Tree<_U_>)
+ *      => Tree<_T_>
+ * }
+ */
+const treeMap = f => ([a, sub]) => Pair(f(a))(map(treeMap(f))(sub));
+\end{lstlisting}
+
+\subsubsection{Processing the Game Board}
+\label{subsub:Processing the Game Board}
+
+Listing~\ref{lst:tictactoe_move} includes the |moves| function. This function
+calculates all possible moves for a player whose turn it is on the board.
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Tic Tac Toe move function,
+  label={lst:tictactoe_move}
+  ]
+/**
+ * Indexes each field using a {@link PairType}.
+ * @param { Iterable<Stone> } fields
+ * @return { SequenceType<PairType<Stone, Number>> }
+ */
+const indexFields = fields => zip(fields)(Range(1,9));
+
+/**
+ * Calculates possible moves for a given board.
+ * @param { Board } board
+ * @return SequenceType<Board>
+ */
+const moves = board => {
+  if (hasWon(board)(Computer)) return /**@type {SequenceType<Board>} */nil;
+  if (hasWon(board)(Human))    return /**@type {SequenceType<Board>} */nil;
+  const otherPlayer = opponent(board.whosTurn);
+
+  const indexedFields = indexFields(board.fields);
+
+  const blankIndices =
+    from(indexedFields)
+      .where( ([content, _]) => content === stone(NoPlayer))
+      .select( ([_, i]) => i)
+      .result();
+
+  const fieldsWithPlayerPlacedAt = pos =>
+    from(indexedFields)
+      .select(([content, i]) => i === pos ? stone(board.whosTurn) : content)
+      .result();
+
+  const boardFieldsAfterMove = map(fieldsWithPlayerPlacedAt)(blankIndices);
+
+  return /** @type SequenceType<Board> */ 
+       map(fields => ({fields, whosTurn: otherPlayer}))(boardFieldsAfterMove);
+}
+\end{lstlisting}
+
+Listing~\ref{lst:tictactoe_hasWon} shows the implementation of the |hasWon|
+function which checks, if a player has won on a given board.
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Tic Tac Toe hasWon function,
+  label={lst:tictactoe_hasWon}
+  ]
+/**
+ * Checks, if a player has won.
+ * @type {
+ *    (board: Board)
+ *    => (player: Player)
+ *    => Boolean
+ * }
+ */
+const hasWon = board => player => {
+  const winTriples = [
+    [1,2,3], [4,5,6], [7,8,9], // row
+    [1,4,7], [2,5,8], [3,6,9], // col
+    [1,5,9], [3,5,7]           // diag
+  ];
+
+  const checkTriple = triple => {
+    const actualStone = stone(player);
+    const indexedFields = indexFields(board.fields);
+
+    const playerOnFields =
+      from(indexedFields)
+      .where( ([_, i])        => triple.includes(i))
+      .select( ([content, _]) => content === actualStone)
+      .result();
+
+    return foldl$((acc, cur) => acc && cur, true)(playerOnFields);
+  };
+  return pipe(
+    map(checkTriple),
+    foldl$((acc, cur) => acc || cur, false)
+  )(winTriples)
+};
+\end{lstlisting}
+
+
+Listing~\ref{lst:tictactoe_gametree} shows the functions to build a game tree.
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Tic Tac Toe game tree,
+  label={lst:tictactoe_gametree}
+  ]
+/**
+ * Generates recursively a game tree, which is potentially endless.
+ * @template _T_
+ * @type {
+ *       (unfold: ((_T_) => Iterable<_T_>))
+ *    => (a: _T_)
+ *    => Tree<_T_>
+ * }
+ */
+const buildTree = unfold => a => {
+  const as = unfold(a);
+  const children = map(buildTree(unfold))(as);
+  return Pair(a)(children);
+};
+
+/**
+ * Creates a game tree.
+ * @param { Board } board
+ * @returns Tree<Board>
+ */
+const gameTree = board => buildTree(moves)(board);
+\end{lstlisting}
+
+\subsubsection{The Minimax Algorithm}
+Listing~\ref{lst:tictactoe_minimax} shows the implementation of the Minimax
+algorithm. These functions determine which are the best moves.
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Tic Tac Toe minimax algorithmus,
+  label={lst:tictactoe_minimax}
+  ]
+/**
+ * Evaluates a given board.
+ * @param { Board } board
+ * @returns Number
+ */
+const staticEval = board => {
+  if (hasWon(board)(Computer)) return  1.0;
+  if (hasWon(board)(Human))    return -1.0;
+  return 0.0;
+};
+
+/**
+ * Determines the best move.
+ * @template _T_
+ * @param { Tree<_T_>}
+ * @return { _T_ }
+ */
+const maximize = ([a, sub]) => {
+  if (sub ["=="] (nil)) return a;
+  return max$ (map(minimize)(sub))
+};
+
+/**
+ * Determines the best move for the opponent.
+ * @template _T_
+ * @param { Tree<_T_>}
+ * @return { _T_ }
+ */
+const minimize = ([a, sub]) => {
+  if (sub ["=="] (nil)) return a;
+  return min$ (map(maximize)(sub))
+};
+\end{lstlisting}
+
+\subsubsection{Pruning a Game Tree}
+\label{subsub:Pruning a Game Tree}
+
+We must prune the game tree for a specific calculation since we are dealing with
+potentially endless trees. The following Listing~\ref{lst:tictactoe_prune} shows
+the implementation.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Tic Tac Toe prune function,
+  label={lst:tictactoe_prune}
+  ]
+/**
+ * Prunes a given {@link Tree} to a max depth n.
+ * @template _T_
+ * @type {
+ *           (n: Number)
+ *        => (tree: Tree<_T_>)
+ *        => Tree<_T_>
+ * }
+ * @param n
+ */
+const prune = n => tree => {
+  const [a, sub] = tree;
+  if (n === 0) return Pair(a)(nil);
+  else return Pair(a)(map(prune(n-1))(sub));
+};
+\end{lstlisting}
+
+\subsubsection{The Evaluation}
+\label{subsub:The Evaluation}
+
+The following functions evaluate a game board. The function |nextBoardBy|
+calculates the next move for the computer based on the number of lookaheads,
+i.e., how many moves are calculated ahead.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Tic Tac Toe - evaluating functions,
+  label={lst:tictactoe_eval}
+  ]
+/**
+ * Evaluating a board with a max number of lookaheads.
+ * @template _T_
+ * @type {
+ *            (f: (Board) => _T_)
+ *         => (lookahead: Number)
+ *         => (board: Board)
+ *         => _T_
+ * }
+ */
+const evaluateBy = f => lookahead => board => {
+  const prunedTree = prune(lookahead)(gameTree(board));
+  const mappedTree = treeMap(f)(prunedTree);
+  return minimize(mappedTree);
+};
+
+/**
+ * @template _T_
+ * @type {
+ *            (lookahead: Number)
+ *         => (board: Board)
+ *         => PairSelectorType<_T_, Board>
+ * }
+ */
+const nowValue = lookahead => board =>
+  Pair(evaluateBy(staticEval)(lookahead)(board))(board);
+
+/**
+ * Calculates the next board with given board fields.
+ * @type {
+ *          (lookahead: Number)
+ *       => (inFields: Array<Number>)
+ *       => Board
+ * }
+ */
+const nextBoardBy = lookahead => inFields => {
+  const possibleMoves  = moves ({whosTurn: Computer, fields: inFields});
+  const evaluatedMoves = 
+      /** @type {SequenceType<PairSelectorType<Number, Board>>} */ 
+      map (nowValue(lookahead)) (possibleMoves);
+
+
+  /**
+   *
+   * @param { SequenceType<PairSelectorType<Number, Board>> } boards
+   * @return Board
+   */
+  const bestOf = boards => {
+    if (isEmpty(boards)) return {whosTurn: NoPlayer, fields: []};
+    return max$(boards, ([a, _b1],[b, _b2]) => a < b )(snd);
+  };
+  return bestOf(evaluatedMoves);
+};
+\end{lstlisting}
+
 
