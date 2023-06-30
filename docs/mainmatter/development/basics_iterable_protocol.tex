@@ -184,21 +184,22 @@ can be seen on line~\ref{line:iteration_return_result_done}.
 \subsection{Illustration of the JS Iteration Protocol}
 \label{sub:Illustration of the JS Iteration Protocol}
 Listing~\ref{lst:example_js_iteration_protocol} illustrates the behavior of the
-JS iteration protocol more clearly using a sample scenario:
+JS iteration protocol more clearly using a sample scenario. Since array is an
+|Iterable|, we can use it for the following demonstration:
 
 \begin{lstlisting}[
   style=ES6, 
   caption=Example: JS Iteration Protocol,
   label={lst:example_js_iteration_protocol}
   ]
-// Generates the values 0, 1. Sequence is discussed in the next section.
-const seq = Sequence(0, x => x < 2, x =>  x + 1);
-const iterator = seq[Symbol.iterator]();*'\label{line:illustraion_create_iterator}'*
+// array including two values, 0 and 1
+const list = [0, 1];
+const iterator = list[Symbol.iterator]();*'\label{line:illustraion_create_iterator}'*
 
 iterator.next(); // returns { done: false, value: 0 }
 iterator.next(); // returns { done: false, value: 1 }
-iterator.next(); // returns { done: true,  value: 2 }
-iterator.next(); // returns { done: true,  value: 2 }
+iterator.next(); // returns { done: true,  value: undefined }
+iterator.next(); // returns { done: true,  value: undefined }
 \end{lstlisting}
 
 On line~\ref{line:illustraion_create_iterator}, invoking |[Symbol.iterator]|
@@ -238,7 +239,7 @@ is of type |IteratorReturnResult<TReturn>|.
 \subsection{Building custom Series of Data}
 \label{sub:Building custom Series of Data}
 The last Section has shown how to make an object iterable, using an Iterable
-always returning |1| as an example. This Section explains how to build more
+always returning |1| as an example~(\ref{lst:protocols}). This Section explains how to build more
 powerful data structures based on these protocols by creating meaningful data
 series.
 

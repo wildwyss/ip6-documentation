@@ -183,32 +183,33 @@ The following sections address the different parts separately.
 \subsubsection{The Table}
 \label{subsub:The Table}
 The testing table is just an array (table) containing test objects.
-Each object has a name and a function. Listing~\ref{lst:testing_table} shows a 
-part of the implementation.
+Each object consists of two properties. Listing~\ref{lst:testing_table} shows
+the implementation.
 
 \begin{lstlisting}[
   style=ES6, 
   caption=Testing Table,
   label={lst:testing_table}
   ]
-const testingTable = [];
-testingTable.push({ name: TESTS.TEST_SIMPLE    , test: testSimple});
-testingTable.push({ name: TESTS.TEST_PURITY    , test: testPurity});
-testingTable.push({ name: TESTS.TEST_PROTOTYPE , test: testPrototype});
-testingTable.push({ name: TESTS.TEST_INVARIANTS, test: testInvariants});
-...
+const testingTable = [
+  { name: TESTS.TEST_SIMPLE,                   test: testSimple},
+  { name: TESTS.TEST_PURITY,                   test: testPurity},
+  { name: TESTS.TEST_CB_NOT_CALLED_AFTER_DONE, test: testCBNotCalledAfterDone},
+  { name: TESTS.TEST_PROTOTYPE,                test: testPrototype},
+  { name: TESTS.TEST_INVARIANTS,               test: testInvariants},
+  { name: TESTS.TEST_ITERATE_MULTIPLE_TIMES,   test: testIterateMultipleTimes},
+];
 \end{lstlisting}
 
 An object in the table includes two properties:
 \begin{itemize}
 \item{A string representing its name. The name is important for displaying an accurate error message if the test fails.}
-\item{A function to test a behavior of a test candidate}
+\item{A function to test a specific behavior}
 \end{itemize}
 
 Each function of the testing table expects as argument a test configuration
 object of type |SequenceTestConfigType|.
-Listing~\ref{lst:test_simple} demonstrate exemplary the
-implementation of |testSimple|.
+Listing~\ref{lst:test_simple} presents exemplary the implementation of |testSimple|.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -230,17 +231,19 @@ const testSimple = config => assert => {
 };
 \end{lstlisting}
 
-The function |simpleTest| executes the following tasks:
+The function |simpleTest| examines whether an operation correctly processes a typical use case.
+For this purpose, the following tasks are executed: 
 \begin{itemize}
-  \item{Line~\ref{line:test_config_iterable} executes the iterable function to
-    get an |Iterable| to work with}
+  \item{Line~\ref{line:test_config_iterable} shows the invocation of
+    iterable to yield an |Iterable| for further use.}
   \item{Line~\ref{line:test_config_operated} executes the operation by passing
-    the required parameters. This is an optional configuration parameter |param| like a predicate and an |Iterable|.}
+    the required parameters. This is an optional configuration parameter
+  |param|, like a predicate, and an |Iterable|.}
   \item{Line~\ref{line:test_config_eval} compares the |actual| and |expected| value with a given eval function. } 
 \end{itemize}
 
-The testing table includes test functions to test the following behaviors of
-operators and constructors of the Sequence library:
+The testing table includes test-functions to examine the following behaviors of
+implementations of the Sequence library:
 
 \begin{itemize}
   \item{\textbf{testSimple} checks if a typical case works properly.}
@@ -256,15 +259,17 @@ operators and constructors of the Sequence library:
 \subsubsection{The Function to Run the Tests}
 \label{subsub:The Function to Run the Tests}
 |addToTestingTable| inserts the tests of the testing table into the |TestSuite| for a
-specific configuration. Visible on line~\ref{line:add_to_testsuite}. 
+specific configuration, visible on line~\ref{line:add_to_testsuite}. 
 Since the configuration runs all tests of the testing table by default, it
 must provide an option to exclude tests for exceptional cases. 
 Line~\ref{line:filtering_tests} filters out all excluded tests.
-Specific tests do not make sense for particular operators and constructors.
+This mechanism is necessary because specific tests do not make sense for 
+particular operators and constructors. For example, if an operation has no
+callback, the check of its side effect is useless.
 
 \begin{lstlisting}[
   style=ES6, 
-  caption=The addToTestingTable Function,
+  caption=The addToTestingTable function,
   label={lst:impl_addToTestingTable}
   ]
 export { addToTestingTable }
@@ -289,12 +294,13 @@ const addToTestingTable = testSuite => config => {
 \subsubsection{The Configuration}
 \label{subsub:The Configuration}
 
-To test operators and constructors with the testing table, they must implement 
-a test configuration.
+In order to test operators and constructors using the testing table, it is
+necessary to implement a test configuration.
 Listing~\ref{lst:config_reduce} shows the configuration of |reduce|. 
-Each configuration has its own |TestSuite|. Therefore, it is possible to add
+Line~\ref{line:start_test_config} to~\ref{line:end_test_config} defines the test 
+configuration for |reduce|. Each configuration has its own |TestSuite|. Therefore, it is possible to add
 some tests for special cases not covered by the table on line~\ref{line:additional_test_cases}.
-Line 3 to 5 defines the test configuration for |reduce|. 
+
 
 \begin{lstlisting}[
   style=ES6, 
@@ -315,8 +321,7 @@ addToTestingTable(testSuite)(*'\label{line:start_test_config}'*
 );*'\label{line:end_test_config}'*
 
 
-testSuite.add("test: special case", assert =>
-{*'\label{line:additional_test_cases}'*
+testSuite.add("test: special case", assert => {*'\label{line:additional_test_cases}'*
   // Given
   // When
   // Then
@@ -338,41 +343,42 @@ properties are available and the purpose of it:
   \begin{tabular}{ l m{10cm} c}
     \textbf{Property} & \textbf{Description} & \textbf{Required}\\
     \hline
-    name            & The name of the |Iterable| under test for meaningful 
+    |name|            & The name of the |Iterable| under test for meaningful 
                       report messages. 
                     & y 
                     \\ 
-    iterable        & A function that constructs a new |Iterable| to apply the 
+    |iterable|        & A function that constructs a new |Iterable| to apply the 
                       operation to. 
                     & y 
                     \\  
-    expected        & The expected result of the operation applied to the |Iterable|
+    |expected|        & The expected result of the operation applied to the |Iterable|
                       defined in property |iterable|.
                     & 
                     y  \\ 
-    excludedTests   & An optional array of |TestingFunction| to exclude tests
+    |excludedTests|   & An optional array of |TestingFunction| to exclude tests
                       in testing table. 
                     & n 
                     \\
-    operation       & The operation to test. The value passed in |param| is
-                      passed as an argument (leave this empty for constructor 
+    |operation|       & The operation to test. |param| is passed as an argument
+                      to it
+                     (leave this empty for constructor 
                       tests since they do not take an inner iterator). 
                     & n 
                     \\
-    param           & A parameter passed to this |operation|. If it is a
+    |param|           & A parameter passed to this |operation|. If it is a
                       function, some extra tests will be performed. 
                     & n
                     \\ 
-    invariants      & An optional array of |InvariantCallback|. The invariant 
+    |invariants|      & An optional array of |InvariantCallback|. The invariant 
                       must hold tests against different lists. 
                     & n
                     \\
-    evalFn          & An optional function that takes |expected| and the |actual| 
+    |evalFn|          & An optional function that takes |expected| and the |actual| 
                       in curried style. The default is |iterableEq|.
                     & n 
                     \\
   \end{tabular}
-  \caption{Properties of Configuration Object}
+  \caption{Properties of the configuration object}
 \label{tab:testing_table}
 \end{table}
 
@@ -384,13 +390,13 @@ John Huges and Carl Claessen wrote to following sentence in the paper
 \textit{
 Despite anecdotal evidence that functional programs require somewhat less
 testing (`Once it type-checks, it usually works'), in practice it is still a 
-major part of functional program development.}
+major part of functional program development}~\cite{quickcheck_hughes}.
 If these programming icons claim it takes many tests even in a strongly typed 
 language, how many does it take in JavaScript? Of course, enough.
 
 \subsubsection{Invariant Testing}
 \label{subsub:Invariant Testing}
-We added another kind of test to increase the Sequence library's robustness -
+We added another kind of tests to increase the Sequence library's robustness -
 invariant testing. Some aspects of this testing are leaned on the Quickcheck
 approach of the paper mentioned before. We concentrated on only some essential
 parts since we cannot implement a whole Quickcheck framework in this work.
@@ -471,8 +477,8 @@ const invariantPenetration = invariant => assert => {
 \end{lstlisting}
 
 Line~\ref{line:list_of_parameters} defines a list with several parameters of
-type |Iterable|. Each parameter tests the invariant of |reverse| holds. 
-This allows for testing many cases written in a few lines of code.
+type |Iterable|. Each parameter tests if the invariant of |reverse| holds. 
+This enables for testing many cases written in a few lines of code.
 
 \subsubsection{An advanced Example}
 \label{subsub:An advanced Example}
@@ -526,9 +532,8 @@ Let us focus on line~\ref{line:mconcat_first_invariant} and
 \ref{line:mconcat_second_invariant}.
 The property |invariants| expect an array of functions. Each of these
 functions represents a law. Therefore, the function injects an arbitrary list
-called it, and the law must hold for |it|. In the same way, it provides the
-ability to check other implementation-specific behavior
-of any constructor or operation of the Sequence library.
+called |it|, and the law must hold for it. In the same way, this provides the
+ability to check other implementation-specific behavior.
 
 \subsection{Conclusion}
 \label{sub:Conclusion}

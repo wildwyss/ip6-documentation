@@ -1,15 +1,15 @@
 \section{Examples} % (fold)
 \label{sec:Examples}This section shows some examples implemented with the
 Sequence library to demonstrate the variable usage.
-The following section covers easy-to-understand and more sophisticated
-examples. Consider consulting the listed sources to understand the applications
-thoroughly.
+The following we cover easy-to-understand and more sophisticated
+examples.  Consult the listed sources to understand the applications
+thoroughly if there are some unclarities.
 
 \subsection{Fibonacci Sequence}
 \label{sub:Fibonacci Sequence}
-This is an example of a specialized sequence constructor.
+This is an example of a specialized Sequence constructor.
 Listing~\ref{lst:fibonacci_sequence} shows the implementation of the Fibonacci 
-Sequence. 
+Sequence~\cite[p.~36]{math_diskrete_2011}. 
 %S36
 \begin{lstlisting}[
   style=ES6, 
@@ -43,11 +43,14 @@ sum of the last and the second last, which represents the Fibonacci sequence.
 
 \subsection{Fizz Buzz}
 \label{sub:Fizz Buzz}
-FizzBuzz is a children's game that also serves as a programming task. Frege
-Goodness~\cite{frege_goodness} includes a detailed explanation of the game.
-It is about adding rules to a sequence of numbers, where if there is a multiple
-of a number, the number is replaced by a word. Listing 3 shows a part of the
-implementation with the Sequence library.
+Fizz Buzz is a simple game played with numbers, typically in a group setting. Players
+take turns counting upward, but instead of saying numbers divisible by 3, they
+say "Fizz," and instead of numbers divisible by 5, they say "Buzz." If a number
+is divisible by both 3 and 5, they say "FizzBuzz". This game also serves as a 
+programming task.
+\newline
+Frege Goodness~\cite{frege_goodness} includes a detailed explanation of the game.
+Listing 3 shows a part of the implementation with the Sequence library.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -91,17 +94,16 @@ const buildFizzBuzz = () => {
 \end{lstlisting}
 Listing~\ref{lst:fizz_buzz} shows two functions, |createSequenceForRule|, and
 |buildFizzBuzz|. 
-The |createSequenceForRule| function is called with an argument |rule| representing a
+|createSequenceForRule| is called with an argument |rule| representing a
 |Number| and a |String|. The returned infinite sequence then contains the
 corresponding text at each multiple of the |rule|s |Number|. In the remaining places, it
 contains an empty |String|. The function |buildFizzBuzz| reduces all sequences
 representing a rule to a single sequence. As a demonstration,
 Figure~\ref{fig:fizzbuzz_control} and \ref{fig:fizzbuzz_result} shows a
 screenshot of a simple application, which shows two rules and the resulting
-sequence. The tool demonstrates the possibility adding new rules at runtime. 
+sequence. The implementation enables adding new rules at runtime. 
 
-
-\begin{figure}
+\begin{figure}[H]
 \centering
 \begin{minipage}{.5\textwidth}
   \centering
@@ -117,15 +119,15 @@ sequence. The tool demonstrates the possibility adding new rules at runtime.
 \end{minipage}
 \end{figure}
 
-
 \subsection{JINQ}
 \label{JINQ}
-The following examples use |JINQ| to process a JSON files.
+The following examples use |JINQ| to browse and process a JSON files.
 
 \subsubsection{Find all Students}
 \label{subsub:Find all Students}
-Therefore, we want to filter out all participants that have
-a student ID. As you can see in the excerpt of the JSON file, this property is
+We want to filter out all participants that have
+a student ID. As you can see in the excerpt of the JSON file in
+Listing~\ref{lst:json_file_devs}, the property |switch-edu-id| is
 not defined for all persons. Because the |JsonMonad| works in the background with
 |MaybeType|, such situations can be processed without null handling.
 
@@ -180,7 +182,8 @@ const findAllStudentIds = developers => {
 
 This example combines two JSON files. We use the JSON file from the previous
 example and the one from Listing~\ref{lst:json_file_lang}.
-Listing~\ref{lst:jinq_sophias_langs} shows the code that selects Sophia's favorite programming languages from two JSON files.
+Listing~\ref{lst:jinq_sophias_langs} shows the code that finds Sophia's 
+favorite programming languages by combining two JSON files using |pairWith|. 
 
 \begin{lstlisting}[
   style=json, 
@@ -219,9 +222,9 @@ const sophiasProgrammingLanguages = (devs, languages) =>
       .result  ();
 \end{lstlisting}
 
-\subsection{Differentiation}
-\label{sub:Differentiation}
-This example shows a mathematical use case, the differentiation using sequences.
+\subsection{Numerical Differentiation}
+\label{sub:Numerical Differentiation}
+This example shows a mathematical use case, the numberical differentiation using Sequences.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -246,14 +249,14 @@ Listing~\ref{lst:diff_sequences} implements the following steps:
   \item{|repeatF| repeatedly applies the function $f$ to a value of the
     previous calculated result, starting with $x$.}
   \item{ |halves| is using |repeatF| and |halve| to halve a value $h0$. With
-      that, the value $h0$ is halved again and again.} 
+      that, the value $h0$ is halved repearedly.} 
     \item{|slope| calculates the slope of a function $f$ at the position $x$
       with delta $h$.}
  \end{itemize}
 
 We already have everything needed to be able to differentiate.  The function
 differentiate calculates at a given point $x$ the slope more and more exactly.
-Since this is an infinite sequence, we have to define one more function.
+Since this is an infinite Sequence, we have to define one more function.
 Listing~\ref{lst:impl_within} shows the function |within|, which allows differentiating until a
 given epsilon.
 
@@ -297,7 +300,7 @@ algorithm for games such as tic-tac-toe. The algorithm looks ahead to make the
 optimal move. The implementation is adapted from the paper "Why Funcitonal
 Programming Matters"~\cite{hughes_why_1989} to prove that even advanced 
 applications in JavaScript can
-be implemented with the Sequence library. For a deeper understanding of the
+be implemented using the Sequence library. For a deeper understanding of the
 algorithm, you can either consult the paper mentioned before or the section
 "Incremental Development" in Frege Goodness~\cite{frege_goodness}.
 
@@ -339,7 +342,7 @@ implementation.
 
 Listing~\ref{lst:tictactoe_players} includes the definition of the players and some
 functions used in the game process. Since JavaScript does not support pattern
-matching, the functions |opponent| and |stone| uses a workaround via an object.
+matching, the functions |opponent| and |stone| use a workaround via an object.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -443,7 +446,7 @@ const moves = board => {
 \end{lstlisting}
 
 Listing~\ref{lst:tictactoe_hasWon} shows the implementation of the |hasWon|
-function which checks, if a player has won on a given board.
+function, which checks if a player has won on a given board.
 \begin{lstlisting}[
   style=ES6, 
   caption=Tic Tac Toe hasWon function,

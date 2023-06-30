@@ -1,8 +1,8 @@
 \section{Sequence Library} % (fold)
 A Sequence is a lazy data structure. This section overviews which operations
-exist to create and modify sequences and how to import this library into your
+exist to create and modify Sequences and how to import this library into your
 own project. An in-depth view of how a Sequence works
-internally gives Chapter~\ref{sec:Sequence and Iterable in General}.
+internally, give Chapter~\ref{sec:Sequence and Iterable in General}.
 
 \subsection{Getting Started} % (fold)
 \label{sub:Getting Started}
@@ -10,7 +10,7 @@ internally gives Chapter~\ref{sec:Sequence and Iterable in General}.
 \label{sec:Importing the Sequence Library}
 
 % subsubsection Importing the Sequence Library (end)
-The module |sequence/sequence.js| exports the whole sequence library. The
+The module |sequence/sequence.js| exports the whole Sequence library. The
 easiest way to use it is named imports. As
 Listing~\ref{lst:named_imports_seq_lib_example} shows, this approach allows
 using the dot notation, which enables the IDE to support the development with
@@ -37,12 +37,12 @@ affect the code's readability.
 \subsubsection{Evaluating endless Sequences} % (fold)
 \label{sec:Evaluating endless Sequences}
 Section~\ref{Lazy Evaluate Iterables} describes the benefits of lazy
-evaluation, which allows working with sequences consisting of infinite
-elements. When working with such sequences, only evaluate parts of the sequence
+evaluation, which allows working with Sequences consisting of infinite
+elements. When working with such Sequences, only evaluate parts of the Sequence
 because evaluating endless values would take forever. Functions of the Sequence
-library, which evaluate a whole sequence, are therefore marked with a
+library, which evaluate a whole Sequence, are therefore marked with a
 \lstinline{$} symbol in the name. These functions are only applicable to
-sequences with a finite number of elements. \\
+Sequences with a finite number of elements. \\
 Listing~\ref{lst:api_endl_seq_eval} shows an example for that:
 
 \begin{lstlisting}[
@@ -73,7 +73,7 @@ evaluates |5| elements.
 A constructor is anything that builds a |Sequence| without depending on another
 one. So they serve as an entry point to the Sequence library. Some of these
 constructors create a specific series of values, including, for example, the
-|PrimeNumberSequence| which yields the infinite sequence of all prime
+|PrimeNumberSequence| which yields the infinite Sequence of all prime
 numbers.\\
 Table~\ref{tab:api_ctors} gives an overview of all available constructors. Code
 examples and more information about the constructors deliver the
@@ -175,7 +175,7 @@ console.log(...mySequence2);
 \end{lstlisting}
 
 As Listing~\ref{lst:api_pipe_proto} shows, using the version of |pipe| defined
-on the prototype of the sequence, the readability improves even more:
+on the prototype of the Sequence, the readability improves even more:
 \begin{lstlisting}[
   style=ES6,
   caption=Using pipe defined on the prototype,
@@ -235,7 +235,7 @@ that expect a monad as a parameter.
 \subsubsection{Verify the Prototype} % (fold)
 \label{subsub:Verify the Prototype}
 Listing 3 shows how to query the prototype of any object using the function
-|Object.getPrototypeOf|. Applying this to any sequence will return
+|Object.getPrototypeOf|. Applying this to any Sequence will return
 |SequencePrototype|.
 
 
