@@ -82,16 +82,18 @@ Description of the functionalities:
       parameters are a string |name| and a callback which provides the test.}
 \end{itemize}
 
+\subsection{Additional Assertions}
+\label{sub:Additional Assertions}
 
-\subsubsection{Assertion for Iterables}
-\label{subsub:Assertion for Iterables}
 Assert functions in the Kolibri testing framework execute tests by comparing
 two values and store the result in the summary collection of the |TestSuite|.
 Listing~\ref{lst:testsuit_demo} shows the comparison of two |boolean|s using
 |assert.is(...)| function.
 This function compares an |actual| and an |expected| value. These two values
 must match. Otherwise, the test fails.
-\newline
+
+\subsubsection{Assertion}
+\label{subsub:Assertion for Iterables}
 Comparing iterables is slightly more complicated. For this reason, we extended
 the testing frameowrk with an additional assert function that compares two
 arbitrary iterables. Listing~\ref{lst:iterableEq} shows the usage of this
@@ -119,6 +121,7 @@ Listing~\ref{lst:impl_iterableEq} shows the implementation of |iterableEq|:
   caption=Implementation of iterableEq,
   label={lst:impl_iterableEq}
   ]
+// test.js
 ...
 iterableEq: (actual, expected, maxElementsToConsume = 1_000) => { *'\label{line:signature_iterableEq}'*
 
@@ -160,6 +163,52 @@ iteration amount on line~\ref{line:signature_iterableEq}.  This is handy
 because it is often the case that an |Iterable| runs infinitely while something
 goes wrong. If an iterable exceeds this limit, the test fails.
 
+\subsubsection{Assertion for Exceptions}
+\label{subsub:Assertion for Exceptions}
+Another extension for the Testing Framework is the |assert.throws| function.
+It is often the case, that functions can throw an exception in a specific situation.
+For example, such a case would be if we want to find the maximum on an empty
+iterable. |max| throws an exception in this case. Therefore, testing the
+function's behavior in error cases is also required. For this purpose, the
+following Listing~\ref{lst:impl_throws} shows the implementation of |assert.throws|.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Implementation of assert.throws,
+  label={lst:impl_throws}
+  ]
+// test.js
+...
+throws: (functionUnderTest, expectedErrorMsg = "") => {
+     let testResult    = false;
+     let message       = "";
+     const hasErrorMsg = expectedErrorMsg !== "";
+
+     try {
+         functionUnderTest();*'\label{line:functionToTest}'*
+         message = "Did not throw an error!";
+         if (hasErrorMsg) {
+             message += ` Expected: '${expectedErrorMsg}'`;
+         }
+         error(message);
+     } catch (e) {
+         testResult = true;
+
+         if (hasErrorMsg) {
+             testResult = expectedErrorMsg === e.message;
+         }
+     }
+     results .push(testResult);
+     messages.push(message);
+ }
+ ...
+\end{lstlisting}
+
+
+Line~\ref{line:functionToTest} shows the call of the function under test. As
+expected, this function should throw an exception that is caught in the catch
+block. If this is the case, the test is successful. Otherwise, the test fails
+and a corresponding error message is stored.
 
 \subsection{Testing Table}
 \label{sub:Testing Table}

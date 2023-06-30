@@ -2,7 +2,7 @@
 \label{sec:conclusion}
 This Chapter discusses the results and findings of the thesis. The beginning reflects the
 standard library we created in this thesis and its achievements. The following
-sections deal with more implementation technical aspects. Therefore, we make a
+Sections deal with more topic specific aspects. Therefore, we make a
 recap of particular decisions during development. Finally, non-functional
 aspects are in the foreground, where we see what other values were important to
 us while implementing the project.
@@ -12,7 +12,7 @@ us while implementing the project.
 The objective of this thesis was to develop a functional standard library for
 the Kolibri Web Ui Toolkit in JavaScript. To achieve this, we delved into the
 iterable protocols of JavaScript, leveraging our understanding to construct the
-concept of sequences. Sequences are characterized by their lazy evaluation and
+concept of Sequences. Sequences are characterized by their lazy evaluation and
 immutability, offering a powerful tool for handling any iterable object. By
 employing the decorator approach, we built various functionalities capable of
 processing regular JavaScript arrays and other iterables. This was made
@@ -25,9 +25,9 @@ with Java Streams. With the Sequence Library's compatibility with all iterable
 objects, it became logical to make other existing collections iterable as well.
 As a result, we extended the Kolibri Toolkit's existing collections such as
 Pair, Stack, and Tuple to support iterability. Additionally, we implemented
-specialized sequences that facilitate the generation of application-specific
-data, such as the Angle Sequence, which produces angles at regular intervals,
-or a sequence of prime numbers.
+specialized Sequences that facilitate the generation of application-specific
+data, such as the |AngleSequence|, which produces angles at regular intervals,
+or a Sequence of prime numbers.
 \newline
 To ensure clarity and maintain consistency, all implementations are typed using
 jsDoc. While overall the process went smoothly, we encountered limitations when
