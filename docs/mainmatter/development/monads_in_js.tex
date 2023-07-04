@@ -124,8 +124,8 @@ lines~\ref{line:js_safeHead1} and following evaluate the result of |safeHead|.
 \subsubsection{Introducing fmap} % (fold)
 \label{subsub:Introducing fmap}
 The example with |Maybe| shows how values work in a context. Over time,
-however, it can become tedious to keep making this distinction between whether
-it has value. Therefore, Haskell offers a concept of working with values in a
+however, it can become tedious to keep making this distinction whether
+it has a value. Therefore, Haskell offers a concept of working with values in a
 context. The simplest way to work with the value using this concept is using
 the function |fmap|. |fmap| knows how to execute a function for the value(s) in
 a context. Listing~\ref{lst:fmap_maybe_hs} shows the usage of |fmap| for
@@ -224,11 +224,10 @@ print $ doubleAll [1,2,3,4]
 print $ doubleAll $ Just 1
 -- Prints 'Just 2'
 \end{lstlisting}
-
 Even though a |List| and a |Maybe| have nothing in common, the same function
 can be applied to both types! \\ 
 \textit{Note:} Another example that makes use of these abstractions is JINQ,
-which is described in the Section~\ref{sec:Query different Data Structures}
+which is described in the Section~\ref{sec:Query different Data Structures}.
 % subsubsection Why using these constraints? (end)
 % subsection Working with values in a context (end)
 
