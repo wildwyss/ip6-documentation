@@ -51,7 +51,7 @@ possible to add extended functionality to a single class object. In the
 following, we will see how to exploit this to manipulate and change an iterable.
 
 \subsection{Processing Sequences}
-\label{sec:Processing Sequences}
+\label{sub:Processing Sequences}
 This section explains how the Sequence library uses the Decorator pattern.
 The implementation of the function |map|, which transforms values by a given
 function, demonstrates the implementation of it. 
@@ -275,6 +275,7 @@ arrays or |HTMLCollection| are not processable anymore, which is a
 significant drawback.
 
 \subsubsection{Scenario 2}
+\label{subsub:Scenario 2}
 Listing~\ref{lst:scen_2} represents scenario 2. Here, the state is on
 line~\ref{line:scen_2_state} inside the |Iterator|. Running the code from the
 previous example~\ref{lst:scen_1_demo} using this implementation produces the
@@ -418,7 +419,7 @@ purpose in chapter~\ref{sec:Monads in JavaScript}.
 \end{lstlisting}
 
 \subsubsection{The SequenceType} % (fold)
-\label{sec:The SequenceType}
+\label{subsub:The SequenceType}
 
 The SequenceType|SequenceType| represents a sequence and the monadic functions defined on it. 
 Listing~\ref{lst:sequence_type} shows the definition of the type.
@@ -450,7 +451,7 @@ monadic but still iterable. Monadic APIs can thus also process sequences. An
 example of this is JINQ. Chapter~\ref{sec:API_JINQ} discusses JINQ in detail.
 
 \subsubsection{SequenceType vs. Iterable} % (fold)
-\label{sec:SequenceType vs. Iterable}
+\label{subsub:SequenceType vs. Iterable}
 SequenceType vs. IterableSo the |SequenceType| describes object which are iterable and having their
 prototype set to |SequencePrototype|. An object of type |Iterable| is just
 iterable. This means, every operator receives an object of type |Iterable| as

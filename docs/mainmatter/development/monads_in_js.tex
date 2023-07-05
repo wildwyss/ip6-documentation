@@ -160,7 +160,7 @@ Therefore, |fmap| is just a way to "map values".
 
 % subsubsection Introducing fmap (end)
 \subsubsection{Making a Context Monadic} % (fold)
-\label{sec:Making a Context Monadic}
+\label{subsub:Making a Context Monadic}
 Haskell defines many other functions analogous to |fmap| to interact with
 values in a context. So-called type classes define these functions. In his book
 "Programming in Haskell" Hutton describes type-classes like
@@ -205,7 +205,7 @@ To really dive into it and see the rules each function follows, please see
 
 % subsubsection Making a Context Monadic (end)
 \subsubsection{Why using these Abstractions?} % (fold)
-\label{sec:Why using these Abstractions?}
+\label{subsub:Why using these Abstractions?}
 These abstractions allow building general functions that can handle various
 types. Listing~\ref{lst:hs_why_use_constraints} shows the function |doubleAll|
 defined in Listing~\ref{lst:fn_comp_hs} in a more general way, which is
@@ -239,7 +239,7 @@ Haskell. Therefore, two important concepts can not be transferred to
 JavaScript: 
 \begin{enumerate}
   \item In Haskell, it is possible to force the type hierarchy hinted in
-    Section~\ref{sec:Making a Context Monadic}.
+    Section~\ref{subsub:Making a Context Monadic}.
   \item Haskell can use its type system to determine a specific implementation
     for a function. The Listing~\ref{lst:hs_fn_body} shows the binding of the
     function body to the name using the example of |fmap|:
@@ -297,8 +297,9 @@ The |MonadType| specifies the following operations:
 
 \end{itemize}
 % subsubsection Which operations fit JavaScript? (end)
+
 \subsubsection{What about the app Operator (<*>)?} % (fold)
-\label{sec:Which operations do not fit JavaScript?}
+\label{subsub:Which operations do not fit JavaScript?}
 The operator |<*>| is great when applying a function wrapped in a context to
 multiple values wrapped in the same context. This use-case is relatively rare
 in JavaScript because you do not operate as strictly in contexts as in Haskell.
@@ -479,6 +480,7 @@ the logic being correct!
 
 % subsubsection The MonadType (end)
 % subsection Representing monads as a type using JSDOC (end)
+
 \subsection{Implementing Monadic Operations in JavaScript} % (fold)
 \label{sub:Implementing Monadic Operations in JavaScript}
 This section covers how to make a context conform to |MonadType| discussed in
@@ -496,8 +498,9 @@ This covers following steps:
 idea, since there are often multiple implementations of a type, like it is in
 Maybe with |Just| and |Nothing|. This way it becomes possible to share the
 implemenations among them.
+
 \subsubsection{Defining the Monadic Operations} % (fold)
-\label{sec:Defining the Monadic Operations}
+\label{subsub:Defining the Monadic Operations}
 Listing~\ref{lst:monadic_maybe_js} uses the example of |Maybe| to show how to
 implement the monadic operations |fmap|, |pure|, |empty|, and |and|.
 
@@ -565,12 +568,10 @@ the same as before. But consider line~\ref{line:proto_maybe_js2} to
 |MonadType| but |Just(value)|.
 
 To make another object monadic, apply the same pattern to it!
-
-
 % subsubsection Defining the Monadic Operations (end)
 
 \subsubsection{Specifying the JSDoc} % (fold)
-\label{sec:Specify the JSDoc}
+\label{subsub:Specify the JSDoc}
 JSDoc types structurally. We exploit this to extend existing types with
 the monadic type. Such complemented types are then compatible with functions
 that expect |MonadType|s as parameters. \\ 
@@ -612,7 +613,7 @@ parts of a type definition.
 
 % subsubsection Specify the JSDoc (end)
 \subsubsection{Limitations of JSDoc} % (fold)
-\label{sec:Limitations of JSDoc}
+\label{subsub:Limitations of JSDoc}
 You may have recognized that |MaybeMonadType| and |MonadType| look almost
 identical. So why not drop the specification for |MaybeMonadType| and directly
 use |MonadType|? The reason is simple: |MonadType| is less specific than
@@ -748,6 +749,4 @@ SequencePrototype.and = function (bindFn) {*'\label{line:monadic_and_sequence}'*
     applies the given function to each element and then flattens it. This is
     what |bind| does.
 \end{itemize}
-
-
 % subsection Making the Sequence Monadic (end)
