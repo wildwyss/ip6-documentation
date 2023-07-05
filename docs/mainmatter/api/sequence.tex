@@ -1,4 +1,5 @@
 \section{Sequence Library} % (fold)
+\label{sec:Sequence Library}
 A Sequence is a lazy data structure. This section overviews which operations
 exist to create and modify Sequences and how to import this library into your
 own project. An in-depth view of how a Sequence works
@@ -7,9 +8,8 @@ internally, give Chapter~\ref{sec:Sequence and Iterable in General}.
 \subsection{Getting Started} % (fold)
 \label{sub:Getting Started}
 \subsubsection{Importing the Sequence Library} % (fold)
-\label{sec:Importing the Sequence Library}
+\label{subsub:Importing the Sequence Library}
 
-% subsubsection Importing the Sequence Library (end)
 The module |sequence/sequence.js| exports the whole Sequence library. The
 easiest way to use it is named imports. As
 Listing~\ref{lst:named_imports_seq_lib_example} shows, this approach allows
@@ -32,10 +32,11 @@ console.log(_.show(seq));
 possible. The advantage of |_| is that it is short and takes up very little
 white space. Other special characters, such as the \lstinline{$}, negatively
 affect the code's readability. 
+% subsubsection Importing the Sequence Library (end)
 % subsection Importing the Sequence Library (end)
 
 \subsubsection{Evaluating endless Sequences} % (fold)
-\label{sec:Evaluating endless Sequences}
+\label{subsub:Evaluating endless Sequences}
 Section~\ref{Lazy Evaluate Iterables} describes the benefits of lazy
 evaluation, which allows working with Sequences consisting of infinite
 elements. When working with such Sequences, only evaluate parts of the Sequence
@@ -67,7 +68,6 @@ Line~\ref{line:api_endl_seq_eval2} uses the function |_.take(5)| which only
 evaluates |5| elements.
 
 % subsubsection Conventions (end)
-\label{sec:api_sequences}
 \subsection{Constructors} % (fold)
 \label{sub:api_Constructors}
 A constructor is anything that builds a |Sequence| without depending on another
@@ -135,7 +135,8 @@ appendix~\ref{sub:appendix_operators}.
   \label{tab:api_operators}
 \end{table}
 
-\subsubsection{Using the pipe Operator} % (fold) \label{subsub:Using the pipe Operator}
+\subsubsection{Using the pipe Operator} % (fold) 
+\label{subsub:Using the pipe Operator}
 The operator |pipe|, is unique because it provides no new functionality but is
 pure syntactic sugar. It offers the possibility of combining several operators.
 Lines~\ref{line:api_pipe1}~-~\ref{line:api_pipe2} of Listing~\ref{lst:api_pipe}
@@ -225,6 +226,7 @@ appendix~\ref{sub:appendix_terminal_operations}.
   \label{tab:api_term_ops}
 \end{table}
 % section Terminal Operations (end)
+
 \subsection{Sequence Prototype} % (fold)
 \label{sub:Sequence Prototype}
 The prototype of the Sequence provides some operations as well. This improves

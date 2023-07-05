@@ -14,6 +14,7 @@ In this scenario, we include |concat| to the Sequence library. |concat| is the
 operation that appends one |Iterable| to another.
 
 \subsubsection{Kind of the Operation}
+\label{subsub:Kind of the Operation}
 The library distinguishes between operators and terminal operations. The
 difference depends on the return type. If a function returns an |Iterable|, it
 is an operator. It is a terminal operation if it produces a different type than an
@@ -49,6 +50,7 @@ shows the relevant directories.
 \end{figure}
 
 \subsubsection{Exports and Imports}
+\label{subsub:Exports and Imports}
 All artifacts of the Sequence library are available via the |sequence.js| file.
 To make |concat| support this, we export it via the |operators.js| file.
 Listings~\ref{lst:concat_export} and \ref{lst:concat_export_operators} shows the corresponding statements.
@@ -159,6 +161,7 @@ If so, then everything is fine.
 \textit{Note:} While running the tests, always observe the console.
 
 \subsubsection{Write the Functionality}
+\label{subsub:Write the Functionality}
 Now you are in a comfortable position to implement the function against tests.
 For this, we create a function |concat| in the file |concat.js|.
 Probably, you can use existing functionalities of the Sequence library to implement them. A list of all
