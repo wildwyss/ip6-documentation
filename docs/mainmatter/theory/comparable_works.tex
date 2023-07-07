@@ -1,12 +1,17 @@
 \section{Comparable Works} % (fold)
 \label{sec:Comparable Works}
 Some projects and approaches already have similar goals as this thesis. This
-section explains them and shows the differences to them.
+section explains them and shows how the standard library differs. All the
+projects listed influenced the standard library in a particular way. However,
+the functional standard library fundamentally differs from the projects listed
+below since it was built explicitly for the Kolibri and supports the "Pair" and
+"Stack" types. It does not introduce new dependencies to other projects or
+dependency management systems.
 
 \subsection{Lodash} % (fold)
 \label{sub:Lodash}
 Lodash~\cite{lodash_2023} is a modern JavaScript utility library that brings many solutions
-similar to this project. Nevertheless, there are some differences:
+similar to the functional standard library. Nevertheless, there are some differences:
 \begin{itemize}
   \item Functions in Lodash do not take their parameters curried.
   \item Functions in Lodash expect the receiver as first parameter.
@@ -16,19 +21,20 @@ ideas (and some more) are essential when writing reusable code. However, Lodash
 also provides a functional programming first module that supports the
 above.\footnote{https://github.com/lodash/lodash/wiki/FP-Guide}
 Nevertheless, the documentation for this is much less extensive than that of
-the regular Lodash module. \\ 
+the regular Lodash module. Both library versions provide much less precise
+typing than this standard library.\\
 The Sequence library additionally supports monadic operations described in
-Section~\ref{subsub:Which operations fit JavaScript?}. Thus, the Sequence
+section~\ref{sub:Monads in JavaScript}. Thus, the Sequence
 library allows generic functionalities based on the monadic API, such as JINQ,
 to be used.
 % subsection Lodash (end)
 
 \subsection{rxjs} % (fold)
 \label{sub:rxjs}
-rxjs~\cite{rxjs_2023} offers very similar functions to the Sequence library.
-However, these functions work with an asynchronous data structure called
+rxjs~\cite{rxjs_2023} offers very similar functionality as the Sequence library.
+However, these functions work with a reactive data structure called
 |Observable|. Nevertheless, rxjs served several times as a good template for
-design decisions. The idea to combine multiple operations using |pipe| comes
+design decisions. The idea to combine multiple operators using |pipe| comes
 from rxjs.
 % subsection rxjs (end) section Comparable Works (end)
 
