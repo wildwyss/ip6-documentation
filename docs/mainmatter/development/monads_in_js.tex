@@ -98,7 +98,7 @@ property to port the previous function |safeHead| to JavaScript:
 ]
 const safeHead = list => {
   const head = list[0];
-  return head ? Just(head) : Nothing;
+  return (undefined === head) ? Just(head) : Nothing;
 };
 
 const printHead = list => {
@@ -275,13 +275,13 @@ Since JavaScript works quite differently than Haskell, not all operations are
 equally suitable to adopt. \\
 The |MonadType| specifies the following operations:
 \begin{itemize}
-  \item |famp|: Changing values inside a context is a typical pattern,
+  \item |fmap|: Changing values inside a context is a typical pattern,
     also in JavaScript. Porting |fmap| to JavaScript brings many benefits.
   \item |pure|: At first sight |pure| is a function that is not needed.
     However, it quickly became apparent that lifting an element into a context
     is often practical via an abstracted function. 
     \\ This is often the case when using |>>=|.
-  \item |>>=|: The |bind| operator allows access to the result of the last
+  \item |and (>>=)|: The |bind| operator allows access to the result of the last
     computation. |bind| is the only way to determine a new result depending on
     the previous result. \\ Since in JavaScript function names must not contain
     the special characters |>| and |=|, |>>=| cannot be used. |bind| is also
@@ -290,7 +290,7 @@ The |MonadType| specifies the following operations:
     that the following result depends on the previous one.
   \item |empty|: The |empty| function creates a context without a value. For
     example, with |Maybe| it is |Nothing| with |List| it is |[]|. A monad does
-    not need to provide a function |empty|, so Section~\ref{sec:Making a
+    not need to provide a function |empty|, so Section~\ref{subsub:Making a
     Context Monadic} does not include it. However, |empty| is a function
     available on many monads and is very handy during the programming of
     generic functions. Therefore, the |MonadType| specifies |empty| as well.
@@ -376,7 +376,9 @@ This shows that the behavior of |app| can be emulated using |and|.
 \subsection{Using JSDoc to type Monads} % (fold)
 \label{sub:Using JSDoc to type monads}
 JSDoc is the optional type system of JavaScript~\cite{jsdoc_use_2023}. As the
-name says, it is pure documentation, therefore, not enforceable.
+name says, it is pure documentation, therefore, not enforceable. Since newer
+IDEs support it very well, it is still very reasonable. With some
+limitations, JSDoc can model a monad pretty well.
 
 \subsubsection{The MonadType} % (fold)
 \label{subsub:The MonadType}
@@ -409,8 +411,11 @@ no direct connection to its properties.
 
 Listing~\ref{lst:monad_type_usage_js} defines a function |keepEven| which
 discards odd values in the context. As parameter, this function accepts every context
-adhering to |MonadType|. Therefore, |keepEven| can access all the monadic
-operations. This way JavaScript knows which implementation to call:
+adhering to |MonadType|. Therefore, |keepEven| can operate on every monadic
+object and access all its monadic operations!\\
+The |pure| and |empty| functions are independent of the values inside of the
+context, but they are still called on the passed monad so that JavaScript can
+find the correct implementation.
 
 \begin{lstlisting}[
   style=ES6,
@@ -430,11 +435,12 @@ const keepEven = monad =>
    }); 
 \end{lstlisting}
 
-Listing~\ref{lst:keep_even_maybe} shows how |keepEven| can be called with a
-|Maybe|. If the |Maybe| contains an odd number, |keepEven| discards it. The
-best aspect is that |Nothing| does not need any special treatment - the
-|and| implementation of |Maybe| knows what to do when a |Nothing| appears. So
-it is not the job of |keepEven| to handle such special cases!
+Listing~\ref{lst:keep_even_maybe} shows how |keepEven| can be called with any
+|Maybe|. This works because |Maybe| is a monad! If it contains an odd number,
+|keepEven| discards it. The best aspect is that |Nothing| does not need any
+special treatment - the |and| implementation of |Maybe| knows what to do when a
+|Nothing| appears. So it is not the job of |keepEven| to handle such special
+cases!
 
 \begin{lstlisting}[
   style=ES6,
@@ -459,8 +465,8 @@ evalMaybe(keepEven(maybe3));
 // => Logs 'There was no value!'
 \end{lstlisting}
 
-The same works for a Sequence - |keepEven| discards every odd number of this
-sequence:
+The same works for a sequence - only because it is a monad! |keepEven| discards
+every odd number of this sequence:
 
 \begin{lstlisting}[
   style=ES6,
