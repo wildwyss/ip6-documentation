@@ -27,8 +27,8 @@ non-concluding list shows an excerpt of the most important:
   \item{Easier to understand test cases}
 \end{itemize}
 
-The generalization of testing is possible for function which fulfill similar
-rules. This enables to write configurations for such functions
+The generalization of testing is possible for functions which meet similar
+constraints. This enables to write configurations for such functions
 under test, which are checked against these rules. Suppose a new particular case, probably a bug, is
 discovered during the development that has to be handled. In that case, it can
 be added to these rules and thus be tested in a central location and easily
@@ -95,9 +95,9 @@ must match. Otherwise, the test fails.
 \subsubsection{Assertion}
 \label{subsub:Assertion for Iterables}
 Comparing iterables is slightly more complicated. For this reason, we extended
-the testing frameowrk with an additional assert function that compares two
+the testing framework with an additional assert function that compares two
 arbitrary iterables. Listing~\ref{lst:iterableEq} shows the usage of this
-funciton called |iterableEq|:
+function called |iterableEq|:
 
 \begin{lstlisting}[
   style=ES6, 
@@ -113,7 +113,7 @@ testSuite.add("demo iterableEq", assert => {
 });  
 \end{lstlisting}
 
-The implementation of |iterableEq| is capable of all different iterables.
+The implementation of |iterableEq| is suitable for all different iterables.
 Listing~\ref{lst:impl_iterableEq} shows the implementation of |iterableEq|:
 
 \begin{lstlisting}[
@@ -531,12 +531,10 @@ This enables for testing many cases written in a few lines of code.
 
 \subsubsection{An advanced Example}
 \label{subsub:An advanced Example}
-We will look at another example in the following. Because Sequence is a Monoid,
-its laws also apply to Sequence implementations. A
-prominent one is the identity law~\cite{quickcheck_hughes}. mconcat is such a function
-that satisfies these rules. |mconcat| flattens a list of |Iterable|s to one
-|Iterable|. Since Sequence is a Monoid~\cite{haskell_monoid}, the empty Sequence is also defined. So
-we can check the following law in Listing~\ref{lst:lr_identity_mconcat}:
+In the following we will look at the laws of the operation |mconcat|, which
+flattens an iterable of iterables. If |mconcat| follows certain laws, the
+sequence forms a monoid under this operation.~\cite{haskell_monoid}
+Listing~\ref{lst:lr_identity_mconcat} shows the definition of the identity law:
 
 \begin{lstlisting}[
   style=Haskell,
@@ -549,12 +547,12 @@ x <> mempty = x
 mempty <> x = x
 \end{lstlisting}
 
-The |<>| operator is defined on the Semigroup, a Monoid subset. The binary 
-operator |<>| is associative and under lists concatenation. Listing~\ref{lst:lr_identity_mconcat} 
-demonstrates that a list $x$ concatenated with |nil|, the empty list, equals the original 
-one. With our implementation of the invariants, we can now represent and 
-test the laws similarly. Listing~\ref{lst:mconcat_invariant} shows the
-implementation.
+The |<>| operator is defined on the semigroup, a monoid subset. The binary 
+operator |<>| is associative and concatenates two lists.
+Listing~\ref{lst:lr_identity_mconcat} demonstrates that a list $x$ concatenated
+with |nil|, the empty list, equals the original one. With our implementation of
+the invariants, we can now represent and test the laws similarly.
+Listing~\ref{lst:mconcat_invariant} shows the implementation.
 
 \begin{lstlisting}[
   style=ES6, 

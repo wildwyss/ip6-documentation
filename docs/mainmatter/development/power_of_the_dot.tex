@@ -45,15 +45,15 @@ available in this module.
 
 \subsection{IDE support through modules} % (fold)
 \label{sub:IDE support through modules}
-The module system now offers several possibilities to bring autocompletion to
+The module system offers several possibilities to bring autocompletion to
 the IDE using the dot.
 \subsubsection{Named Imports} % (fold)
 \label{subsub:Named Imports}
 The sequence library offers many loose functions. To use them, you need to know
 their names. This is not easy, especially for beginners, and reduces the
 development speed. Fortunately, this can be solved using named imports.
-Line~\ref{line:named_imports_js1} in Listing~\ref{lst:named_imports_js} imports
-the sequence library named |_|:
+Line~\ref{line:named_imports_js1} in listing~\ref{lst:named_imports_js} imports
+the Sequence library named |_|:
 
 \begin{lstlisting}[
   style=ES6,
@@ -69,7 +69,17 @@ console.log(_.show(seq));
 \end{lstlisting}
 This allows the developer to access exported symbols of |_| using |_.|. Thanks
 to the |.| (dot) after the module name (|_|), IDEs like IntelliJ IDEA will
-suggest exported names of this module!\\
+suggest exported members of this module.\\
+Figure~\ref{fig:the_power_of_the_dot_idea_sugg} shows exactly this behavior:
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=0.95\textwidth]{mainmatter/pictures/the-power-of-the-dot-intellj.jpg}
+  \end{center}
+  \caption{IntelliJ suggests exported members of a named import}
+  \label{fig:the_power_of_the_dot_idea_sugg}
+\end{figure}
+
 This is a way to combine the power of the dot with the advantages of placing
 the receiver at the end described in Section~\ref{subsub:Placing the Receiver
 at the End}! \\
@@ -146,7 +156,7 @@ can easily be replaced by just changing the import to another implementation!
 \subsubsection{Conclusion} % (fold)
 \label{subsub:Conclusion}
 The module system of JavaScript thus offers several possibilities to couple
-loose functions. While namespace objects can fulfill an interface, the
+loose functions. While namespace objects can fulfil an interface, the
 flexibility of named imports makes it easier for developers to get started with
 a potentially comprehensive library. \\ 
 Both approaches allow the IDE to provide the developer additional support by
