@@ -84,13 +84,13 @@ appendices~\ref{sub:appendix_constructors} and
   \centering
   \begin{tabularx}{\textwidth}{| l | X |} \hline
     \textbf{Name} & \textbf{Description} \\ \hline
-    \texttt{Sequence} & Creates a new Sequence based on a start \texttt{value}, \texttt{incrFn} and \texttt{stopFn}. \\ \hline
-    \texttt{PureSequence} & Creates a Sequence which contains just the given value. \\ \hline
-    \texttt{repeat} & Returns a Sequene that will repeatedly yield the value of \texttt{arg} when iterated over. \texttt{repeat} will never be exhausted. \\ \hline
-    \texttt{replicate} & \texttt{replicate(n)(x)} creates a Sequence of length \texttt{n} with \texttt{x} the value of every element. \\ \hline
+    \texttt{Sequence} & Creates a new sequence based on a start \texttt{value}, \texttt{whileFunction} and \texttt{incrementFunction}. \\ \hline
+    \texttt{PureSequence} & Creates a sequence which contains just the given value. \\ \hline
+    \texttt{repeat} & Returns a sequence that will repeatedly yield the value of \texttt{arg} when iterated over. \texttt{repeat} will never be exhausted. \\ \hline
+    \texttt{replicate} & \texttt{replicate(n)(x)} creates a sequence of length \texttt{n} with \texttt{x} the value of every element. \\ \hline
     \texttt{StackSequence} & Creates a \texttt{SequenceType} on top of the given \texttt{stack}. \\ \hline
     \texttt{TupleSequence} & Constructs a new \texttt{SequenceType} based on the given tuple. \\ \hline
-    \texttt{AngleSequence} & Creates a Sequence which generates evenly spaced angles between 0 and 360. \\ \hline
+    \texttt{AngleSequence} & Creates a sequence which generates evenly spaced angles between 0 and 360. \\ \hline
     \texttt{FibonacciSequence} & Generates the Fibonacci sequence. \\  \hline
     \texttt{PrimeNumberSequence} & Generates the sequence of prime numbers. \\ \hline
     \texttt{SquareNumberSequence} & Generates the sequence of square numbers. \\ \hline
@@ -103,10 +103,10 @@ appendices~\ref{sub:appendix_constructors} and
 
 \subsection{Operators} % (fold)
 \label{sub:api_Operators}
-Operators are all functions that operate on an existing |Sequence| and create a
-new |Sequence| from it. \\
+Operators are functions that operate on any existing iterable and create a
+new sequence from it. \\
 Table~\ref{tab:api_operators} gives an overview of all available operators.\\
-Code examples and more information about the operators delivers the
+Code examples, types and more information about the operators delivers the
 appendix~\ref{sub:appendix_operators}.
 \begin{table}[H]
   \centering
@@ -125,7 +125,7 @@ appendix~\ref{sub:appendix_operators}.
     \texttt{rejectAll} & Only keeps elements which does not fulfill the given predicate. \\ \hline 
     \texttt{retainAll} & Only keeps elements which fulfill the given predicate. \\ \hline 
     \texttt{reverse\$} & Processes the \texttt{Iterable} backwards. \\ \hline 
-    \texttt{snoc} & Adds the given element to the end of the \texttt{Iterable}. \\ \hline 
+    \texttt{snoc} & Adds the given element to the end of the \texttt{Iterable}. It is the opposite of \texttt{const}.\\ \hline 
     \texttt{take} & Stop after so many elements. \\ \hline 
     \texttt{takeWhile} & Proceeds with the iteration until the predicate becomes true. \\ \hline 
     \texttt{zip} & Zip takes two \texttt{Iterable}s and returns an \texttt{Iterable} of corresponding \texttt{Pair}s. \\ \hline 
@@ -151,12 +151,12 @@ using |pipe|.
 ]
 import * as _ from "./src/sequence/sequence.js"
 
-const seq = _.Sequence(0, _ => true, x => x + 1);
+const numbers = _.Sequence(0, _ => true, x => x + 1);
 
 const mySequence = _.take(5)( *'\label{line:api_pipe1}'*
   _.retainAll(x => x > 50)(
     _.map(x => 2 * x)(
-      _.rejectAll(x => x % 2 === 1)(seq)
+      _.rejectAll(x => x % 2 === 1)(numbers)
     )
   )
 );*'\label{line:api_pipe2}'*
@@ -169,7 +169,7 @@ const mySequence2 = _.pipe(*'\label{line:api_pipe3}'*
   _.map(x => 2 * x),
   _.retainAll(x => x > 50),
   _.take(5)
-)(seq); *'\label{line:api_pipe4}'*
+)(numbers); *'\label{line:api_pipe4}'*
 
 console.log(...mySequence2);
 // => Logs '52, 56, 60, 64, 68'
@@ -276,6 +276,15 @@ console.log(seqPrototype === SequencePrototype);
 \end{table}
 
 % subsubsection The operations on the Prototype (end)
+\subsubsection{When to use the operations on the Prototype?} % (fold)
+\label{subsub:When to use the operations on the prototype?}
+Each operation on the prototype is also available as an operator or terminal
+operation. The prototype offers these functionalities additionally because
+sometimes it has additional advantages - the function |toString| for example,
+converts by convention an object into its string representation. Other
+operations, such as |["=="]|, often make the code more readable. So when to use
+the prototype operations? It depends on the context and code readability!
+% subsubsection When to use the operations on the prototype? (end)
 % subsection Sequence Prototype (end)
 % section Sequence (end)
 

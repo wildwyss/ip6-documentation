@@ -67,11 +67,10 @@ Searching for all Pythagorean Triple~\cite{pythagorean_triple} between 1 and 10.
   caption=The Pythagorean Triple between 1 and 10,
   label={lst:triple}
   ]
-import * as _    from "./src/sequence/sequence.js"
-import { from }  from "./src/jinq/jinq.js";
-import { Range } from "./src/range/range.js";
+import { Range, show } from "./src/sequence/sequence.js"
+import { from }        from "./src/jinq/jinq.js";
 
-const range= Range(1, 10);
+const range = Range(1, 10);
 
 const result =
   from(range)
