@@ -56,7 +56,7 @@ This section explains how the Sequence library uses the Decorator pattern.
 The implementation of the function |map|, which transforms values by a given
 function, demonstrates the implementation of it. 
 
-\subsubsection{Processing Iteratbles with Functions}
+\subsubsection{Processing Iterables with Functions}
 \label{subsub:Processing Iterables with Functions}
 In the following, |map| serves as a representative for any function of the
 Sequence library. We call such functions operators, according
@@ -74,7 +74,7 @@ On line~\ref{line:args}, the function signature shows that a client can invoke
 \end{enumerate}
 
 An iterable must adhere to the JS iteration protocols outlined in
-Section~\ref{subsub:The Iterable Protocol}. Therefore, |map| can process
+section~\ref{subsub:The Iterable Protocol}. Therefore, |map| can process
 sequences, arrays, or any other iterable. 
 
 \begin{lstlisting}[
@@ -143,7 +143,7 @@ are three significant advantages:
 
 Additionally, the |operators| implement their arguments in a curried-style, passing the
 receiver at the last position allows the use of eta-reduction in many situations. 
-More about this in Section~\ref{subsub:Placing the Receiver at the End}.
+More about this in section~\ref{subsub:Placing the Receiver at the End}.
 
 \subsubsection{Stateful Decorating}
 \label{subsub:Stateful Decorating}
@@ -303,17 +303,17 @@ const SampleIterable = () => {
 };
 \end{lstlisting}
 
-As mentioned in Section~\ref{sub:Types of Iterables}, there is a reason for 
+As mentioned in section~\ref{sub:Types of Iterables}, there is a reason for 
 the deep nesting of the |Iterator|. Each iterator can have its own state.
 
-In this Section, we examined the possibilities for adding state to 
+In this section, we examined the possibilities for adding state to 
 sequences. Due to the advantages of immutability, we built the Sequence library 
 according to scenario 2.
 
 
 \subsection{Adding Monadic Functions to Iterables}
 \label{sub:Adding Monadic Functions to Iterables}
-In this last Section of this Chapter, we will highlight one more function we 
+In this last section of this chapter, we will highlight one more function we 
 have left out so far. It is about the function |createMonadicSequence|, which
 can be used to create iterables.
 
@@ -345,7 +345,7 @@ Listing~\ref{lst:createMonadicSequence} demonstrates the implementation of
 
 Line~\ref{line:start_createMonadicSequence}
 to~\ref{line:end_createMonadicSequence} implement the responsibility of the
-function |toMonadicSequence|:
+function |createMonadicSequence|:
 
 \begin{itemize}
   \item{Assign the passed iterator to the |[Symbol.iterator]| property}
@@ -421,10 +421,10 @@ purpose in chapter~\ref{sec:Monads in JavaScript}.
 \subsubsection{The SequenceType} % (fold)
 \label{subsub:The SequenceType}
 
-The SequenceType|SequenceType| represents a sequence and the monadic functions defined on it. 
+The SequenceType represents a sequence and the monadic functions defined on it. 
 Listing~\ref{lst:sequence_type} shows the definition of the type.
-Furthermore, |toString| and equals |"=="| are also functions we decided to add to the
-prototype. Having these functions on each |SequenceType| is convenient.
+Furthermore, |toString|, |pipe| and equals |"=="| are also functions we decided to add to the
+prototype. Having these functions on each SequenceType is convenient.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -452,23 +452,22 @@ example of this is JINQ. Chapter~\ref{sec:API_JINQ} discusses JINQ in detail.
 
 \subsubsection{SequenceType vs. Iterable} % (fold)
 \label{subsub:SequenceType vs. Iterable}
-SequenceType vs. IterableSo the |SequenceType| describes object which are iterable and having their
-prototype set to |SequencePrototype|. An object of type |Iterable| is just
-iterable. This means, every operator receives an object of type |Iterable| as
-parameter and returns then an object of type |SequenceType|.
+The SequenceType describes an object which is iterable and having their
+prototype set to SequencePrototype. An object of type iterable is just
+iterable. This means, every operation or operator receives an object of type iterable as
+parameter and returns then an object of type SequenceType.
 
-% subsubsection  (end)
 
 \subsubsection{Turning an Iterable into a SequenceType}
 \label{subsub:Turn Iterables into SequenceType}
-Sometimes the |SequenceType| must be set on an arbitrary |Iterable|. For example,
+Sometimes the SequenceType must be set on an arbitrary iterable. For example,
 if you want to use the monadic functions on a JavaScript array. To make this
 possible, the Sequence library provides a |toMonadicIterable| function.
 Listing~\ref{lst:casting_iterables} shows the
-implementation of it. This function takes an arbitrary |Iterable| and returns an
-|SequenceType| mapped by |id| \footnote{The id (identity) function always
+implementation of it. This function takes an arbitrary iterable and returns an
+SequenceType mapped by |id| \footnote{The id (identity) function always
 returns the value passed to it.}. 
-Therefore, the returning object is then of the desired type |SequenceType|.
+Therefore, the returning object is then of the desired type SequenceType.
 
 \begin{lstlisting}[
   style=ES6, 
