@@ -220,7 +220,7 @@ iterable contains only two elements, the third and fourth call on |next|
 returns an object of type |IteratorReturnResult<TReturn>|. Thereby, |done| is
 |true| and |value| is |undefined|. \\
 By using |for...of| and destructuring, an iterable would stop iterating at this
-point. This means, an |for...of| loop runs until the property |done| is set to
+point. This means an |for...of| loop runs until the property |done| is set to
 |true|.
 
 % \begin{figure}[H]
@@ -353,6 +353,206 @@ The |for..of| loop iterates over the sequence until |done| is true. Meanwhile,
 |console.log| writes the elements to the console.
 Line~\ref{line:demo_output} shows the output produced.
 
+
+\subsection{Range - A Useful Sequence}
+\label{sub:Range - A Useful Sequence}
+When considering sequences, a common requirement is to generate a series of
+numbers, often with a specified starting point, an end value, and adjustable
+increments. This is a classic definition of implementing a Range.
+Ranges are built into many programming languages such as
+Haskell~\cite{haskell_list},
+Python~\cite{python_range}
+or Kotlin~\cite{kotlin_ranges}. Therefore, we also implemented a Range using the Sequence constructor. 
+
+Listing~\ref{lst:range_haskell} shows the construction of a Range in Haskell.
+\begin{lstlisting}[
+  style=Haskell,
+  caption=Range in Haskell,
+  label={lst:range_haskell}
+]
+ghci> r = [1..10] -- contains the numbers from 1 up to 10.
+ghci> r
+[1,2,3,4,5,6,7,8,9,10]
+ghci> r = [1..] -- contains an infinite range
+\end{lstlisting}
+
+Listing~\ref{lst:kolibri_range} demonstrates different ways to initialize a
+Range of the Sequence library.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Kolibri toolkit Range,
+  label={lst:kolibri_range}
+  ]
+ const range               = Range(3);
+ const [five, three, one]  = Range(1, 5, -2);
+ const [three, four, five] = Range(5, 3);
+\end{lstlisting}
+
+\subsubsection{What can a Range be used for?}
+\label{subsub:What can a Range be used for?}
+Ranges offer efficient processing of sequences of almost any size, consuming
+minimal memory and computational resources. As a result, they serve as
+excellent foundational components for larger structures. Due to their ability
+to handle number sequences, ranges have versatile applications. They can be
+utilized for lazily generating numbers or executing a specific action several
+times.
+
+\subsubsection{The Boundaries}
+\label{subsub:The Boundaries}
+Built-in ranges are commonly available in various programming languages, making
+their usage in the Kolibri toolkit intuitive. However, it is important to note
+that not all languages handle range boundaries similarly. For instance, Kotlin
+and Haskell consider both boundaries inclusive. Thus, a range from 1 to 3 in
+these languages would include the elements 1, 2, and 3. On the other hand, in
+Python, only the lower limit is inclusive. Therefore, the boundaries must be
+set as 1 and 4 to create an equivalent range in Python.
+Since it seems more intuitive to have both borders inclusive, the range for
+Kolibri toolkit works accordingly.
+
+\subsubsection{Implementation}
+\label{subsub:Implementation}
+A Range uses a Sequence under the hood. Helper functions analyze the parameters
+and, if necessary, reorder them to return a desired Sequence. Listing~\ref{lst:impl_range} shows the
+main part of the implementation of the Range. 
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Implementation of the Range,
+  label={lst:impl_range}
+  ]
+/**
+ * @constructor
+ * @pure
+ * @param { !Number } firstBoundary  - the first boundary of the range
+ * @param { Number }  secondBoundary - optional second boundary of the Range
+ * @param { Number }  step - size of a step, processed during each iteration
+ * @returns SequenceType<Number>
+ */
+const Range = (fstBoundary, sndBoundary = 0, step = 1) => {
+  const stepIsNegative = 0 > step;
+  const [left, right] = normalize(fstBoundary, sndBoundary, stepIsNegative);
+
+  return Sequence(
+    left,                                                // start value
+    value => hasReachedEnd(stepIsNegative, value, right),// while function
+    value => value + step                                // increment function
+    );
+};
+\end{lstlisting}
+
+In the following, we have a closer look at the features of a Range. By doing
+so, we cover the functions |normalize| and |hasReachedEnd| to explain them 
+in more detail.
+
+\subsubsection{Features}
+\label{subsub:Features}
+
+\begin{itemize}
+  \item{\textbf{Parametrization:} The range can be initialized with 1-3 parameters. The parameters specify the lower limit, the upper limit and the
+  step size. If not all parameters are set the range uses suitable default values.}
+  \item{\textbf{Interchangeable boundaries:} Interchangeable lower and upper limits when creating a new range}
+  \item{\textbf{Negative boundaries and step:} The boundaries and the step size of the range can be positive or negative integers.}
+\end{itemize}
+
+
+\subsubsection{Normalization of the Boundaries}
+\label{subsub:Normalization of the Boundaries}
+To ensure flexibility, the Range provides the interchangeability of boundaries
+and the option for positive or negative step values. Initially, the range
+boundaries are normalized based on the step value. This normalization
+determines which boundary will contain the first generated number and which
+will represent the last number.
+The following figure~\ref{fig:norm-flowchart} explains the process in detail.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{mainmatter/pictures/boundary-normalization.png}
+    \caption{Normalization Flow-Chart diagram}
+    \label{fig:norm-flowchart}
+\end{figure}
+
+\subsubsection{The End of a Range}
+\label{subsub:The End of a Range}
+The |hasReachedEnd| function detects the end of the Range and defines the
+|untilFunction| of the underlying Sequence. Listing~\ref{lst:impl_hasReachedEnd}
+shows the implementation of the function. 
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=hasReachedEnd implementation,
+  label={lst:impl_hasReachedEnd}
+  ]
+/**
+ * Determines if the end of the range is reached.
+ * @param   { Boolean } stepIsNegative
+ * @param   { Number }  next - the current element of the Range
+ * @param   { Number }  end  - max value of the Range
+ * @returns { boolean }
+ */
+const hasReachedEnd = (stepIsNegative, next, end) =>
+    stepIsNegative ? next >= end : next <= end;
+\end{lstlisting}
+
+The function must be able to distinguish between two different cases:
+
+\begin{itemize}
+  \item{If the step size is a negative, the Range counts from top to bottom:
+    The Range reached its end as soon as next is greater or equals than right.}
+  \item{If the step size is positive, the Range counts from bottom to top: The
+  Range reached its end as soon as next is smaller or equals than the value right.}
+\end{itemize}
+
+\subsubsection{Some Restrictions of Using a Range}
+\label{subsub:Some Restrictions of Using a Range}
+We defined some Range behaviors by contract rather than intercepting or
+addressing them in implementation. Therefore, we defined the following
+restrictions:
+
+\begin{itemize}
+  \item{End value may not be reached exactly, but will never be exceeded.}
+  \item{Zero step size leads to infinite loops, returning always the same values.}
+  \item{Only values that behave correctly with respect to addition and size
+    comparison may be passed as arguments.}
+\end{itemize}
+
+
+\subsubsection{Using a Range}
+\label{subsub:Using a Range}
+Following listing~\ref{lst:range_examples} demonstrates various ways to
+construct a Range.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Range examples,
+  label={lst:range_examples}
+  ]
+// typical cases
+for (const value of Range(3)) { console.log(value); }
+// => Logs '0, 1, 2, 3'
+
+for (const value of Range(2,3)) { console.log(value); }
+// => Logs '2, 3'
+
+// lower and upper boundaries interchanged
+for (const value of Range(3,2,1)) { console.log(value); }
+// => Logs '2, 3'
+
+// negative step size
+for (const value of Range(4,6,-2)) { console.log(value); }
+// => Logs '6, 4'
+
+for (const value of Range(6,4,-2)) { console.log(value); }
+// => Logs '6, 4'
+
+// range with negatgive boundary
+for (const value of Range(0,-2,-1)) { console.log(value); }
+// => Logs '0, -1, -1'
+\end{lstlisting}
+
+
+\subsection{Conclusion}
+\label{sub:Conclusion}
 Now, we discussed the ability to generate arbitrary sequences of data. However, 
 just creation is often not enough as there is a need to manipulate the data or 
 introduce additional levels of abstraction. In the upcoming chapter, we will 
