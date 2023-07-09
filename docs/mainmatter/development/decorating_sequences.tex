@@ -205,7 +205,7 @@ for (const elem of seq) {
 }
 // => Should log: '0, 1, 2, 3, 4' *'\label{line:scen1_output}'*
 \end{lstlisting}
-However, since both loops operate on the same object ("seq"), the second output
+However, since both loops operate on the same object (|seq|), the second output
 will not give the expected result but "1, 2, 3, 4".\\
 To achieve the expected result, |map| must copy the object before processing.
 That implies that each iterable must be copyable. An example implementation
@@ -232,7 +232,7 @@ const SampleIterable = () => {
 };
 \end{lstlisting}
 Since |copy| must be callable from outside, returning it alongside 
-|[Symbol.iterator]| on line~\ref{line:iterable_copy} is requried. |map| is now
+|[Symbol.iterator]| on line~\ref{line:iterable_copy} is required. |map| is now
 able to copy the underlying  iterable before consuming its elements.
 However, |map| itself must also implement |copy|, because its interface must be
 the same as the decorated object (and also to ensure that iterables created
@@ -277,7 +277,7 @@ significant drawback.
 \subsubsection{Scenario 2}
 \label{subsub:Scenario 2}
 Listing~\ref{lst:scen_2} represents scenario 2. Here, the state is on
-line~\ref{line:scen_2_state} inside the |Iterator|. Running the code from the
+line~\ref{line:scen_2_state} inside the iterator. Running the code from the
 previous example~\ref{lst:scen_1_demo} using this implementation produces the
 expected output straight away. The distinction lies in the fact that the object
 does not need to be copyable. Each call to |[Symbol.iterator]| creates a new
@@ -303,12 +303,38 @@ const SampleIterable = () => {
 };
 \end{lstlisting}
 
-As mentioned in section~\ref{sub:Types of Iterables}, there is a reason for 
-the deep nesting of the |Iterator|. Each iterator can have its own state.
 
+\subsubsection{Comparing the Two Scenarios}
+\label{subsub:Comparing the Two Scenarios}
 In this section, we examined the possibilities for adding state to 
-sequences. Due to the advantages of immutability, we built the Sequence library 
-according to scenario 2.
+sequences.\\
+As mentioned in section~\ref{sub:Types of Iterables}, there is a reason for 
+the deep nesting of the iterator into the iterbale object. 
+Each iterator can have its own state and is therefore immutable.
+\\
+In programming, immutability refers to creating objects that cannot be changed
+once they are created. There are several advantages to using immutability in
+code.
+\\
+Firstly, it helps in creating more reliable and bug-free programs. Since
+immutable objects cannot be modified, there is no risk of accidental changes or
+unintended side effects. This simplifies the code and makes it easier to reason
+about.
+\\
+Secondly, immutability promotes functional programming practices. Immutable
+data structures are the foundation of functional programming, allowing for more
+predictable and declarative code that is easier to test.
+\\
+In Scenario 2, the immutable approach has a specific impact on an iterable.
+When an iterable is immutable, each time we access its iterator, a new iterator
+instance is returned. This means that it is not possible to process an iterable
+partially or in multiple stages. To achieve this behavior, we need to implement
+Scenario 1.
+\\
+Because of the significant benefits of immutability and, consequently, the
+advantages of Scenario 2, we made the decision to implement this concept. As a
+result, when a programmer uses a sequence, they can always depend on receiving
+a new instance of it, guaranteeing consistency.
 
 
 \subsection{Adding Monadic Functions to Iterables}
@@ -366,7 +392,7 @@ they have the same prototype.\\
 emerge through chaining prototypes, meaning setting the prototype of a
 prototype.
 
-A prototype is just a function. As already mentionend in JavaScript functions
+A prototype is just a function. As already mentioned in JavaScript functions
 are objects as well. Therefore, you can define any properties on them. A static
 function |setPrototypeOf| adds this prototype to an existing object. Thus, any
 properties set on the prototype become available to that object. These
@@ -398,7 +424,7 @@ console.log(tobi.getName());
 
 The function |setPrototype| on line~\ref{line:setPrototype} adds the sequence
 prototype to an iterable using the function |setPrototypeOf|. This causes some
-functions to be accessible on each |SequenceType| using the |.| (dot) notation. These are,
+functions to be accessible on each SequenceType using the |.| (dot) notation. These are,
 among others, monadic functions. You will read more about Monads and their
 purpose in chapter~\ref{sec:Monads in JavaScript}.
 \begin{lstlisting}[
@@ -434,13 +460,14 @@ prototype. Having these functions on each SequenceType is convenient.
 /**
  * @template _T_
  * @typedef {
- *  {
- *    and:  <_U_>(bindFn: (_T_)    => SequenceType<_U_>) => SequenceType<_U_>,
- *    pure: <_U_>(_U_)             => SequenceType<_U_>,
- *    fmap: <_U_>(f: (_T_) => _U_) => SequenceType<_U_>,
- *    empty:     ()                => SequenceType<_T_>,
- *    toString:  ()                => String,
- *    "==":      (that:SequenceType<_T_>) => Boolean
+ * {
+ *   and:  <_U_>(bindFn: (_T_)    => SequenceType<_U_>) => SequenceType<_U_>,
+ *   pure: <_U_>(_U_)             => SequenceType<_U_>,
+ *   fmap: <_U_>(f: (_T_) => _U_) => SequenceType<_U_>,
+ *   empty:     ()                => SequenceType<_T_>,
+ *   pipe: function(...transformers: SequenceOperation<*,*>): SequenceType<*>|*,
+ *   toString:  ()                => String,
+ *   "==":      (that:SequenceType<_T_>) => Boolean
  *  } & Iterable<_T_>
  * } SequenceType
  */
