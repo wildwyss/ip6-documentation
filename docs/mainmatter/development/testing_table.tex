@@ -353,7 +353,7 @@ some tests for special cases not covered by the table on line~\ref{line:addition
 
 \begin{lstlisting}[
   style=ES6, 
-  caption=Test Configuration Reduce,
+  caption=Test configuration reduce,
   label={lst:config_reduce}
   ]
 const testSuite = TestSuite("Sequence: terminal operation reduce$");
@@ -581,6 +581,27 @@ The property |invariants| expect an array of functions. Each of these
 functions represents a law. Therefore, the function injects an arbitrary list
 called |it|, and the law must hold for it. In the same way, this provides the
 ability to check other implementation-specific behavior.
+
+\subsection{Revealed Code Bugs: Discoveries through Testing during Development}
+\label{sub:Revealed Code Bugs: Discoveries through Testing during Development}
+This section focuses on the enhancements made by the testing framework. As
+illustrated in the Table section, a test case named |TEST_CB_NOT_CALLED_AFTER_DONE|
+guarantees that a callback is not invoked once an iterator is exhausted. This
+test arose from a realization during development that it is expected for a
+callback not to be called after the iterator is used up. Such occurrences could
+lead to program errors or unexpected behavior. Consequently, we implemented a
+test case addressing this scenario and added it to the TestingTable. By adding
+just one more test, the entire Sequence Library could be examined for this
+behavior, allowing for further improvements.
+\\
+Another example concerns the behavior of operators and operations when dealing
+with empty iterables. The inclusion of invariant tests automatically contains the
+scenario involving an empty iterable. Other cases involving special iterables
+can also be tested, helping prevent other errors.
+\\
+Furthermore, another special test case is the |TEST_PURITY|, which ensures that
+the state of an iterable is in the proper location. This safeguards against
+unexpected side effects, promoting a more reliable program execution.
 
 \subsection{Conclusion}
 \label{sub:Conclusion}
