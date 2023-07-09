@@ -1,28 +1,35 @@
 \section{Description of the Application Domain}
 \label{sec:Description of the Application Domain}
-This section gives a rough overview of the Kolibri Toolkit and the environment
-of this work. Thereby we see which role the Functional Standard Library plays.
-Furthermore, the end of the chapter discusses to whom such a Toolkit could be of interest.
+This section provides a brief overview of the Kolibri Web UI Toolkit and its
+working environment. We explore the functional standard library's
+significance in this context. Additionally, the chapter concludes by discussing
+the potential interest and target audience for such a toolkit.
 
 \subsection{Functional Programming in JavaScript}
 \label{sub:Functional Programming in JavaScript}
 JavaScript is omnipresent on the web client side. In many aspects, JavaScript
-differs from other programming languages. Sometimes it has the reputation of
+differs from other programming languages, and sometimes it has the reputation of
 being a bit strange. Nevertheless, the language offers some excellent concepts
-which enable functional programming. For example, in JavaScript, functions are
-ordinary objects. \\
-As Listing~\ref{lst:curried_fn_in_js} shows, defining functions receiving their
-parameters in a curried style is also possible. This means, passing one
-argument to a function taking two parameters returns a new function just taking
-one parameter. \\ 
-This paper explores these powerful concepts in depth. Among other things,
-writing more robust code in JavaScript is possible with functional concepts.
-And that’s where the Kolibri Toolkit comes in. You’ll learn more about the
-Kolibri Toolkit in the next section.
+which enable functional programming. 
+Therefore, the language provides the following concepts:
+
+\begin{itemize}
+  \item{Arrow functions: Assignment of functions to variables} 
+  \item{Higher-order functions: Functions are common objects}
+  \item{Lazy evaluation: calculations are done when the result is needed}
+  \item{Curried functions: passing one argument to a function taking two parameters returns a new function just taking one parameter}
+\end{itemize}
+
+Listing~\ref{lst:curried_fn_in_js} shows these concepts with an example.
+First, |plus| defines a function that expects two arguments in curried style.
+Then, the function is partially evaluated by passing an argument to the
+function |plus| and storing the result in a new variable |plusOne|. This process is called
+partial application. |plusOne| is now a function that expects one more argument
+to evaluate the result.
 
 \begin{lstlisting}[
   style=ES6,
-  caption=Curried functions in JavaScript,
+  caption=Functional concepts in JavaScript,
   label={lst:curried_fn_in_js}
 ]
 const plus = a => b => a + b; // A function taking two params
@@ -32,30 +39,33 @@ console.log(plusOne(5));      // applying another param calculates the result
 // => Logs '6'
 \end{lstlisting}
 
+With these functional concepts, writing robust code in JavaScript is possible. 
+And that’s where the Kolibri toolkit comes in. You’ll learn more about the
+Kolibri toolkit in the next section.
 
 \subsection{The Kolibri Web UI Toolkit}
 \label{sub:The Kolibri Web UI Toolkit}
 The web page of the Kolibri describes the toolkit as, "Kolibri wants to be a
-sustainable, high quality Toolkit"~\cite{kolibri}, - and it is.
+sustainable, high quality toolkit"~\cite{kolibri}, - and it is.
 The Kolibri Web UI Toolkit is a collection of implementations. Experts test all
 components, which must satisfy high functional and non-functional standards. An
 essential part of the toolkit is the dependency-less implementation. Thus, it
 represents a certain antithesis to the frameworks dominated by |npm| libraries.
 This is important to fulfill the quality requirements in the long term.\\
 The toolkit is under continuous development. Mainly from student work, each
-focuses on one topic. Implementing a standard library based on functional
-concepts, is the focus of this work. \\ 
-The implementations provide examples in each case, making adaptations and use
-possible without an intensive training period.
+focuses on one topic. The main goal of this thesis is to implement a standard
+library based on functional concepts. These implementations provide examples in
+each case, enabling adaptations and usage without the need for extensive
+training.
 
-\subsection{The Root of the Project}
-\label{sub:The Root of the Project}
+\subsection{The Basis of the Project}
+\label{sub:The Basis of the Project}
 This work continues the previous project from the fifth semester of Computer
-Science studies. Thus, we have already dealt with the topic before this thesis,
+Science studies. Therefore, we have already dealt with the topic before this thesis,
 but on a smaller scale. This predecessor project includes a Logging Framework
 for the Kolibri toolkit and the first version of the functional standard
 library. These results made it possible to develop the library to its current
-state further. By researching the literature and trying different approaches, a
+state. By researching the literature and trying different approaches, a
 versatile and robust implementation of a functional standard library emerged.
 
 \subsection{Role of the Standard Library}
