@@ -8,7 +8,7 @@ thoroughly if there are some unclarities.
 
 \subsection{Fibonacci Sequence}
 \label{sub:Fibonacci Sequence}
-This is an example of a specialized Sequence constructor.
+This is an example of a specialized sequence constructor.
 Listing~\ref{lst:fibonacci_sequence} shows the implementation of the Fibonacci 
 Sequence~\cite[p.~36]{math_diskrete_2011}. 
 %S36
@@ -296,12 +296,18 @@ Listing~\ref{lst:impl_within} defines the following implementations:
 
 \subsection{Tic Tac Toe with a Kind of AI}
 \label{sub:Alpha - Beta Algorithm}
-This example includes the implementation of the alpha-beta heuristic, an
-algorithm for games such as tic-tac-toe. The algorithm looks ahead to make the
-optimal move. The implementation is adapted from the paper "Why Funcitonal
-Programming Matters"~\cite{hughes_why_1989} to prove that even advanced 
-applications in JavaScript can
-be implemented using the Sequence library. For a deeper understanding of the
+This example describes the implementation of the alpha-beta heuristic, an
+algorithm for estimating how good a position a game-player is in~\cite[p.
+16]{hughes_why_1989}. \\ 
+Before each move, the algorithm pre-calculates several moves to decide the best
+possible move. \\ 
+Hughes explains the implementation of this algorithm based on laziness and
+higher-order functions~\cite[p. 16]{hughes_why_1989}.
+Chapter~\ref{sec:Modularizing Programs} describes that the Sequence library
+supports these two concepts. This example now shows an implementation of the
+algorithm in JavaScript.
+
+For a deeper understanding of the
 algorithm, you can either consult the paper mentioned before or the section
 "Incremental Development" in Frege Goodness~\cite{frege_goodness}.
 
