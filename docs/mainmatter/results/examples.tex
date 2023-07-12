@@ -50,8 +50,9 @@ say "Fizz," and instead of numbers divisible by 5, they say "Buzz." If a number
 is divisible by both 3 and 5, they say "FizzBuzz". This game also serves as a 
 programming task.
 \newline
-Frege Goodness~\cite{frege_goodness} includes a detailed explanation of the game.
-Listing 3 shows a part of the implementation with the Sequence library.
+Frege Goodness~\cite{frege_goodness} includes a detailed explanation of the
+game. Listing~\ref{lst:fizz_buzz} shows a part of the implementation with the
+Sequence library.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -296,24 +297,21 @@ Listing~\ref{lst:impl_within} defines the following implementations:
 
 \subsection{Tic Tac Toe with a Kind of AI}
 \label{sub:Alpha - Beta Algorithm}
-This section describes the implementation of the alpha-beta heuristic, an
-algorithm for estimating how good a position a game player is in~\cite[p.
-16]{hughes_why_1989}. \\ 
-Before each move, the algorithm pre-calculates several moves to decide the best
-possible. \\ 
-In his paper, Hughes explains how laziness and higher order functions can be
-used to implement this algorithm~\cite[p. 16]{hughes_why_1989}.
-Chapter~\ref{sec:Modularizing Programs} describes that the Sequence library
-supports these two concepts. This example now shows an implementation of the
-algorithm in JavaScript.
+This section describes the implementation of the alpha-beta heuristic in
+JavaScript, an algorithm for estimating how good a position a game player is
+in. \\ 
+This algorithm allows building a computer-controlled opponent for a
+turn-based game. Hughes explains how the algorithm uses laziness and
+higher-order functions to be modular and extensible in his paper.~\cite[p.
+16]{hughes_why_1989}. As section~\ref{sec:Modularizing Programs} describes, the
+Sequence library supports these two concepts. This allows porting the algorithm
+to JavaScript.
 
 \subsubsection{How does the Algorithm work?} % (fold)
-\label{sec:How does the Algorithm work?}
-This section briefly introduces the topic and explains why laziness and
-higher-order functions are crucial for this algorithm.
-For a deeper understanding of the algorithm, you can either consult the paper
-mentioned before or the section "Incremental Development" in Frege
-Goodness~\cite{frege_goodness}.
+\label{subsub:How does the Algorithm work?}
+ For a deeper understanding of the algorithm, you can consult the previous
+ paper or the section "Incremental Development" in Frege
+ Goodness~\cite{frege_goodness}.
 
 \paragraph{Building a Game Tree} The idea of the algorithm is to build a tree
 of possible playing fields. The start node in this tree is the current state of
@@ -324,15 +322,15 @@ be huge, depending on the game, even infinitely large, this is only possible to
 implement with laziness! 
 
 The algorithm must estimate whether a playfield is good or bad for a player.
-The simplest case for this is to judge based on the playing field whether a
-player has already won at this level - in the case of tic tac toe, therefore,
-when three of his symbols are next to each other. \\ 
-A function (call it |evalFunction|) does this evaluation - if the algorithm has
+The simplest way to figure this out is to look at the playing field and decide
+if a player has already won. In the case of tic tac toe, a player has won when
+three of his symbols are next to each other. \\
+A function (called |evalFunction|) does this evaluation - if the algorithm has
 won the game on a field, it evaluates to 1 if it has lost to -1, in all other
-cases, to 0. \\ 
-The |evalFunction| is mapped via the tree (this is where higher-order functions
-come into play): Each node is assigned its static value. This results in a new
-tree with the value of |evalFunction| assigned instead of all possible fields.
+cases, to 0.\\
+The |evalFunction| is mapped via the tree (where higher-order functions come into
+play): Each node is assigned its static value. This results in a new tree with
+the value of |evalFunction| assigned instead of all possible fields.\\
 
 \paragraph{Pruning the huge Tree} The tree of possible moves and possible
 result values can be huge. So the algorithm must have a way to limit the tree
@@ -341,10 +339,10 @@ it cuts the children off.
 
 \paragraph{What is the best Move?}
 The tree's root is the current playing field - the algorithm cannot know from
-the root which moves are good and which are not. The previously mentioned eval
-function will evaluate to 0 for most nodes directly after the root. Therefore,
-the computer also calculates all subsequent moves. The values of the lowest
-calculated nodes are then propagated upwards to the root. 
+the root which moves are good and which are not. The previously mentioned
+|evalFunction| will evaluate to 0 for most nodes directly after the root.
+Therefore, the computer also calculates all subsequent moves. The values of the
+lowest calculated nodes are then propagated upwards to the root. 
 
 The maximize function goes through to the lowest precalculated level. It
 evaluates the board: when it is the computer's turn, it selects the board with
@@ -368,10 +366,15 @@ chances of winning!
 % wählen kann. Das heisst, 
 % subsubsection How does the Algorithm work? (end)
 
-\subsubsection{The Required Types}
-\label{subsub:The Required Types}
+\subsubsection{Implementation}
+\label{subsub:alphabeta_implementation}
+\paragraph{Basic Types and Helper functions} 
 Listing~\ref{lst:tictactoe_types} shows the required types for the game
-implementation.
+implementation. \\
+A pair models the |Tree| (line~\ref{line:ttt_treetype}) - the first
+value is the current node, and the second value is a sequence consisting of
+further trees. The types |Player| and |Stone| exist only for writing more
+expressive JSDoc.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -379,12 +382,12 @@ implementation.
   label={lst:tictactoe_types}
   ]
 /**
- * This tree manages the possible game states.
+ * 
  * @template _T_
  * @typedef {SequenceType<Tree<_T_>>} TreeSequence
  */
 
-/**
+/** *'\label{line:ttt_treetype}'*
  * @template _T_
  * @typedef { PairSelectorType<_T_, TreeSequence<_T_>> } Tree
  */
@@ -407,7 +410,8 @@ implementation.
 
 Listing~\ref{lst:tictactoe_players} includes the definition of the players and some
 functions used in the game process. Since JavaScript does not support pattern
-matching, the functions |opponent| and |stone| use a workaround via an object.
+matching, the functions |opponent| and |stone| use a workaround - they store
+the mappings in an object.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -463,11 +467,40 @@ const stone = player => {
 const treeMap = f => ([a, sub]) => Pair(f(a))(map(treeMap(f))(sub));
 \end{lstlisting}
 
-\subsubsection{Processing the Game Board}
-\label{subsub:Processing the Game Board}
+\paragraph{Building trees and processing the Game Board} 
+Listing~\ref{lst:tictactoe_gametree} shows the functions for building a game
+tree.
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Tic Tac Toe game tree,
+  label={lst:tictactoe_gametree}
+  ]
+/**
+ * Generates recursively a game tree, which is potentially endless.
+ * @template _T_
+ * @type {
+ *       (unfold: ((_T_) => Iterable<_T_>))
+ *    => (a: _T_)
+ *    => Tree<_T_>
+ * }
+ */
+const buildTree = unfold => a => {
+  const as = unfold(a);
+  const children = map(buildTree(unfold))(as);
+  return Pair(a)(children);
+};
 
-Listing~\ref{lst:tictactoe_move} includes the |moves| function. This function
-calculates all possible moves for a player whose turn it is on the board.
+/**
+ * Creates a game tree.
+ * @param { Board } board
+ * @returns Tree<Board>
+ */
+const gameTree = board => buildTree(moves)(board);
+\end{lstlisting}
+
+Listing~\ref{lst:tictactoe_move} includes
+the |moves| function. This function calculates all possible moves for a player
+based on the current playing field.
 \begin{lstlisting}[
   style=ES6, 
   caption=Tic Tac Toe move function,
@@ -510,8 +543,13 @@ const moves = board => {
 }
 \end{lstlisting}
 
+\paragraph{Evaluating a Board}
 Listing~\ref{lst:tictactoe_hasWon} shows the implementation of the |hasWon|
-function, which checks if a player has won on a given board.
+function, which checks if a player has won on a given board. The evaluation
+function, explained in section ~\ref{subsub:How does the Algorithm work?}, uses
+this function to assess a playing field. Line~\ref{line:ttt_static_eval}
+defines this function called |staticEval|.
+
 \begin{lstlisting}[
   style=ES6, 
   caption=Tic Tac Toe hasWon function,
@@ -549,58 +587,31 @@ const hasWon = board => player => {
     foldl$((acc, cur) => acc || cur, false)
   )(winTriples)
 };
-\end{lstlisting}
 
-
-Listing~\ref{lst:tictactoe_gametree} shows the functions to build a game tree.
-\begin{lstlisting}[
-  style=ES6, 
-  caption=Tic Tac Toe game tree,
-  label={lst:tictactoe_gametree}
-  ]
-/**
- * Generates recursively a game tree, which is potentially endless.
- * @template _T_
- * @type {
- *       (unfold: ((_T_) => Iterable<_T_>))
- *    => (a: _T_)
- *    => Tree<_T_>
- * }
- */
-const buildTree = unfold => a => {
-  const as = unfold(a);
-  const children = map(buildTree(unfold))(as);
-  return Pair(a)(children);
-};
-
-/**
- * Creates a game tree.
- * @param { Board } board
- * @returns Tree<Board>
- */
-const gameTree = board => buildTree(moves)(board);
-\end{lstlisting}
-
-\subsubsection{The Minimax Algorithm}
-\label{subsub:minimax_algo}
-Listing~\ref{lst:tictactoe_minimax} shows the implementation of the Minimax
-algorithm. These functions determine which are the best moves.
-\begin{lstlisting}[
-  style=ES6, 
-  caption=Tic Tac Toe minimax algorithmus,
-  label={lst:tictactoe_minimax}
-  ]
 /**
  * Evaluates a given board.
  * @param { Board } board
  * @returns Number
  */
-const staticEval = board => {
+const staticEval = board => { *'\label{line:ttt_static_eval}'*
   if (hasWon(board)(Computer)) return  1.0;
   if (hasWon(board)(Human))    return -1.0;
   return 0.0;
 };
 
+\end{lstlisting}
+
+\paragraph{Finding the best Move}
+Listing~\ref{lst:tictactoe_minimax} shows the implementation of the functions
+|maximize| (and its counterpart |minimize|) explained in
+section~\ref{subsub:How does the Algorithm work?}. These functions determine
+which are the best moves.
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Tic Tac Toe minimax algorithmus,
+  label={lst:tictactoe_minimax}
+  ]
 /**
  * Determines the best move.
  * @template _T_
@@ -624,12 +635,10 @@ const minimize = ([a, sub]) => {
 };
 \end{lstlisting}
 
-\subsubsection{Pruning a Game Tree}
-\label{subsub:Pruning a Game Tree}
-
-We must prune the game tree for a specific calculation since we are dealing with
-potentially endless trees. The following Listing~\ref{lst:tictactoe_prune} shows
-the implementation.
+\paragraph{Pruning Trees} 
+We cut off (prune) the possibly infinite tree. The following
+listing~\ref{lst:tictactoe_prune} shows the implementation of this pruning.
+Since subtrees are sequences, |nil| replaces them when pruning.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -653,12 +662,11 @@ const prune = n => tree => {
 };
 \end{lstlisting}
 
-\subsubsection{The Evaluation}
-\label{subsub:The Evaluation}
-
-The following functions evaluate a game board. The function |nextBoardBy|
-calculates the next move for the computer based on the number of lookaheads,
-i.e., how many moves are calculated ahead.
+\paragraph{Putting it all together}
+The following functions evaluate a playing field. \\ 
+The function |nextBoardBy| calculates the next move for the computer. The
+number |lookaheads| defines how many turns the algorithm calculates in advance.
+Based on these calculations the algorithm chooses the next move.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -720,4 +728,7 @@ const nextBoardBy = lookahead => inFields => {
 };
 \end{lstlisting}
 
+\subsubsection{Conclusion} % (fold)
+\label{subsub:ttt_conclusion}
 
+% subsubsection Conclusion (end)
