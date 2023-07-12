@@ -728,7 +728,39 @@ const nextBoardBy = lookahead => inFields => {
 };
 \end{lstlisting}
 
+\subsubsection{The Result} % (fold)
+\label{sec:ttt_result}
+One advantage of JavaScript is that it works hand in hand with websites and
+HTML. A website with a UI (like figure~\ref{img:ttt_playfield}) can now use the
+algorithm.\\
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{./mainmatter/pictures/tic-tac-toe-field.jpg}
+    \caption{A website using the algorithm}
+    \label{img:ttt_playfield}
+\end{figure}
+
+When a player places his stone on the board, the function |nextBoard| gets
+called. The algorithm automatically makes the best possible next turn based on
+how many moves it can look ahead and returns the new board.
+% subsubsection The result (end)
+
 \subsubsection{Conclusion} % (fold)
 \label{subsub:ttt_conclusion}
-
+This example shows impressively how the Sequence library enables developers to
+adapt an algorithm developed for functional programming languages in
+JavaScript.\\
+Of course, copying the algorithm is not possible because JavaScript misses some
+language features like pattern matching. Nevertheless, the essential concepts
+and logic of the algorithm can be adopted directly. \\
+It is also exciting how JSDoc allows constructing straightforward talking types
+like |Player| or |Stone| (listing~\ref{lst:tictactoe_types}).\\
+To extend the algorithm, for example, to improve the static evaluation to
+decide how good a current playing field is, only one function has to be
+adjusted. Also, the evaluation of the algorithm can be easily improved and
+detached from other logic by increasing the number of lookahead moves. Further
+optimizations to prune away subtrees that are out of consideration anyway can
+be done directly in the function |maximize|.\\
+Thus, the modularity and extensibility of the program is very high.
 % subsubsection Conclusion (end)
