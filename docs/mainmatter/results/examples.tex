@@ -304,27 +304,30 @@ This algorithm allows building a computer-controlled opponent for a
 turn-based game. Hughes explains how the algorithm uses laziness and
 higher-order functions to be modular and extensible in his paper.~\cite[p.
 16]{hughes_why_1989}. As section~\ref{sec:Modularizing Programs} describes, the
-Sequence library supports these two concepts. This allows porting the algorithm
-to JavaScript.
+Sequence library supports these two concepts, thus allowing to port the
+algorithm to JavaScript.
 
 \subsubsection{How does the Algorithm work?} % (fold)
 \label{subsub:How does the Algorithm work?}
- For a deeper understanding of the algorithm, you can consult the previous
- paper or the section "Incremental Development" in Frege
- Goodness~\cite{frege_goodness}.
+The following explanation is meant to give a brief explanation for the
+algorithm, allowing to understand the preceding code. For a deeper
+understanding of the algorithm, consider ~\cite[Ch. 5]{hughes_why_1989} or the
+section "Incremental Development" in Frege Goodness~\cite{frege_goodness}.
 
 \paragraph{Building a Game Tree} The idea of the algorithm is to build a tree
-of possible playing fields. The start node in this tree is the current state of
-the playing field. Its children are all possible playing fields, which can
-arise when the next player has made his move. This results in a potentially
-endless tree. All the next possible moves follow each node. Since this tree can
-be huge, depending on the game, even infinitely large, this is only possible to
-implement with laziness! 
+containing \textit{all} possible playing fields. The start node in this
+tree is the current state of the playing field. Its children are all possible
+playing fields, which can arise when the players make their next moves. This
+results in a potentially endless tree. All direct successors of a node are the
+next possible moves for this node's playing field. Since this tree can be huge,
+depending on the game, even infinitely large, only a lazy data structure can
+handle it!
 
-The algorithm must estimate whether a playfield is good or bad for a player.
-The simplest way to figure this out is to look at the playing field and decide
-if a player has already won. In the case of tic tac toe, a player has won when
-three of his symbols are next to each other. \\
+The algorithm must estimate whether a playfield is good or bad for a player to
+find the best possible next move. The simplest way to figure this out is to
+look at the playing field and decide if a player has already won. In the case
+of tic tac toe, a player has won when three of his symbols are next to each
+other. \\
 A function (called |evalFunction|) does this evaluation - if the algorithm has
 won the game on a field, it evaluates to 1 if it has lost to -1, in all other
 cases, to 0.\\
@@ -332,10 +335,6 @@ The |evalFunction| is mapped via the tree (where higher-order functions come int
 play): Each node is assigned its static value. This results in a new tree with
 the value of |evalFunction| assigned instead of all possible fields.\\
 
-\paragraph{Pruning the huge Tree} The tree of possible moves and possible
-result values can be huge. So the algorithm must have a way to limit the tree
-to a fixed depth. The algorithm uses pruning - from a freely selectable depth,
-it cuts the children off. 
 
 \paragraph{What is the best Move?}
 The tree's root is the current playing field - the algorithm cannot know from
@@ -344,27 +343,19 @@ the root which moves are good and which are not. The previously mentioned
 Therefore, the computer also calculates all subsequent moves. The values of the
 lowest calculated nodes are then propagated upwards to the root. 
 
-The maximize function goes through to the lowest precalculated level. It
-evaluates the board: when it is the computer's turn, it selects the board with
+The function |maximize| goes through to the lowest precalculated level. It
+evaluates the board there: when it is the computer's turn, it selects the board with
 the highest value assigned (safest chance of winning). If the opponent's turn,
 it selects the smallest value (the algorithm thus assumes that the opponent
 also selects the best possible move). This found value is assigned to the
-parent node as a result - and maximizes all nodes on this level according to
+parent node as a result - and chooses the best move on this level according to
 the same scheme. Ultimately, the root has the value with the best possible
 chances of winning!
 
-% Wie wird herausgefunden, ob ein Spielfeld gut ist? Der Algorithmus baut den
-% Tree so auf, dass er eine möglichst gute Entscheidung treffen kann. Dabei geht
-% er davon aus, dass sein Gegenspieler jedes Mal ebenfalls die beste Entscheidung
-% trifft. Das funktioniert relativ einfach: Aus dem Spielfeld-Tree baut der
-% Algorithmus einen neuen Tree indem jedem Spielfeld eine Zahl zugeordnet wird.
-% Dieses aufbauen geschieht dadurch, dass eine statische Evaluationsfunktion über
-% den Tree gemappt wird - hier kommt also die higher-order function ins Spiel.
-% Die Evaluations sagt basierend auf dem Spielfeld, wie gut ein Spielzug ist. Bei
-% einem unendlich grossen Tree muss das natülrich wieder lazy passieren. Der
-% Algorithmus möchte den Tree aber so bauen, dass er für sich den besten Zug
-% wählen kann. Das heisst, 
-% subsubsection How does the Algorithm work? (end)
+\paragraph{How to evaluate the huge Tree?} The tree of possible moves and possible
+result values can be huge. So the algorithm must have a way to limit the tree
+to a fixed depth. The algorithm uses pruning - from a freely selectable depth,
+it cuts the children off. 
 
 \subsubsection{Implementation}
 \label{subsub:alphabeta_implementation}
@@ -378,7 +369,7 @@ expressive JSDoc.
 
 \begin{lstlisting}[
   style=ES6, 
-  caption=Tic Tac Toe Types,
+  caption=tic tac toe types,
   label={lst:tictactoe_types}
   ]
 /**
@@ -472,7 +463,7 @@ Listing~\ref{lst:tictactoe_gametree} shows the functions for building a game
 tree.
 \begin{lstlisting}[
   style=ES6, 
-  caption=Tic Tac Toe game tree,
+  caption=tic tac toe game tree,
   label={lst:tictactoe_gametree}
   ]
 /**
@@ -498,12 +489,11 @@ const buildTree = unfold => a => {
 const gameTree = board => buildTree(moves)(board);
 \end{lstlisting}
 
-Listing~\ref{lst:tictactoe_move} includes
-the |moves| function. This function calculates all possible moves for a player
-based on the current playing field.
+Listing~\ref{lst:tictactoe_move} includes the |moves| function. This function
+calculates all possible moves for a player based on the current playing field.
 \begin{lstlisting}[
   style=ES6, 
-  caption=Tic Tac Toe move function,
+  caption=tic tac toe move function,
   label={lst:tictactoe_move}
   ]
 /**
@@ -521,8 +511,8 @@ const indexFields = fields => zip(fields)(Range(1,9));
 const moves = board => {
   if (hasWon(board)(Computer)) return /**@type {SequenceType<Board>} */nil;
   if (hasWon(board)(Human))    return /**@type {SequenceType<Board>} */nil;
-  const otherPlayer = opponent(board.whosTurn);
 
+  const otherPlayer   = opponent(board.whosTurn);
   const indexedFields = indexFields(board.fields);
 
   const blankIndices =
@@ -536,11 +526,10 @@ const moves = board => {
       .select(([content, i]) => i === pos ? stone(board.whosTurn) : content)
       .result();
 
-  const boardFieldsAfterMove = map(fieldsWithPlayerPlacedAt)(blankIndices);
+  const boardFieldsAfterMove = map (fieldsWithPlayerPlacedAt) (blankIndices);
 
-  return /** @type SequenceType<Board> */ 
-       map(fields => ({fields, whosTurn: otherPlayer}))(boardFieldsAfterMove);
-}
+  return map(fields => ({fields, whosTurn: otherPlayer})) (boardFieldsAfterMove);
+};
 \end{lstlisting}
 
 \paragraph{Evaluating a Board}
@@ -552,7 +541,7 @@ defines this function called |staticEval|.
 
 \begin{lstlisting}[
   style=ES6, 
-  caption=Tic Tac Toe hasWon function,
+  caption=tic tac toe hasWon function,
   label={lst:tictactoe_hasWon}
   ]
 /**
@@ -571,7 +560,7 @@ const hasWon = board => player => {
   ];
 
   const checkTriple = triple => {
-    const actualStone = stone(player);
+    const actualStone   = stone(player);
     const indexedFields = indexFields(board.fields);
 
     const playerOnFields =
@@ -593,9 +582,9 @@ const hasWon = board => player => {
  * @param { Board } board
  * @returns Number
  */
-const staticEval = board => { *'\label{line:ttt_static_eval}'*
-  if (hasWon(board)(Computer)) return  1.0;
-  if (hasWon(board)(Human))    return -1.0;
+const staticEval = board => {
+  if (hasWon (board) (Computer)) return 1.0;
+  if (hasWon (board) (Human))    return -1.0;
   return 0.0;
 };
 
@@ -609,7 +598,7 @@ which are the best moves.
 
 \begin{lstlisting}[
   style=ES6, 
-  caption=Tic Tac Toe minimax algorithmus,
+  caption=tic tac toe minimax algorithmus,
   label={lst:tictactoe_minimax}
   ]
 /**
@@ -642,7 +631,7 @@ Since subtrees are sequences, |nil| replaces them when pruning.
 
 \begin{lstlisting}[
   style=ES6, 
-  caption=Tic Tac Toe prune function,
+  caption=tic tac toe prune function,
   label={lst:tictactoe_prune}
   ]
 /**
@@ -670,22 +659,20 @@ Based on these calculations the algorithm chooses the next move.
 
 \begin{lstlisting}[
   style=ES6, 
-  caption=Tic Tac Toe - evaluating functions,
+  caption=tic tac toe - evaluating functions,
   label={lst:tictactoe_eval}
   ]
 /**
- * Evaluating a board with a max number of lookaheads.
- * @template _T_
+ * Evaluates a given Board by building a tree
  * @type {
- *            (f: (Board) => _T_)
- *         => (lookahead: Number)
+ *            (lookahead: Number)
  *         => (board: Board)
- *         => _T_
+ *         => Number
  * }
  */
-const evaluateBy = f => lookahead => board => {
+const evaluate = lookahead => board => {
   const prunedTree = prune(lookahead)(gameTree(board));
-  const mappedTree = treeMap(f)(prunedTree);
+  const mappedTree = treeMap(staticEval)(prunedTree);
   return minimize(mappedTree);
 };
 
@@ -698,7 +685,7 @@ const evaluateBy = f => lookahead => board => {
  * }
  */
 const nowValue = lookahead => board =>
-  Pair(evaluateBy(staticEval)(lookahead)(board))(board);
+  Pair(evaluate(lookahead)(board))(board);
 
 /**
  * Calculates the next board with given board fields.
@@ -708,22 +695,24 @@ const nowValue = lookahead => board =>
  *       => Board
  * }
  */
-const nextBoardBy = lookahead => inFields => {
-  const possibleMoves  = moves ({whosTurn: Computer, fields: inFields});
-  const evaluatedMoves = 
-      /** @type {SequenceType<PairSelectorType<Number, Board>>} */ 
-      map (nowValue(lookahead)) (possibleMoves);
+const nextBoard = lookahead => inFields => {
+  const currentBoard = {whosTurn: Computer, fields: inFields};
+  // get all possible
+  const possibleMoves  = moves (currentBoard);
+  if (isEmpty(possibleMoves)) return currentBoard;
+  // evaluate each move by looking ahead how good it is
+  let evaluatedMoves = /** @type {SequenceType<PairSelectorType<Number, Board>>} */ map (nowValue(lookahead)) (possibleMoves);
 
+  // if the computer is sure to lose, only look one place ahead to prevent the "nearest" loss
+  if (onlyLoses(evaluatedMoves)) {
+    evaluatedMoves = map (nowValue(1)) (possibleMoves);
+  }
 
   /**
-   *
-   * @param { SequenceType<PairSelectorType<Number, Board>> } boards
+   * Gets the highest ranked board of the passed board
+   * @param {SequenceType<PairSelectorType<Number, Board>>} boards
    * @return Board
    */
-  const bestOf = boards => {
-    if (isEmpty(boards)) return {whosTurn: NoPlayer, fields: []};
-    return max$(boards, ([a, _b1],[b, _b2]) => a < b )(snd);
-  };
   return bestOf(evaluatedMoves);
 };
 \end{lstlisting}
