@@ -701,9 +701,10 @@ const nextBoard = lookahead => inFields => {
   const possibleMoves  = moves (currentBoard);
   if (isEmpty(possibleMoves)) return currentBoard;
   // evaluate each move by looking ahead how good it is
-  let evaluatedMoves = /** @type {SequenceType<PairSelectorType<Number, Board>>} */ map (nowValue(lookahead)) (possibleMoves);
+  let evaluatedMoves =  map (nowValue(lookahead)) (possibleMoves);
 
-  // if the computer is sure to lose, only look one place ahead to prevent the "nearest" loss
+  // if the computer is sure to lose 
+  // only look one place ahead to prevent the "nearest" loss
   if (onlyLoses(evaluatedMoves)) {
     evaluatedMoves = map (nowValue(1)) (possibleMoves);
   }
