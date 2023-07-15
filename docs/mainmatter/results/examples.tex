@@ -17,30 +17,27 @@ Sequence~\cite[p.~36]{math_diskrete_2011}.
   caption=Fibonacci Sequence,
   label={lst:fibonacci_sequence}
   ]
-const FibonacciSequence = () => {
-
-  const fibonacciIterator = () => {
-    let last = 0;
-    let secondLast = 0;
-
-    const next = () => {*'\label{line:start_next}'*
-      let current = last + secondLast;*'\label{line:fibonacci_calc}'*
-      if (current === 0) current = 1;
-      secondLast = last;
-      last = current;
-      return { done: false, value: current };
-    };*'\label{line:end_next}'*
-
-
-    return { next };
-  };
-
-  return createMonadicSequence(fibonacciIterator);
-};
+/**
+ * Generates the Fibonacci sequence.
+ *
+ * @constructor
+ * @pure
+ * @returns { SequenceType<Number> }
+ *
+ * @example
+ * const result = take(8)(FibonacciSequence);
+ *
+ * console.log(...result);
+ * // => Logs '1, 1, 2, 3, 5, 8, 13, 21'
+ */
+const FibonacciSequence = map(
+  ([_, snd]) => snd)
+  (Sequence(Pair(0)(1), _ => true, ([fst, snd])=> Pair(snd)(fst + snd))
+);
 \end{lstlisting}
-On line~\ref{line:start_next} to \ref{line:end_next}, |next| is responsible for calculating an
-element based on the previous. As we see on line~\ref{line:fibonacci_calc}, the current element is the
-sum of the last and the second last, which represents the Fibonacci sequence.
+The |FibonacciSequence| generates the Fibonacci sequence using the
+|Sequence| and |Pair| constructor. The |map| function extracts the current Fibonacci number
+from the pair returned by the sequence.
 
 \subsection{Fizz Buzz}
 \label{sub:Fizz Buzz}
@@ -54,9 +51,32 @@ Frege Goodness~\cite{frege_goodness} includes a detailed explanation of the
 game. Listing~\ref{lst:fizz_buzz} shows a part of the implementation with the
 Sequence library.
 
+First, let us look at the simplest form in listing~\ref{lst:simple_fizzbuzz}. 
+The fizzes and buzzes are combined in a
+sequence. If neither a fizz nor a buzz occurs, the number is output:
+
 \begin{lstlisting}[
   style=ES6, 
-  caption=Fizz Buzz,
+  caption=Fizz Buzz example,
+  label={lst:simple_fizzbuzz}
+  ]
+const limit    = 15;
+const range    = Range(limit);
+const fizzez   = cycle(["", "", "fizz"]);
+const buzzez   = cycle(["", "", "", "", "buzz"]);
+
+const pattern  = zipWith((fizz, buzz) => fizz + buzz)(fizzez)(buzzez);
+const fizzbuzz = zipWith((num, str) => str === "" ? num : str)(range)(pattern);
+
+console.log(...take(limit)(fizzbuzz));
+// => Logs '0 1 "fizz" 3 "buzz" ... 10 "fizz" 12 13 "fizzbuzz"'
+\end{lstlisting}
+
+Now we are extending the application to add new rules during the runtime:
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Fizz Buzz example extended,
   label={lst:fizz_buzz}
   ]
 import * as _ from "./src/sequence/sequence.js";
@@ -73,19 +93,13 @@ const createSequenceForRule = rule =>
 
 const buildFizzBuzz = () => {
   const currentRules = model.rulesSnapshot().map(createSequenceForRule);
+  const baseLine     = _.Sequence("", _ => true, _ => "");
 
-  const baseLine  = _.Sequence("", _ => true, _ => "");
-  const fizzBuzz  = _.pipe(
+  const fizzBuzz = _.pipe(
       // reduce to single sequence by combining all iterable values
-    _.reduce$((acc, cur) =>       
-    _.zipWith((a, b) => a + b)(acc)(cur), // combine all strings
-    baseLine),  // start value (empty strings)
-
-    _.zipWith((numbers, pattern) => pattern === "" 
-                                     ? String(numbers) 
-                                       // add numbers where no text is present
-                                     : pattern
-                                     )(infiniteNumbers), 
+    _.reduce$((acc, cur) => _.zipWith((a, b) => a + b)(acc)(cur), baseLine), 
+    _.zipWith((numbers, pattern) => pattern === "" ? String(numbers) : pattern)
+                 (infiniteNumbers), 
     // limit output
     _.take(model.getUpperBoundary()),
     _.drop(model.getLowerBoundary() -1),
