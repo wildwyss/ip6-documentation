@@ -142,6 +142,15 @@ title={Bibliography}]                                   %Titel des Literaturverz
 \include{./backmatter/declaration_of_independence}
 \include{./backmatter/sequence_library}
 \include{./backmatter/user_test_results}
+
+\includepdf[
+  scale=0.75,
+  angle=00,
+  offset=0mm -18mm,
+  pages={1},
+  frame=false,
+  pagecommand={\chapter{Project Description}\label{chap:Project Description}}
+]{./backmatter/ip6-project-description.pdf}
 \end{appendices}
 
 \end{document}
