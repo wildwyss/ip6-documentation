@@ -11,52 +11,80 @@ JavaScript is omnipresent on the web client side. In many aspects, JavaScript
 differs from other programming languages, and sometimes it has the reputation of
 being a bit strange. Nevertheless, the language offers some excellent concepts
 which enable functional programming. 
-Therefore, the language provides the following concepts:
+Therefore, the language provides the following features: 
 
 \begin{itemize}
   \item{Arrow functions: Assignment of functions to variables} 
-  \item{Higher-order functions: Functions are common objects}
+  \item{Higher-order functions: Functions that can take other functions as arguments or return functions as results}
+  \item{First class functions: Functions are objects that can be treated as any other object}
   \item{Lazy evaluation: calculations are done when the result is needed}
   \item{Curried functions: passing one argument to a function taking two parameters returns a new function just taking one parameter}
 \end{itemize}
 
-Listing~\ref{lst:curried_fn_in_js} shows these concepts with an example.
-First, |plus| defines a function that expects two arguments in curried style.
-Then, the function is partially evaluated by passing an argument to the
-function |plus| and storing the result in a new variable |plusOne|. This process is called
-partial application. |plusOne| is now a function that expects one more argument
-to evaluate the result.
+Listing~\ref{lst:curried_fn_in_js} shows these concepts with some examples.
+First, on line~\ref{line:start_plus} the arrow function |plus| defines a function that expects two arguments in curried style.
+Then, the function is partially evaluated by passing one argument to it. 
+The result is a new function |plusOne|. This process is called partial application. 
+|plusOne| is now a function that expects one more argument
+to evaluate the result. Passing the next argument calculates the addition and
+stores the result in the variable |result| on line~\ref{line:end_plus}.
+\\
+
 
 \begin{lstlisting}[
   style=ES6,
   caption=Functional concepts in JavaScript,
   label={lst:curried_fn_in_js}
 ]
-const plus = a => b => a + b; // A function taking two params
-const plusOne = plus(1);      // plus(1) returns a new function taking 1 param
+const plus    = a => b => a + b; // an arrow function taking two params *'\label{line:start_plus}'*
+const plusOne = plus(1);         // plus(1) returns a new function 
+const result  = plusOne(5);      // applying another param calculates the result *'\label{line:end_plus}'*
 
-console.log(plusOne(5));      // applying another param calculates the result
-// => Logs '6'
+const commentResult = func => {  // a function as argument*'\label{line:start_commentResult}'*
+
+  // defining a new function which takes one argument
+  const returnFunction = value => {
+    const comment = "The result is: ";
+    const result  = func(value);
+    return comment + result;
+  };
+
+  // returning a function from a function
+  return returnFunction;
+};*'\label{line:end_commentResult}'*
+
+const commentResultFn = commentResult(plusOne); // yields a new function
+const result          = commentResultFn(6);     // evaluating the result *'\label{line:comment_result_fn}'*   
+console.log(result);
+// => Logs 'The result is: 6'
 \end{lstlisting}
-
+Next, let us consider the |commentResult| function on
+line~\ref{line:start_commentResult} to~\ref{line:end_commentResult}, 
+which takes another function
+as input and generates a new function. To achieve this, the original function,
+referred to as |func| is enclosed within a wrapper function to produce a
+commented result. The outcome of invoking |commentResult| with the |plusOne|
+function is stored in |commentResultFn,| which itself becomes a function. The
+actual computation and output of results occur only when |commentResultFn| is
+called on line~\ref{line:comment_result_fn}. This example showcases how 
+functions can be treated as regular objects.
+\\
 With these functional concepts, writing robust code in JavaScript is possible. 
-And that’s where the Kolibri toolkit comes in. You’ll learn more about the
-Kolibri toolkit in the next section.
+And that is where the Kolibri toolkit comes in. You will learn more about the
+Kolibri toolkit in the next sections.
 
 \subsection{The Kolibri Web UI Toolkit}
 \label{sub:The Kolibri Web UI Toolkit}
 The web page of the Kolibri describes the toolkit as, "Kolibri wants to be a
 sustainable, high quality toolkit"~\cite{kolibri}, - and it is.
-The Kolibri Web UI Toolkit is a collection of implementations. Experts test all
+The Kolibri Web UI Toolkit is a collection of JavaScript abstractions. Experts test all
 components, which must satisfy high functional and non-functional standards. An
 essential part of the toolkit is the dependency-less implementation. Thus, it
 represents a certain antithesis to the frameworks dominated by |npm| libraries.
 This is important to fulfill the quality requirements in the long term.\\
-The toolkit is under continuous development. Mainly from student work, each
-focuses on one topic. The main goal of this thesis is to implement a standard
-library based on functional concepts. These implementations provide examples in
-each case, enabling adaptations and usage without the need for extensive
-training.
+The toolkit is under continuous development, with each student project focusing
+on a new topic. The main goal of this thesis is to extend the toolkit
+with a standard library based on functional concepts. 
 
 \subsection{The Basis of the Project}
 \label{sub:The Basis of the Project}
@@ -70,17 +98,18 @@ versatile and robust implementation of a functional standard library emerged.
 
 \subsection{Role of the Standard Library}
 \label{sub:Role of the Standard Library}
-The Kolibri toolkit ships the standard library. The current state of the
-library already covers many needs. Section~\ref{sec:Examples} shows that it is
-possible to create stunning projects based on it. But such a library has
-enormous expansion capabilities. Chapter~\ref{sec:Future Features} describes
-the possibilities of extending the library.
+The Kolibri toolkit comes with a standard library that already covers many
+needs. Section~\ref{sec:Examples} shows that it is possible to create stunning
+projects based on it. However, such a library has enormous expansion
+capabilities. Chapter~\ref{sec:Future Features} describes the possibilities of
+extending the library.
 
 \subsection{Who is the Toolkit for?}
 \label{sub:Who is the Toolkit for?}
-The toolkit is for anyone who wants to implement sustainable web applications 
-and does not want to be exposed to the hell of dependencies and dangers
-of vulnerabilities in various packages. It is an open-source project that
-anyone can use. The basic idea is that you copy the toolkit into your project.
-Then you can use the things you need. Of course, everyone is free to adapt
-things for their purposes or to add new implementations.
+The toolkit is intended for people who want to develop robust web applications
+without the burdensome dependencies and vulnerabilities associated with
+multiple packages. As an open-source project, it is available for anyone to
+utilize. The fundamental concept entails copying the toolkit into your project,
+allowing you to utilize the necessary components. Naturally, users have the
+freedom to modify elements to suit their specific needs or contribute new
+implementations as desired.
