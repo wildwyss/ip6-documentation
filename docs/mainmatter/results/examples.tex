@@ -14,9 +14,12 @@ Sequence~\cite[p.~36]{math_diskrete_2011}.
 %S36
 \begin{lstlisting}[
   style=ES6, 
-  caption=Fibonacci Sequence,
+  caption=FibonacciSequence implementation,
   label={lst:fibonacci_sequence}
   ]
+const start   = Pair(0)(1);
+const whileFn =  _ => true;
+const incrFn  = ([fst, snd]) => Pair(snd)(fst + snd);
 /**
  * Generates the Fibonacci sequence.
  *
@@ -30,10 +33,8 @@ Sequence~\cite[p.~36]{math_diskrete_2011}.
  * console.log(...result);
  * // => Logs '1, 1, 2, 3, 5, 8, 13, 21'
  */
-const FibonacciSequence = map(
-  ([_, snd]) => snd)
-  (Sequence(Pair(0)(1), _ => true, ([fst, snd])=> Pair(snd)(fst + snd))
-);
+const FibonacciSequence = 
+                    map(pair => pair(snd))(Sequence(start, whileFn, incrFn));
 \end{lstlisting}
 The |FibonacciSequence| generates the Fibonacci sequence using the
 |Sequence| and |Pair| constructor. The |map| function extracts the current Fibonacci number
@@ -244,7 +245,7 @@ This example shows a mathematical use case, the numberical differentiation using
 
 \begin{lstlisting}[
   style=ES6, 
-  caption=Differentiation using Sequences,
+  caption=Differentiation using sequences,
   label={lst:diff_sequences}
   ]
 const halve   = x => x / 2;
@@ -383,7 +384,7 @@ expressive JSDoc.
 
 \begin{lstlisting}[
   style=ES6, 
-  caption=tic tac toe types,
+  caption=Tic tac toe types,
   label={lst:tictactoe_types}
   ]
 /**
@@ -477,7 +478,7 @@ Listing~\ref{lst:tictactoe_gametree} shows the functions for building a game
 tree.
 \begin{lstlisting}[
   style=ES6, 
-  caption=tic tac toe game tree,
+  caption=Tic tac toe game tree,
   label={lst:tictactoe_gametree}
   ]
 /**
@@ -507,7 +508,7 @@ Listing~\ref{lst:tictactoe_move} includes the |moves| function. This function
 calculates all possible moves for a player based on the current playing field.
 \begin{lstlisting}[
   style=ES6, 
-  caption=tic tac toe move function,
+  caption=Tic tac toe move function,
   label={lst:tictactoe_move}
   ]
 /**
@@ -555,7 +556,7 @@ defines this function called |staticEval|.
 
 \begin{lstlisting}[
   style=ES6, 
-  caption=tic tac toe hasWon function,
+  caption=Tic tac toe hasWon function,
   label={lst:tictactoe_hasWon}
   ]
 /**
@@ -596,7 +597,7 @@ const hasWon = board => player => {
  * @param { Board } board
  * @returns Number
  */
-const staticEval = board => {
+const staticEval = board => {*'\label{line:ttt_static_eval}'*
   if (hasWon (board) (Computer)) return 1.0;
   if (hasWon (board) (Human))    return -1.0;
   return 0.0;
@@ -612,7 +613,7 @@ which are the best moves.
 
 \begin{lstlisting}[
   style=ES6, 
-  caption=tic tac toe minimax algorithmus,
+  caption=Tic tac toe minimax algorithmus,
   label={lst:tictactoe_minimax}
   ]
 /**
@@ -645,7 +646,7 @@ Since subtrees are sequences, |nil| replaces them when pruning.
 
 \begin{lstlisting}[
   style=ES6, 
-  caption=tic tac toe prune function,
+  caption=Tic tac toe prune function,
   label={lst:tictactoe_prune}
   ]
 /**
@@ -673,7 +674,7 @@ Based on these calculations the algorithm chooses the next move.
 
 \begin{lstlisting}[
   style=ES6, 
-  caption=tic tac toe - evaluating functions,
+  caption=Tic tac toe - evaluating functions,
   label={lst:tictactoe_eval}
   ]
 /**
@@ -740,7 +741,7 @@ algorithm.\\
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{./mainmatter/pictures/tic-tac-toe-field.jpg}
+    \includegraphics[width=0.4\textwidth]{./mainmatter/pictures/tic-tac-toe-field.jpg}
     \caption{A website using the algorithm}
     \label{img:ttt_playfield}
 \end{figure}
