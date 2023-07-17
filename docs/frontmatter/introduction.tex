@@ -107,8 +107,33 @@ bugs occurring in edge cases, such as the empty sequence.
 
 \section*{Methodology} % (fold)
 \label{sec:Methodology}
-
+\subsection*{Designing an Extensible Library} % (fold)
+\label{sub:introd_Decorating iterables}
+Operations for sequences are static functions that do not belong to an object
+or a class. This means they are not accessible using the dot on a sequence but
+are imported using ES6 modules, which brings several advantages:
+\begin{enumerate}
+  \item The Sequence library is easily extensible. Without changing existing
+    code, anyone can add new operations.
+  \item All operations work with any iterable.
+  \item The implementations can be divided into different modules.
+\end{enumerate}
+% subsection Decorating iterables (end)
 % section Methodology (end)
+Passing an iterable to such an operation does not change the underlying
+iterable but only decorates it! The operation returns a new sequence with the
+same API, which calls when consumed, the underlying iterable.
+
+\subsection*{Ensure the Usefulness of the Library} % (fold)
+\label{sub:User tests}
+% subsection User tests (end)
+User tests conducted with several developers ensure the usefulness of the
+functional standard library. Test users solve various tasks with the help of
+the functional standard library and complete a questionnaire about them. The
+questionnaire aims to determine whether the users find the library easy to use
+and to receive general suggestions for improvement—findings from this flow back
+into the implementation. Questions with text answers allow capturing the
+general mood of the participants.
 
 \section*{Reader Guidance} % (fold)
 \label{sec:Reader Guidance}
