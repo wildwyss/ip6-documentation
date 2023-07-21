@@ -4,8 +4,8 @@
 \section*{Problem Statement} % (fold)
 \label{sec:Problem Statement}
 JavaScript already includes some concepts known from functional programming.
-For example, it supports higher-order functions or auto-currying of function
-parameters.\\
+For example, it supports higher-order functions, arrow functions or
+auto-currying of function parameters.\\
 However, it also lacks many concepts included in languages as Haskell. Based on
 the previously mentioned language characteristics, it is possible to recreate some of
 these missing features. The Haskell standard library, for example, has a wide range of
@@ -46,7 +46,21 @@ mainly consists of two parts:\\
     evaluate it. These operations work on sequences and any data structure that
     implements the iteration protocols! Thus, among other things, JavaScript
     arrays can also be lazily evaluated and transformed using the Sequence
-    library.
+    library.\\
+    Operations performed on sequences are static functions that do not belong
+    to an object or a class. This means they are not accessible using the dot
+    on a sequence but are imported using ES6 modules, which brings several
+    advantages:
+      \begin{enumerate}
+        \item The Sequence library is easily extensible. Without changing existing
+          code, anyone can add new operations.
+        \item All operations work with any iterable.
+        \item The implementations can be divided into different modules.
+      \end{enumerate}
+  Passing an iterable to such an operation does not change the underlying
+  iterable but only decorates it! The operation returns a new sequence with the
+  same API, which calls when consumed, the underlying iterable.
+
 \item \textbf{Monadic API in JavaScript:} The knowledge gained from the
   Sequence library enabled adapting the type class "monad" from Haskell into
   JavaScript. This type class is defined as JSDoc, which allows writing generic
@@ -102,28 +116,22 @@ application that uses this algorithm:
 
 \section*{Methodical Elaboration} % (fold)
 \label{sec:intro_methoical_elaboration}
-This bachelor thesis is not a pure implementation task. It was unclear how much
-could ultimately be achieved. Therefore, we chose an iterative approach to solve
-the problems. Regular meetings with the project supervisor ensured the progress
-of the project. At the end of each meeting, we discussed the next iteration,
-and the direction was slightly adjusted based on the prior results.
-
 To achieve essential goals we followed certain concepts and methods:
 \begin{enumerate}
-  \item \textbf{Designing an extensible library:} Operations for sequences are
-    static functions that do not belong to an object or a class. This means
-    they are not accessible using the dot on a sequence but are imported using
-    ES6 modules, which brings several advantages:
-      \begin{enumerate}
-        \item The Sequence library is easily extensible. Without changing existing
-          code, anyone can add new operations.
-        \item All operations work with any iterable.
-        \item The implementations can be divided into different modules.
-      \end{enumerate}
-  Passing an iterable to such an operation does not change the underlying
-  iterable but only decorates it! The operation returns a new sequence with the
-  same API, which calls when consumed, the underlying iterable.
-  \item  \textbf{Ensuring the usefulness of the library:} User tests conducted
+  \item \textbf{Iterative approach}: This bachelor thesis is not a pure
+    implementation task. It was unclear how much could ultimately be achieved.
+    Therefore, we chose an iterative approach to solve the problems. Regular
+    meetings with the project supervisor ensured the progress of the project.
+    At the end of each meeting, we discussed the next iteration, and the
+    direction was slightly adjusted based on the prior results.
+  \item \textbf{Test-driven development:} Operations for the sequence are very
+    well testable since they are independent of state. Therefore, before
+    implementing a new operation, we wrote a test for the main branch of
+    functionality to ensure correct behavior. Before we implemented the next
+    sub-branch, we again wrote a test. Thus, as the functionality grows, so
+    does the test coverage. This not only ensures code quality but also makes
+    refactorings safer.
+    \item  \textbf{User tests:} User tests conducted
     with several developers ensure the usefulness of the functional standard
     library. Test users solve various tasks with the help of the functional
     standard library and complete a questionnaire about them. The questionnaire
