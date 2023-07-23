@@ -1,13 +1,11 @@
 \chapter{Iterators in JavaScript} % (fold)
 \label{chap:Iterators in JavaScript}
-This section explains the concept of iterable and iterator objects and points
-out features and characteristics of it. |Sequence| is one implementation of
-an iterable and represents the core functionality of the implementations
-related to the functional standard library. We call these functionalities in
-the thesis Sequence library analogous to the package in the code
-base~\cite{wildwyss_kolibri}. The following
-discussion covers challenges and solutions for creating a robust and
-user-friendly API.
+This chapter explains the concept of iterable and iterator objects and points
+out features and characteristics of it. The sequence is an implementation of an
+iterable. There is a constructor with the same name and a JSDoc type for the
+sequence. Many operations can process a sequence. Together with the sequence,
+they form the "Sequence library". The following discussion covers challenges
+and solutions for creating a robust and user-friendly API.
 
 \section{Iterables in General}
 \label{sec:Iterables in General}
@@ -16,26 +14,23 @@ access to elements of a data structure. It does not matter if the iterator
 accesses a data structure fully kept in memory (like arrays) or if it computes
 the elements lazily when queried. In both ways, a function call on the iterator
 retrieves the next value. Iterators are an essential part of this work.
-Therefore, it is crucial to understand the fundamentals of this concept. The
-following sections cover this topic in depth.
+Therefore, it is crucial to understand the fundamentals of this concept.
 
 \subsection{Iterable Data Structures in JavaScript}
 \label{sub:Iterable data structures in JS}
 JavaScript knows two protocols which define how an object can be used for
-iteration. An iterable object, also known as an iterable, represents a
-collection of data. By calling a function on the iterator, we can access the
-next element in the collection, moving in a single direction. Iterators can be
-either finite or infinite. Once a finite iterator reaches its end, it is
-considered "used up" - subsequent calls to such an exhausted iterator won't
-produce any meaningful results. Below, we will provide a more detailed
-description of these two protocols.
+iteration - the iterable protocol and the iterator
+protocol~\cite{mdn_protocols} object, also known as an iterable, represents a
+collection of values. A function call on its iterator, gives access to the next
+element in the collection - there is no way to access a previous value. Once an
+iterator reaches its end, it is considered "used up" - subsequent calls to such
+an exhausted iterator won't produce any meaningful results.
 
 \subsubsection{The Iterable Protocol}
 \label{subsub:The Iterable Protocol}
-
-In JavaScript, an object is considered an iterable if it contains a property
+In JavaScript, an object is considered as iterable if it contains a property
 called |[Symbol.iterator]|. This property signifies that the object is of type
-|Iterable<T>|. When we invoke the |[Symbol.iterator]| property, it creates an
+|Iterable<T>|. Invoking the |[Symbol.iterator]| property, creates an
 iterator that follows the iterator protocol explained in the following section.
 Objects in JavaScript that implement this property can be utilized with
 destructuring \footnote{The destructuring assignment syntax is a JavaScript
@@ -63,10 +58,10 @@ defines how and which values are returned when iterating. Each iteration on an
 iterator calls this function. |next| returns an object, which must
 include two properties: |value| and |done|. The property |value|
 contains the current value of the iteration, while |done| represents the
-information on whether the end of the iteration has been reached. The following
+information on whether the end of the iterator has been reached. The following
 code \ref{lst:iterator_protocol} shows a simple implementation of it. Each call
-on |next| returns an object with the |value 1|. |done| is always |false|, so
-the iteration never ends. 
+on |next| returns an object with the |value 1|. |done| is always |false| -
+hence the iterator never ends. 
 
 \begin{lstlisting}[
   style=ES6, caption=Iterator protocol,
@@ -82,46 +77,37 @@ the iteration never ends.
 By combining these two protocols, the result could look like listing
 \ref{lst:protocols}. The constructor |InfiniteOnesIterable| on
 line~\ref{line:ctor_infiniteones} wraps the two
-previously defined implementations. This constructor therefore returns iterable
-objects. Since the return value is always one(|1|), this is an iterable of
-type |Iterable<Number>|.
+previously defined implementations. This constructor therefore constructs
+iterable objects. Since the return value is a number, this is an
+iterable of type |Iterable<Number>|.
 
 \begin{lstlisting}[
   style=ES6, caption=Iterable and iterator protocol,
   label={lst:protocols}
   ]
- const InfiniteOnesIterable = () => {*'\label{line:ctor_infiniteones}'*
-
-  const next = () => {
-    return { done: false, value: 1 };
-  };
+const InfiniteOnesIterable = () => {*'\label{line:ctor_infiniteones}'*
+  const next = () => ({ done: false, value: 1 });
 
   return {
-    [Symbol.iterator]: () => {
-      return { next: next };
-    }
+    [Symbol.iterator]: () => ({ next })
   }
 };
 
 const [one, anotherOne, andOneAgain] = InfiniteOnesIterable();*'\label{line:infiniteones_destructuring}'*
 
-for(one in InfiniteOnesIterable){
-  ...
-  break;
+for (const _one of InfiniteOnesIterable()) { 
+  // hangs forever, since done is always false
 }*'\label{line:infiniteones_forof}'*
-
-
 \end{lstlisting}
 
-Because |InfiniteOnesIterable| adheres to the JS iteration protocols, it is now 
-possible to create iterable objects. Language features like |for..of| and 
-destructuring can process these objects as shown on line~\ref{line:infiniteones_destructuring}
-to~\ref{line:infiniteones_forof}. However, beware of this 
-case. This would lead to an infinite loop because the property |done| never 
-becomes |true|. Therefore, the iteration never ends. We will see examples 
-with non-endless iterables later in this work. 
-For now, the focus here is on the protocols. Therefore, this 
-example is sufficient at this point.
+Because objects created by |InfiniteOnesIterable| adhere to the JS iteration
+protocols, it is possible to use language features like |for..of| and
+destructuring to process these objects as shown on
+line~\ref{line:infiniteones_destructuring} to~\ref{line:infiniteones_forof}.
+However, beware of this case. This would lead to an infinite loop because the
+property |done| never becomes |true|. Therefore, the iteration never ends. This
+work shows finite iterables later. For now, the focus is on the protocols.
+Therefore, this example is sufficient at this point.
 \newline
 Such protocols make it possible to build customized iterables and
 collections. This opens new possibilities. Various programming tasks can have 
@@ -132,9 +118,9 @@ There are already some JavaScript iterables present. Arrays and
 
 \subsection{Types of Iterables}
 \label{sub:Types of Iterables}
-Previously we saw a distinction between iterables and iterators. These abstractions
-also have their types. Listing \ref{lst:iterable_types} shows an excerpt of the
-relevant types.
+JavaScript distinguishes between iterables and iterators. These
+protocols also have their corresponding types. Listing \ref{lst:iterable_types}
+shows an excerpt of them:
 
 \begin{lstlisting}[
   style=ES6, caption=Types of iterables,
@@ -181,20 +167,22 @@ interface IteratorReturnResult<TReturn> {
       values we want to work with.}
 \end{itemize}
 
-In chapter~\ref{subsub:Stateful Decorating}, we will see the reason for this
-nested architecture of the JS iteration protocol.
+Section~\ref{subsub:Stateful Decorating} explains the reason for this nested
+architecture of the JS iteration protocols.
 
 \subsubsection{Closer Look to IteratorReturnResult}
 \label{subsub:Closer look to IteratorReturnResult}
 When iterating an iterable, the returned elements are of type
-|IteratorYieldResult<T>|. The last and all following element of an iterable is of type
-|IteratorReturnResult<TReturn>|. This ensures that |done| is set to |true|, as 
-can be seen on line~\ref{line:iteration_return_result_done} in listing~\ref{lst:iterable_types}.
+|IteratorYieldResult<T>|. Calling the function |next| on an exhausted iterator
+returns an element of type |IteratorReturnResult<TReturn>|. This ensures that
+|done| is set to |true|, as can be seen on
+line~\ref{line:iteration_return_result_done} in
+listing~\ref{lst:iterable_types}.
 
 \subsection{Illustration of the JS Iteration Protocol}
 \label{sub:Illustration of the JS Iteration Protocol}
 Listing~\ref{lst:example_js_iteration_protocol} illustrates the behavior of the
-JS iteration protocol more clearly using a sample scenario. Since array is an
+JS iteration protocols more clearly using a sample scenario. Since array is an
 iterable, we can use it for the following demonstration:
 
 \begin{lstlisting}[
@@ -213,14 +201,14 @@ iterator.next(); // returns { done: true,  value: undefined }
 \end{lstlisting}
 
 On line~\ref{line:illustraion_create_iterator}, invoking |[Symbol.iterator]|
-returns iterator of the iterable |list|. 
+returns the iterator of the iterable |list|. 
 After that, we call |next| four times directly on the iterator. Since the
 iterable contains only two elements, the third and fourth call on |next|
 returns an object of type |IteratorReturnResult<TReturn>|. Thereby, |done| is
 |true| and |value| is |undefined|. \\
-By using |for...of| and destructuring, an iterable would stop iterating at this
-point. This means an |for...of| loop runs until the property |done| is set to
-|true|.
+By using |for...of| and destructuring, an iterable would stop iterating after
+the second call. This means an |for...of| loop runs until the property |done|
+is set to |true|.
 
 \section{Sequence: An iterable Series of Values}
 \label{sec:Sequence: A Series of Values}
@@ -239,7 +227,7 @@ What distinguishes the object generated by the sequence from the conventional
 list is that a sequence generates its values when they are requested.
 Therefore, it needs almost no memory. At the same time, you have the impression
 that you are dealing with a vast amount of data. So the constructor |Sequence|
-emerged, which generates such connected data.
+emerged, which generates such a series of data.
 
 \subsection{Components of a Sequence}
 \label{sub:Components of a Sequence}
@@ -250,14 +238,14 @@ Defining a sequence requires specifying three essential points:
     further values} 
   \item{A function to calculate the next value based on its predecessor} 
 \end{enumerate}
-These three elements define the sequence. Listing \ref{lst:sequence} on
-line~\ref{line:seq_args} shows the passing of these three elements as arguments
-to the constructor. To keep the focus on the core elements of the sequence,
-some functionality in listing \ref{lst:sequence} is omitted and discussed later.
-The |next| function, explained section~\ref{subsub:The Iterator Protocol}, is on
+Listing \ref{lst:sequence} on line~\ref{line:seq_args} shows the passing of
+these three elements as arguments to the constructor. To keep the focus on the
+core elements of the sequence, some functionality in listing \ref{lst:sequence}
+is omitted and discussed later. The |next| function, explained by
+section~\ref{subsub:The Iterator Protocol}, is on
 lines~\ref{line:start_protocol}~-~\ref{line:end_protocol}. It contains the
 logic to return the next value in an iteration. First, it uses |whileFunction|
-to check if the Sequence has finished. If this is not the case, the
+to check if the sequence has finished. If this is not the case, the
 |incrementFunction| calculates the next element, which afterward will be
 returned.
 
@@ -286,7 +274,7 @@ const Sequence = (start, whileFunction, incrementFunction) => {*'\label{line:seq
     return { next };
   };
 
-  return ... 
+  return  /* omitted */;
 };
 \end{lstlisting}
 
@@ -311,8 +299,8 @@ for (const elem of seq) {
 // => Logs '0, 2, 4, 6, 8' *'\label{line:demo_output}'*
 \end{lstlisting}
 
-The |for..of| loop iterates over the sequence until |done| is true. Meanwhile,
-|console.log| writes the elements to the console.
+The |for..of| loop iterates over the sequence until |done| becomes |true|.
+Meanwhile, |console.log| writes the elements to the console.
 Line~\ref{line:demo_output} shows the output produced.
 
 
@@ -320,13 +308,13 @@ Line~\ref{line:demo_output} shows the output produced.
 \label{sub:Range - A Real-World Example}
 When considering sequences, a common requirement is to generate a series of
 numbers, often with a specified starting point, an end value, and adjustable
-increments. This is a classic definition of implementing a Range.
+increments. This is a classic definition of implementing a range.
 Ranges are built into many programming languages such as
-Haskell~\cite{haskell_list},
-Python~\cite{python_range}
-or Kotlin~\cite{kotlin_ranges}. Therefore, we also implemented a Range using the Sequence constructor. 
+Haskell~\cite{haskell_list}, Python~\cite{python_range} or
+Kotlin~\cite{kotlin_ranges}. Therefore, we also implemented a range using the
+sequence constructor. 
 
-Listing~\ref{lst:range_haskell} shows the construction of a Range in Haskell.
+Listing~\ref{lst:range_haskell} shows the construction of a range in Haskell.
 \begin{lstlisting}[
   style=Haskell,
   caption=Range in Haskell,
@@ -339,7 +327,7 @@ ghci> r = [1..] -- contains an infinite range
 \end{lstlisting}
 
 Listing~\ref{lst:kolibri_range} demonstrates different ways to initialize a
-Range of the Sequence library.
+range using the Sequence library.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -354,29 +342,27 @@ Range of the Sequence library.
 \subsubsection{What can a Range be used for?}
 \label{subsub:What can a Range be used for?}
 Ranges offer efficient processing of sequences of almost any size, consuming
-minimal memory and computational resources. As a result, they serve as
-excellent foundational components for larger structures. Due to their ability
-to handle number sequences, ranges have versatile applications. They can be
-utilized for lazily generating numbers or executing a specific action several
-times.
+minimal memory resources. As a result, they serve as excellent foundational
+components for larger structures. They can be utilized for lazily generating
+numbers or executing a specific action several times.
 
 \subsubsection{The Boundaries}
 \label{subsub:The Boundaries}
-Built-in ranges are commonly available in various programming languages, making
-their usage in the Kolibri toolkit intuitive. However, it is important to note
-that not all languages handle range boundaries similarly. For instance, Kotlin
-and Haskell consider both boundaries inclusive. Thus, a range from 1 to 3 in
-these languages would include the elements 1, 2, and 3. On the other hand, in
-Python, only the lower limit is inclusive. Therefore, the boundaries must be
-set as 1 and 4 to create an equivalent range in Python.
-Since it seems more intuitive to have both borders inclusive, the range for
-Kolibri toolkit works accordingly.
+Built-in ranges are commonly available in various programming languages - the
+concept of ranges is therefore well-known. However, it is worth noting that not
+all languages handle range boundaries similarly. For instance, Kotlin and
+Haskell consider both boundaries inclusive. Thus, a range from 1 to 3 in these
+languages would include the elements 1, 2, and 3. On the other hand, in Python,
+only the lower limit is inclusive. Therefore, the boundaries must be set as 1
+and 4 to create an equivalent range in Python. Since it seems more intuitive to
+have both borders inclusive, the range for Kolibri toolkit works accordingly.
 
 \subsubsection{Implementation}
 \label{subsub:Implementation}
-A Range uses a Sequence under the hood. Helper functions analyze the parameters
-and, if necessary, reorder them to return a desired Sequence. Listing~\ref{lst:impl_range} shows the
-main part of the implementation of the Range. 
+A range uses a sequence under the hood. Helper functions analyze the passed
+parameters and, if necessary, reorder them to return the desired sequence.
+Listing~\ref{lst:impl_range} shows the main part of the implementation of the
+range:
 
 \begin{lstlisting}[
   style=ES6, 
@@ -403,23 +389,25 @@ const Range = (fstBoundary, sndBoundary = 0, step = 1) => {
 };
 \end{lstlisting}
 
-In the following, we have a closer look at the features of a Range. By doing
-so, we cover the functions |normalize| and |hasReachedEnd| to explain them 
-in more detail.
+While closely examining the features of a range, we will also cover the functions
+|normalize| and |hasReachedEnd| to explain them in more detail.
 
 \subsubsection{Features}
 \label{subsub:Features}
 
 \begin{itemize}
-  \item{\textbf{Parametrization:} The range can be initialized with 1-3 parameters. The parameters specify the lower limit, the upper limit and the
-  step size. If not all parameters are set the range uses suitable default values.}
-  \item{\textbf{Interchangeable boundaries:} Interchangeable lower and upper limits when creating a new range}
-  \item{\textbf{Negative boundaries and step:} The boundaries and the step size of the range can be positive or negative integers.}
+  \item \textbf{Parametrization:} The range takes 1–3 parameters. The
+    parameters specify the lower limit, the upper limit, and the step size. If
+  not all parameters are set, the range uses suitable default values.
+\item \textbf{Interchangeable boundaries:} The order of the lower and the upper
+  limit is Interchangeable when creating a new range.
+\item \textbf{Negative boundaries and step:} The boundaries and the step size
+  of the range can be positive or negative integers.
 \end{itemize}
 
 \subsubsection{Normalization of the Boundaries}
 \label{subsub:Normalization of the Boundaries}
-To ensure flexibility, the Range provides the interchangeability of boundaries
+To ensure flexibility, the range provides the interchangeability of boundaries
 and the option for positive or negative step values. Initially, the range
 boundaries are normalized based on the step value. This normalization
 determines which boundary will contain the first generated number and which
@@ -435,9 +423,9 @@ The following figure~\ref{fig:norm-flowchart} explains the process in detail.
 
 \subsubsection{The End of a Range}
 \label{subsub:The End of a Range}
-The |hasReachedEnd| function detects the end of the Range and defines the
-|untilFunction| of the underlying Sequence. Listing~\ref{lst:impl_hasReachedEnd}
-shows the implementation of the function. 
+The |hasReachedEnd| function detects the end of the range and defines the
+|untilFunction| of the underlying sequence. Listing~\ref{lst:impl_hasReachedEnd}
+shows the implementation of the function:
 
 \begin{lstlisting}[
   style=ES6, 
@@ -447,41 +435,38 @@ shows the implementation of the function.
 /**
  * Determines if the end of the range is reached.
  * @param   { Boolean } stepIsNegative
- * @param   { Number }  next - the current element of the Range
- * @param   { Number }  end  - max value of the Range
+ * @param   { Number }  next - the current element of the range
+ * @param   { Number }  end  - the last value of the range
  * @returns { boolean }
  */
 const hasReachedEnd = (stepIsNegative, next, end) =>
-    stepIsNegative ? next >= end : next <= end;
+    stepIsNegative ? next < end : next > end;
 \end{lstlisting}
 
 The function must be able to distinguish between two different cases:
 
 \begin{itemize}
-  \item{If the step size is a negative, the Range counts from top to bottom:
-    The Range reached its end as soon as next is greater or equals than right.}
-  \item{If the step size is positive, the Range counts from bottom to top: The
-  Range reached its end as soon as next is smaller or equals than the value right.}
+  \item If the step size is a negative, the range counts from top to bottom:
+    The range reached its end as soon as next is smaller than right.
+  \item If the step size is positive, the range counts from bottom to top: The
+  range reached its end as soon as next is larger than right.
 \end{itemize}
 
 \subsubsection{Some Restrictions of Using a Range}
 \label{subsub:Some Restrictions of Using a Range}
-We defined some Range behaviors by contract rather than intercepting or
-addressing them in implementation. Therefore, we defined the following
-restrictions:
-
+When using the range, one has to pay attention to the contract:
 \begin{itemize}
-  \item{End value may not be reached exactly, but will never be exceeded.}
-  \item{Zero step size leads to infinite loops, returning always the same values.}
-  \item{Only values that behave correctly with respect to addition and size
-    comparison may be passed as arguments.}
+\item End value may not be reached exactly, but will never be exceeded.
+  \item Zero step size leads to infinite loops, returning always the same values.
+  \item Only values that behave correctly with respect to addition and size
+    comparison may be passed as arguments.
 \end{itemize}
 
 
 \subsubsection{Using a Range}
 \label{subsub:Using a Range}
 Following listing~\ref{lst:range_examples} demonstrates various ways to
-construct a Range.
+construct a range.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -511,27 +496,16 @@ for (const value of Range(0,-2,-1)) { console.log(value); }
 // => Logs '0, -1, -1'
 \end{lstlisting}
 
-\subsection{Conclusion}
-\label{sub:iterable_protocol_Conclusion}
-Now, we discussed the ability to generate arbitrary sequences of data. However, 
-just creation is often not enough as there is a need to manipulate the data or 
-introduce additional levels of abstraction. In the upcoming chapter, we will 
-delve into processing such Sequences.
-
 \section{Iterables Everywhere}
 \label{sec:Iterables Everywhere}
-This Section concerns the implications of the previous findings for other
-data structures. Some of them are already implemented in the Kolibri Web UI
-Toolkit~\cite{kolibri}. The Pair example demonstrates the advantages of 
-iterating existing implementations.
-
+The JS iteration protocols are suitable for a wide variety of data structures.
+With the sequence library defining many operations for iterables, it makes
+sense to make more objects iterable. For example, the Kolibri Web UI toolkit
+defines the immutable data structure "pair", for which there are noteworthy
+applications if it is iterable. 
 \subsection{Making immutable Data Structures iterable}
 \label{sub:Making immutable Data Structures iterable}
-Among other immutable data structures, the Kolibri Web UI Toolkit provides an
-implementation for |Pair|. In the following, we will examine its
-implementation. Listing~\ref{lst:pair_non_iterable} shows how to create and use
-a Pair.
-
+Listing~\ref{lst:pair_non_iterable} defines the type pair and shows its usage:
 \begin{lstlisting}[
   style=ES6, 
   caption=Immutable Pair,
@@ -556,20 +530,21 @@ console.log(one + " " + two);
 // => Logs '1 2'
 \end{lstlisting}
 
-The only way to make a |Pair| immutable is to build it using functions. The type 
+The only way to make a pair immutable is to build it using functions. The type 
 signature on line~\ref{line:start_pair_type}~-~\ref{line:end_pair_type} shows 
-that the first two arguments are arbitrary values. |Pair| stores these two values
-in its closure scope. 
+that the first two arguments are arbitrary values. Pair stores these two values
+in its closure scope, the only scope in JavaScript which can not be changed in
+any way from the outside.
 Selector functions named |fst| on line~\ref{line:fst_pair} and |snd| on 
-line~\ref{line:snd_pair} grant access to these values. However, |Pair| offers
+line~\ref{line:snd_pair} grant access to these values. However, pair offers
 no way to modify these values. Listing~\ref{lst:pair_non_iterable} shows that
-handling a |Pair| can be tedious. It would be great to use the built-in
-JavaScript language features to access the content of a |Pair|. 
+handling a pair can be tedious. It would be great to use the built-in
+JavaScript language features to access the content of a pair.
 
 \subsubsection{Iterable Pair}
 \label{subsub:Iterable Pair}
 Listing~\ref{lst:pair_iterable} demonstrates the implementation of an iterable 
-|Pair|. Still, |Pair| operates only with functions. However, it additionally defines the
+pair. Still, pair operates only with functions. However, it additionally defines the
 |[Symbol.iterator]| property:
 
 \begin{lstlisting}[
@@ -591,15 +566,15 @@ const Pair = x => y => {
 \end{lstlisting}
 
 Line~\ref{line:pair_symbol_iterator} shows that 
-this property defines a function, which only returns the |[Symbol.iterator]| 
-property of array. The array stores the values of the |Pair|. With that, |Pair|
-is an Iterable. Therefore, all iterable functions are now available to |Pair|.
-Listing~\ref{lst:handling_pair_iterable} shows the usage of the iterable |Pair|. 
-Line~\ref{line:pair_destructuring} shows the deconstruction of a |Pair| in the same way as an array. 
-This access option is more convenient than in Listing~\ref{lst:pair_non_iterable}. 
-Line~\ref{line:show_pair} demonstrates the use of operations from the Sequence 
-library. |show| converts an iterable into a string, analogous to how |toString|
-works.
+this property defines a function, which only returns the |[Symbol.iterator]|
+property of array. The array stores the values of the pair. With that, pairs
+are now iterable. Listing~\ref{lst:handling_pair_iterable} shows the usage of
+such an iterable pair. Line~\ref{line:pair_destructuring} shows the
+deconstruction of a pair in the same way as an array. This access option is
+more convenient than in listing~\ref{lst:pair_non_iterable}.
+Line~\ref{line:show_pair} demonstrates the usage of operations from the Sequence
+library alongside a pair. |show| converts an iterable into a string, analogous
+to how |toString| works.
 
 \begin{lstlisting}[
   style=ES6, 
