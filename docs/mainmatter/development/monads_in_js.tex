@@ -1,5 +1,5 @@
-\section{Monads in JavaScript} % (fold)
-\label{sec:Monads in JavaScript}
+\chapter{Monads in JavaScript} % (fold)
+\label{chap:Monads in JavaScript}
 The first part of this section describes what contexts in Haskell are and how
 Haskell wraps values in such contexts. "Maybe" serves as an example of this.
 Implementing this example using JavaScript shows that such contexts are also
@@ -10,9 +10,8 @@ this concept exactly from Haskell and describes acceptable workarounds. Thus, it
 is also possible to transform values in a context in JavaScript. The
 last part shows what the monadic operations of the sequence look like.
 
-\subsection{Wrapping Values in a Context} % (fold)
-\label{sub:Wrapping values in a context}
-
+\section{Wrapping Values in a Context} % (fold)
+\label{sec:Wrapping values in a context}
 In Haskell, you often work with values wrapped in a particular context. This
 context can be, for example, a list. Nevertheless, this context can also be
 another data structure, for instance, the polymorphic type |Maybe|. \\
@@ -64,11 +63,11 @@ printHead []
 \end{lstlisting}
 
 The function |printHead| needs to deal explicitly with the case when the passed
-ist empty. When returning just |null|, the user has to explicitly deal with the
+is empty. When returning just |null|, the user has to explicitly deal with the
 case where there is no first element. This leads to improved safety.
 
-\subsubsection{Doing the Same in JavaScript} % (fold)
-\label{subsub:Doing the same in JavaScript}
+\subsection{Doing the Same in JavaScript} % (fold)
+\label{sub:Doing the same in JavaScript}
 Listing~\ref{lst:maybe_js} defines the same type in JavaScript:
 \begin{lstlisting}[
   style=ES6,
@@ -119,10 +118,10 @@ lines~\ref{line:js_safeHead1} and following evaluate the result of |safeHead|.
 % subsubsection Doing the same in JavaScript (end)
 % subsection Wrapping values in a context (end)
 
-\subsection{Working with Values in a Context} % (fold)
-\label{sub:Working with values in a context}
-\subsubsection{Introducing fmap} % (fold)
-\label{subsub:Introducing fmap}
+\section{Working with Values in a Context} % (fold)
+\label{sec:Working with values in a context}
+\subsection{Introducing fmap} % (fold)
+\label{sub:Introducing fmap}
 The example with |Maybe| shows how values work in a context. Over time,
 however, it can become tedious to keep making this distinction whether
 it has a value. Therefore, Haskell offers a concept of working with values in a
@@ -159,8 +158,8 @@ Applying |fmap| to a list has the same result as applying |map| to a list.
 Therefore, |fmap| is just a way to "map values".
 
 % subsubsection Introducing fmap (end)
-\subsubsection{Making a Context Monadic} % (fold)
-\label{subsub:Making a Context Monadic}
+\subsection{Making a Context Monadic} % (fold)
+\label{sub:Making a Context Monadic}
 Haskell defines many other functions analogous to |fmap| to interact with
 values in a context. So-called type classes define these functions. In his book
 "Programming in Haskell" Hutton describes type-classes like
@@ -231,15 +230,15 @@ which is described in the Section~\ref{sec:Query different Data Structures}.
 % subsubsection Why using these constraints? (end)
 % subsection Working with values in a context (end)
 
-\subsection{Monads in JavaScript} % (fold)
-\label{sub:Monads in JavaScript}
+\section{Monads in JavaScript} % (fold)
+\label{sec:Monads in JavaScript}
 Since monads are so good at handling values in a context, this concept is also
 interesting for JavaScript. However, JavaScript has a weaker type system than
 Haskell. Therefore, two important concepts can not be transferred to
 JavaScript: 
 \begin{enumerate}
   \item In Haskell, it is possible to force the type hierarchy hinted in
-    Section~\ref{subsub:Making a Context Monadic}.
+    Section~\ref{sub:Making a Context Monadic}.
   \item Haskell can use its type system to determine a specific implementation
     for a function. The Listing~\ref{lst:hs_fn_body} shows the binding of the
     function body to the name using the example of |fmap|:
@@ -269,8 +268,8 @@ different approach to these two problems is needed:
 Section~\ref{sub:Using JSDoc to type monads} describes these workarounds in
 detail.
 
-\subsubsection{Which Operations fit JavaScript?} % (fold)
-\label{subsub:Which operations fit JavaScript?}
+\subsection{Which Operations fit JavaScript?} % (fold)
+\label{sub:Which operations fit JavaScript?}
 Since JavaScript works quite differently than Haskell, not all operations are
 equally suitable to adopt. \\
 The |MonadType| specifies the following operations:
@@ -383,7 +382,7 @@ limitations, JSDoc can model a monad pretty well.
 \subsubsection{The MonadType} % (fold)
 \label{subsub:The MonadType}
 The |Monadtype| combines all the operations described in
-Section~\ref{subsub:Which operations fit JavaScript?} into a single JSDoc type.
+Section~\ref{sub:Which operations fit JavaScript?} into a single JSDoc type.
 It serves as a structural interface that functions can use to describe their
 arguments or return values.
 

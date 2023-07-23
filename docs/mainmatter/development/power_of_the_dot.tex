@@ -1,5 +1,5 @@
-\section{The Power of the Dot} % (fold)
-\label{sec:The Power of the Dot}
+\chapter{The Power of the Dot} % (fold)
+\label{chap:The Power of the Dot}
 In object-oriented languages, the receiver of an operation usually precedes the
 dot. As described in Section 2, this has some downsides. However, it also
 brings advantages: The IDE can help you find the correct method because the
@@ -9,8 +9,8 @@ Dot"]{frege_goodness} \\ This chapter shows how one can exploit the module
 system of JavaScript to get similar suggestions from the IDE, even when not
 working with objects.
 
-\subsection{The JavaScript Module System} % (fold)
-\label{sub:The JavaScript Module System}
+\section{The JavaScript Module System} % (fold)
+\label{sec:The JavaScript Module System}
 
 Nowadays, when JavaScript programs are increasingly complex, it makes sense to
 structure the code better. Modules are a great way to do this - they define
@@ -99,9 +99,12 @@ module names as Listing~\ref{lst:destr_named_import} shows:
   label={lst:destr_named_import}
 ]
 import *'\colorbox{code-highlight}{* as \_}'* from "../src/sequence/sequence.js" 
-const { Sequence } = *'\colorbox{code-highlight}{\_}'*; *'\label{line:destr_named_import1}'*
+const { Sequence, show } = *'\colorbox{code-highlight}{\_}'*; *'\label{line:destr_named_import1}'*
 
 const seq = Sequence(0, i => i < 5, i => i + 1); *'\label{line:destr_named_import3}'*
+
+console.log(show(seq));
+// => Logs '[0,1,2,3,4]'
 \end{lstlisting}
 
 The statement on line~\ref{line:destr_named_import1} destructures the named
@@ -110,8 +113,8 @@ typically!
 
 
 % subsubsection Named Imports (end)
-\subsubsection{The Namespace object pattern} % (fold)
-\label{subsub:The Namespace Object Pattern}
+\subsection{The Namespace Object Pattern} % (fold)
+\label{sub:The Namespace Object Pattern}
 The previously described approach with named imports is great for
 functionalities that are only loosely related. What do you do if you want to
 define modules that share a common interface with other modules? Good examples
