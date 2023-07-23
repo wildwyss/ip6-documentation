@@ -70,7 +70,7 @@ evaluates |5| elements.
 % subsubsection Conventions (end)
 \subsection{Constructors} % (fold)
 \label{sub:api_Constructors}
-A constructor is anything that builds a |Sequence| without depending on another
+A constructor is anything that creates a sequence without depending on another
 one. So they serve as an entry point to the Sequence library. Some of these
 constructors create a specific series of values, including, for example, the
 |PrimeNumberSequence| which yields the infinite Sequence of all prime
@@ -78,7 +78,7 @@ numbers.\\
 Table~\ref{tab:api_ctors} gives an overview of all available constructors. Code
 examples and more information about the constructors deliver the
 appendices~\ref{sub:appendix_constructors} and
-\ref{sub:appendix_special_constructors}.
+\ref{sub:appendix_generators}.
 
 \begin{table}[H]
   \centering
@@ -164,7 +164,7 @@ const mySequence = _.take(5)( *'\label{line:api_pipe1}'*
 console.log(...mySequence);
 // => Logs '52, 56, 60, 64, 68'
 
-const mySequence2 = _.pipe(*'\label{line:api_pipe3}'*
+const mySequence2 = _.pipe(
   _.rejectAll(x => x % 2 === 1),
   _.map(x => 2 * x),
   _.retainAll(x => x > 50),
@@ -272,7 +272,7 @@ console.log(seqPrototype === SequencePrototype);
     \texttt{pipe} & Is the same as \lstinline{pipe} described in section~\ref{sub:api_Operators}\\ \hline 
   \end{tabularx}
   \caption{The operations served on the prototype of the \lstinline{Sequence}}
-  \label{tab:api_term_ops}
+  \label{tab:prototype_operations}
 \end{table}
 
 % subsubsection The operations on the Prototype (end)
