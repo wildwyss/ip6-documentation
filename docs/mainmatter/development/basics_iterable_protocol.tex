@@ -1,5 +1,5 @@
-\section{Sequence and Iterable in General}
-\label{sec:Sequence and Iterable in General}
+\chapter{Iterators in JavaScript} % (fold)
+\label{chap:Iterators in JavaScript}
 This section explains the concept of iterable and iterator objects and points
 out features and characteristics of it. |Sequence| is one implementation of
 an iterable and represents the core functionality of the implementations
@@ -9,8 +9,8 @@ base~\cite{wildwyss_kolibri}. The following
 discussion covers challenges and solutions for creating a robust and
 user-friendly API.
 
-\subsection{The Essence of an Iterator}
-\label{sub:The Essence of an Iterator}
+\section{Sequence and Iterable in General}
+\label{sec:Sequence and Iterable in General}
 In Computer Science, iterators are a popular concept. An iterator provides
 access to elements of a data structure. It does not matter if the iterator
 accesses a data structure fully kept in memory (like arrays) or if it computes
@@ -19,14 +19,14 @@ retrieves the next value. Iterators are an essential part of this work.
 Therefore, it is crucial to understand the fundamentals of this concept. The
 following sections cover this topic in depth.
 
-\subsection{Iterators in JavaScript}
-\label{sub:Iterators in JavaScript}
-These two protocols explain how an object can be used for iteration in
-JavaScript. An iterable object, also known as an iterable, represents a
+\subsection{Iterable Data Structures in JavaScript}
+\label{sub:Iterable data structures in JS}
+JavaScript knows two protocols which define how an object can be used for
+iteration. An iterable object, also known as an iterable, represents a
 collection of data. By calling a function on the iterator, we can access the
 next element in the collection, moving in a single direction. Iterators can be
-either finite or infinite. Once we reach the end of a finite iterator, it is
-considered "used up," and subsequent calls to an exhausted iterator won't
+either finite or infinite. Once a finite iterator reaches its end, it is
+considered "used up" - subsequent calls to such an exhausted iterator won't
 produce any meaningful results. Below, we will provide a more detailed
 description of these two protocols.
 
@@ -557,3 +557,5 @@ Now, we discussed the ability to generate arbitrary sequences of data. However,
 just creation is often not enough as there is a need to manipulate the data or 
 introduce additional levels of abstraction. In the upcoming chapter, we will 
 delve into processing such Sequences.
+
+% chapter Iterators in JavaScript (end)
