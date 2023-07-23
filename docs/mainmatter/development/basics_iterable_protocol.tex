@@ -9,8 +9,8 @@ base~\cite{wildwyss_kolibri}. The following
 discussion covers challenges and solutions for creating a robust and
 user-friendly API.
 
-\section{Sequence and Iterable in General}
-\label{sec:Sequence and Iterable in General}
+\section{Iterables in General}
+\label{sec:Iterables in General}
 In Computer Science, iterators are a popular concept. An iterator provides
 access to elements of a data structure. It does not matter if the iterator
 accesses a data structure fully kept in memory (like arrays) or if it computes
@@ -191,7 +191,6 @@ When iterating an iterable, the returned elements are of type
 |IteratorReturnResult<TReturn>|. This ensures that |done| is set to |true|, as 
 can be seen on line~\ref{line:iteration_return_result_done} in listing~\ref{lst:iterable_types}.
 
-
 \subsection{Illustration of the JS Iteration Protocol}
 \label{sub:Illustration of the JS Iteration Protocol}
 Listing~\ref{lst:example_js_iteration_protocol} illustrates the behavior of the
@@ -223,44 +222,8 @@ By using |for...of| and destructuring, an iterable would stop iterating at this
 point. This means an |for...of| loop runs until the property |done| is set to
 |true|.
 
-% \begin{figure}[H]
-%   \centering
-%   \begin{sequencediagram}                                                      
-%     \newthread{client}{:Client}                                                        
-%     \newinst[3]{iterable}{:Iterable}                                                     
-%     \newinst[3]{iterator}{:Iterator}                                                     
-% 
-%     \begin{call}{client}{[Symbol.iteator()]}{iterable}{return Iterator<T>}                                  
-%     \end{call}                                                                    
-% 
-%     \begin{call}{client}{next()}{iterator}{returns IteratorYieldResult<T>}                                  
-%     \end{call}                                                                    
-% 
-%     \begin{call}{client}{next()}{iterator}{returns IteratorYieldResult<T>}                                  
-%     \end{call}                                                                    
-% 
-%     \begin{call}{client}{next()}{iterator}{returns IteratorReturnResult<TReturn>}                                  
-%     \end{call}                                                                    
-% 
-%     \begin{call}{client}{next()}{iterator}{returns IteratorReturnResult<TReturn>}                                  
-%     \end{call}                                                                    
-%   \end{sequencediagram}    
-%   \caption{JS iteration protocol procedure}
-%   \label{fig:js_iteration_protocol}
-% \end{figure}
-
-% Since |InfiniteOnesIterable| only contains two elements, the third and fourth element
-% is of type |IteratorReturnResult<TReturn>|.
-
-\subsection{Building custom Sequences of Data}
-\label{sub:Building custom Sequences of Data}
-The last section has shown how to make an object iterable, using an iterable
-always returning one (|1|) as an example~(\ref{lst:protocols}). This section explains how to build more
-powerful data structures based on these protocols by creating meaningful data
-series.
-
-\subsubsection{Sequence - The Name of connected Data}
-\label{subsub:Sequence - The Name of connected Data}
+\section{Sequence: An iterable Series of Values}
+\label{sec:Sequence: A Series of Values}
 In Computer Science, naming elements accurately poses a significant challenge 
 when aiming to develop sustainable and robust code. We decided to name series
 of data a "sequence". It has been influenced by several factors:
@@ -278,8 +241,8 @@ Therefore, it needs almost no memory. At the same time, you have the impression
 that you are dealing with a vast amount of data. So the constructor |Sequence|
 emerged, which generates such connected data.
 
-\subsubsection{Components of a Sequence}
-\label{subsub:Components of a Sequence}
+\subsection{Components of a Sequence}
+\label{sub:Components of a Sequence}
 Defining a sequence requires specifying three essential points:
 \begin{enumerate}
   \item{A fixed starting value for the sequence} 
@@ -327,9 +290,8 @@ const Sequence = (start, whileFunction, incrementFunction) => {*'\label{line:seq
 };
 \end{lstlisting}
 
-
-\subsubsection{Using a Sequence}
-\label{subsub:Using a Sequence}
+\subsection{Using a Sequence}
+\label{sub:Using a Sequence}
 Listing \ref{lst:even-sequence} shows the definition of a sequence of even 
 numbers smaller than ten and how to use it. 
 \begin{lstlisting}[
@@ -354,8 +316,8 @@ The |for..of| loop iterates over the sequence until |done| is true. Meanwhile,
 Line~\ref{line:demo_output} shows the output produced.
 
 
-\subsection{Range - A Useful Sequence}
-\label{sub:Range - A Useful Sequence}
+\subsection{Range - A Real-World Example}
+\label{sub:Range - A Real-World Example}
 When considering sequences, a common requirement is to generate a series of
 numbers, often with a specified starting point, an end value, and adjustable
 increments. This is a classic definition of implementing a Range.
@@ -455,7 +417,6 @@ in more detail.
   \item{\textbf{Negative boundaries and step:} The boundaries and the step size of the range can be positive or negative integers.}
 \end{itemize}
 
-
 \subsubsection{Normalization of the Boundaries}
 \label{subsub:Normalization of the Boundaries}
 To ensure flexibility, the Range provides the interchangeability of boundaries
@@ -549,7 +510,6 @@ for (const value of Range(6,4,-2)) { console.log(value); }
 for (const value of Range(0,-2,-1)) { console.log(value); }
 // => Logs '0, -1, -1'
 \end{lstlisting}
-
 
 \subsection{Conclusion}
 \label{sub:iterable_protocol_Conclusion}
