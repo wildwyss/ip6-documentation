@@ -1,18 +1,19 @@
-\section{Modularizing Programs}
-\label{sec:Modularizing Programs}
-This section explains how to break down programs and functions into small,
+\chapter{Modularizing Programs} % (fold)
+\label{chap:Modularizing Programs}
+This chapter explains how to break down programs and functions into small,
 reusable pieces using lazy evaluation and higher-order functions. The start
 shows how Haskell implements these concepts. The subsequent discussion covers
 the application and limitations of these concepts in JavaScript before showing
 how the Sequence library overcomes these limitations, providing valuable tools
 for writing reliable and reusable code.
 
-\subsection{Gluing Programs together} % (fold)
-\label{sub:Gluing Programs together}
+% chapter Modularizing Programs (end)
+\section{Gluing Programs together} % (fold)
+\label{sec:Gluing Programs together}
 John Hughes argues that functional programming languages provide two extra ways
 to better partition programs and easily combine them later. He refers to them
-as "glues". These are, on the one hand, higher-order functions and, on the
-other hand, lazy evaluation. \cite[p.3]{hughes_why_1989}
+as "glues"~\cite[p.3]{hughes_why_1989}. These are, on the one hand,
+higher-order functions and, on the other hand, lazy evaluation.
 % subsection Gluing Programs together (end)
 
 \subsection{Using these Glues in Haskell} % (fold)
