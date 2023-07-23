@@ -1,5 +1,5 @@
-\section{Testing}
-\label{sec:Testing}
+\chapter{Effective Testing}
+\label{chap:Effective_Testing}
 This chapter discusses the test strategy of the Sequence library. The start
 explains which instruments are already available from the Kolibri Toolkit and
 how we used them. After that, we focus on the testing table. 
@@ -7,14 +7,14 @@ This is the core of the implemented testing framework during this project,
 exciting details are covered in depth. The end of the Chapter discusses some
 advanced concepts regarding property-based testing.
 
-\subsection{Motivation}
-\label{sub:Motivation}
+\section{Motivation}
+\label{sec:Motivation}
 When implementing a library, testing is an essential task. With the constant
 increase of functionalities, the number of tests also grows. Therefore, it
 brings many benefits to implementing tests in a standardized and generalized
 way. This leads to a robust and leakless testing framework and, thus, a solid
 code base. We called our implementation of the generalization testing table
-An explanation in detail follows in Section~\ref{sub:Testing Table}. \\
+An explanation in detail follows in Section~\ref{sec:Testing Table}. \\
 Such a testing strategy has significant advantages. The following
 non-concluding list shows an excerpt of the most important:
 
@@ -34,15 +34,15 @@ discovered during the development that has to be handled. In that case, it can
 be added to these rules and thus be tested in a central location and easily
 checked against all configurations.
 
-\subsection{Kolibri Testing Framework}
-\label{sub:Kolibri Test Framework}
+\section{Kolibri Testing Framework}
+\label{sec:Kolibri Test Framework}
 This Section gives an overview of the Kolibri testing framework. It was already
 part of the toolkit. Therefore, we do not dive deep but still want to cover
 certain aspects. Additionally, we extended the framework with some iterable
 specific functionalities for easier handling of our implementations.
 
-\subsubsection{Parts of the Framework}
-\label{subsub:Parts of the Framework}
+\subsection{Parts of the Framework}
+\label{sub:Parts of the Framework}
 The |TestSuite| is the core element of the testing framework. Typically, a
 |TestSuite| includes several tests, whereas a testing framework can consist of
 several suites. Executing the |TestSuite|s generates a test report in HTML.
@@ -210,8 +210,8 @@ expected, this function should throw an exception that is caught in the catch
 block. If this is the case, the test is successful. Otherwise, the test fails
 and a corresponding error message is stored.
 
-\subsection{Testing Table}
-\label{sub:Testing Table}
+\section{Testing Table}
+\label{sec:Testing Table}
 This Section describes the realization of the testing table. It examines the
 architecture of it and how it works for a particular operation. It covers the
 config-based testing approach, which enables generalizing test cases for the
@@ -229,8 +229,8 @@ Each constructor and operator of the Sequence library has its configuration
 that specifies the test behavior. Likewise, each has its |TestSuite|. 
 The following sections address the different parts separately.
 
-\subsubsection{The Table}
-\label{subsub:The Table}
+\subsection{The Table}
+\label{sub:The Table}
 The testing table is just an array (table) containing test objects.
 Each object consists of two properties. Listing~\ref{lst:testing_table} shows
 the implementation.
@@ -305,8 +305,8 @@ implementations of the Sequence library:
 \end{itemize}
 
 
-\subsubsection{The Function to Run the Tests}
-\label{subsub:The Function to Run the Tests}
+\subsection{Running the Testing Table}
+\label{sub:Running the Testing Table}
 |addToTestingTable| inserts the tests of the testing table into the |TestSuite| for a
 specific configuration, visible on line~\ref{line:add_to_testsuite}. 
 Since the configuration runs all tests of the testing table by default, it
@@ -340,8 +340,8 @@ const addToTestingTable = testSuite => config => {
 };
 \end{lstlisting}
 
-\subsubsection{The Configuration}
-\label{subsub:The Configuration}
+\subsection{Configuring the Testing Table}
+\label{sub:Configuring the Testing Table}
 
 In order to test operators and constructors using the testing table, it is
 necessary to implement a test configuration.
@@ -432,8 +432,8 @@ properties are available and the purpose of it:
 \end{table}
 
 
-\subsection{A Kind of Property based Testing}
-\label{sub:A Kind of Property based Testing}
+\section{Testing based on Properties}
+\label{sec:Testing based on Properties}
 John Huges and Carl Claessen wrote to following sentence in the paper
 "Quickcheck, A Lighweight Tool for Random Testing of Haskell Programms":
 \textit{
@@ -443,8 +443,8 @@ major part of functional program development}~\cite{quickcheck_hughes}.
 If these programming icons claim it takes many tests even in a strongly typed 
 language, how many does it take in JavaScript? Of course, enough.
 
-\subsubsection{Invariant Testing}
-\label{subsub:Invariant Testing}
+\subsection{Invariant Testing}
+\label{sub:Invariant Testing}
 We added another kind of tests to increase the Sequence library's robustness -
 invariant testing. Some aspects of this testing are leaned on the Quickcheck
 approach of the paper mentioned before. We concentrated on only some essential

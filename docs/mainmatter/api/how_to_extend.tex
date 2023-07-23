@@ -97,7 +97,7 @@ Because great software engineers start with the tests, we do that first.
 
 \subsubsection{Write the Tests}
 \label{subsub:Write the Tests}
-Chapter~\ref{sec:Testing} has already explained testing in detail. Therefore, we will only deal 
+Chapter~\ref{chap:Effective_Testing} has already explained testing in detail. Therefore, we will only deal 
 with the practical part here.
 \newline
 Let us start with the imports. For testing reasons, we need the following
@@ -117,7 +117,7 @@ Creating a test config requires the following steps:
 \begin{itemize}
   \item{Create a |TestSuite| with a meaningful name corresponding to the function you are implementing.}
   \item{|createTestConfig| expects an object of type |SequenceTestConfigType|. Have a look
-    to this type or to section~\ref{subsub:The Configuration} to get the information about the available properties. }
+    to this type or to section~\ref{sub:Configuring the Testing Table} to get the information about the available properties. }
       \item{If neccessary, add some further test cases using the same TestSuite.}
   \item{Run the |TestSuite| by calling the |run()| function at the end of the file. }
 \end{itemize}
