@@ -40,7 +40,8 @@ print $ doubles ++ quads
 \end{lstlisting}
 
 Listing~\ref{lst:hof_haskell} shows how higher-order functions work in Haskell.
-Code is easily reusable since |map| can be parametrized with a function.
+This code is very reusable since |map| takes a function as an argument to
+transform the values of a list.
 % subsubsection Higher order functions Haskell (end)
 
 \subsubsection{Lazy Evaluation} % (fold)
@@ -60,13 +61,13 @@ doubles = map double as*'\label{line:lazy_eval_haskell_2}'*
 print $ take 4 doubles *'\label{line:lazy_eval_haskell_3}'*
 -- Prints '[2,4,6,8]'
 \end{lstlisting}
-Line~\ref{line:lazy_eval_haskell_1} of Listing~\ref{lst:lazy_eval_haskell}
-defines a list with infinite values. Then the function |double|, defined in
-Listing ~\ref{lst:hof_haskell}, is applied to this list. Since the list has
-infinite elements, eagerly evaluating it would take forever. But since Haskell
-evaluates its statements lazily, nothing happens on line
+Line~\ref{line:lazy_eval_haskell_1} of listing~\ref{lst:lazy_eval_haskell}
+defines a list with infinite values. Then the function |double|, defined in the
+previous listing ~\ref{lst:hof_haskell}, is applied to this list. As the list
+has infinite elements, eagerly evaluating it would take forever. But since
+Haskell evaluates its statements lazily, nothing happens on
 line~\ref{line:lazy_eval_haskell_2}. Haskell applies |double| not before line
-~\ref{line:lazy_eval_haskell_3} where |print| evaluates a part of the list (the
+~\ref{line:lazy_eval_haskell_3}, where |print| evaluates a part of the list (the
 first four elements). Even then, Haskell exclusively uses |double| on those
 four elements.\\
 More theoretically, when applying the function |f| to |g x|, |g| produces only
@@ -87,7 +88,7 @@ building large programs consisting of small parts is much easier.
 \subsubsection{Higher Order Functions in JavaScript} % (fold)
 \label{subsub:Higher Order Functions in JavaScript}
 Higher-order functions in JavaScript work similarly as they do in Haskell.
-Transferring Listing~\ref{lst:hof_haskell} to JavaScript results in the
+Transferring listing~\ref{lst:hof_haskell} to JavaScript results in the
 following:
 
 \begin{lstlisting}[
@@ -141,11 +142,11 @@ elements of |as| and not just its first four.
 
 % subsubsection Lazy Evaluate Iterables (end)
 The eager evaluation of JavaScript is a significant limitation. Fortunately,
-JavaScript can emulate this laziness using the JS iterable protocols, which
-Section ~\ref{sec:Iterables in General} describes. \\ 
+JavaScript can emulate this laziness using the JS iteration protocols, which
+section ~\ref{sec:Iterables in General} describes. \\ 
 
 With the use of the Sequence library, it is possible to rewrite the JavaScript
-code of Listing~\ref{lst:js_eagerly_eval} lazily:
+code of listing~\ref{lst:js_eagerly_eval} lazily:
 
 \begin{lstlisting}[
   style=ES6,
@@ -162,21 +163,21 @@ const mapped = map(x => {
 console.log(...take(4)(mapped));
 // => Logs '2, 4, 6, 8'
 console.log(bs);
-// => Logs '2, 4, 6, 8'
+// => Logs '1, 2, 3, 4'
 \end{lstlisting}
-The first output is the same as in Listing ~\ref{lst:js_eagerly_eval} - the
+The first output is the same as in listing ~\ref{lst:js_eagerly_eval} - the
 first four elements of the array |as| have been multiplied by 2. However, the
-second output differs: the array |bs| now contains only four elements. So |map|
+second output differs: the array |bs| now contains only four elements! So |map|
 applied the passed function only to four initial array elements! This fact
 proves that transforming arrays using the Sequence library happens lazily!\\
 This works because the JS iteration protocols process element by element. The
 iterator delivers the next element only if it is requested. If no further
-elements are needed, just stop iterating! \\
-Iterators therefore decouple the termination condition (asking for another
+elements are needed, it just stops iterating! \\
+Iterators, therefore, decouple the termination condition (asking for another
 element) from the loop body (generating/accessing the next element).\\
 
 Furthermore, it is even possible to port the initial Haskell laziness
-example defined in Listing~\ref{lst:lazy_eval_haskell} to JavaScript:
+example defined in listing~\ref{lst:lazy_eval_haskell} to JavaScript:
 \begin{lstlisting}[
   style=ES6,
   caption=Process infinite sequences in JavaScript,
@@ -193,14 +194,14 @@ If the code displayed in Listing~\ref{lst:inf_seq_js} were evaluated eagerly,
 this would go on forever since line~\ref{line:inf_seq_js_1} defines a sequence
 with infinite elements. \\ 
 
-\subsection{Lazy evaluation and side effects} % (fold)
+\subsection{Lazy Evaluation and Side Effects} % (fold)
 \label{sub:Lazy Evaluation and Side Effects}
 Decoupling the loop body and termination condition helps to consider these two
 concepts separately. This split reasoning makes sense since they often do not
 relate to each other. Why change the whole list of elements if the program only
 uses the first five? In JavaScript, however, this thinking carries a danger
 that cannot occur in pure functions like those used in Haskell. \\ 
-The following Listing~\ref{lst:side_effects_lazy_js} states the problem:
+The following listing~\ref{lst:side_effects_lazy_js} states the problem:
 
 \begin{lstlisting}[
   style=ES6,
@@ -215,7 +216,7 @@ const mapped = map(x => {
 
 console.log(i);
 // => Logs '0' i has not been incremented
-console.log(...take(2)(mapped);
+console.log(...take(2)(mapped));
 // => Logs '2, 4' 
 console.log(i);
 // => Logs '2' i has only been incremented two times
@@ -237,15 +238,15 @@ definition, this is not a problem. Since side effects often make a program
 harder to understand, getting rid of it feels even more natural.
 % subsection Lazy evaluation and side effects (end)
 
-\subsubsection{Placing the Receiver at the End} % (fold)
-\label{subsub:Placing the Receiver at the End}
+\section{Placing the Receiver at the End} % (fold)
+\label{sec:Placing the Receiver at the End}
 Compared to object-oriented programming languages, where the receiver of an
 operation is always placed before the point (i.e., at the beginning), functions
 in Haskell usually expect it as the last argument. If one sticks to this, it is
-possible to build a new function from a pre-configured function in Haskell
-(line~\ref{line:precon_fs_hs_1} of Listing~\ref{lst:precon_fs_hs}) and then
-reuse this function:
-
+possible to give a new name to a partially applied (pre-configured)
+function. Line~\ref{line:precon_fs_hs_1} of the following Haskell
+listing~\ref{lst:precon_fs_hs} does precisely this and results in a reusable
+pre-configured function (|doubleAll|) with a very descriptive name:
 \begin{lstlisting}[
   style=Haskell,
   caption=Pre-configured functions in Haskell,
@@ -269,7 +270,7 @@ This paradigm allows it also to link existing functions together using the |.|
   label={lst:fn_comp_hs}
 ]
 -- "sum" sums up all elements in the list
-doubleAndSum = sum . doubleAll -- *' doubleAll defined in Listing~\ref{lst:precon_fs_hs}'*
+doubleAndSum = sum . doubleAll
 
 print $ doubleAndSum [1,2,3,4]
 -- Prints '20'
@@ -280,7 +281,7 @@ create a new function applicable to any list with numerical values. This
 concept makes the code very reusable.\\
 Placing the receiver at the end is another powerful modularization
 tool. Therefore, the sequence library supports this kind of modularization.
-Refactoring the initial example from Listing~\ref{lst:hof_in_js}, which 
+Refactoring the initial example from listing~\ref{lst:hof_in_js}, which 
 shows how higher-order functions work in JavaScript results in:
 
 \begin{lstlisting}[
@@ -298,7 +299,7 @@ console.log(doubleAll([1, 2, 3, 4]));
 // => Logs '2, 4, 6, 8'
 \end{lstlisting}
 
-The Listing~\ref{lst:rec_bef_point} fixes this issue using a function that gets
+The listing~\ref{lst:rec_bef_point} fixes this issue using a function that gets
 the receiver as an argument. However, this is not very convenient. The Sequence
 library provides a more elegant way to solve this:
 
@@ -310,7 +311,7 @@ library provides a more elegant way to solve this:
 const doubleAll = map(double);
 \end{lstlisting}
 
-The code in Listing~\ref{lst:rcv_at_end_js} is not only less to type but also
+The code in listing~\ref{lst:rcv_at_end_js} is not only less to type but also
 more accurate when reading because the term |doubleAll = map(double)| says that
 the pre-configured function |map(double)| gets a new name (|doubleAll|). No worrying about
 parameter naming is needed here.
