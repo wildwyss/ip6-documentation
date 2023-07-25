@@ -1,7 +1,7 @@
 \section{Iterables Everywhere}
 \label{sec:Iterables Everywhere}
 The JS iteration protocols are suitable for a wide variety of data structures.
-With the sequence library defining many operations for iterables, it makes
+With the Sequence library defining many operations for iterables, it makes
 sense to make more objects iterable. For example, the Kolibri Web UI toolkit
 defines the immutable data structure "pair", for which there are noteworthy
 applications if it is iterable. 
@@ -40,14 +40,14 @@ any way from the outside.
 Selector functions named |fst| on line~\ref{line:fst_pair} and |snd| on 
 line~\ref{line:snd_pair} grant access to these values. However, pair offers
 no way to modify these values. Listing~\ref{lst:pair_non_iterable} shows that
-handling a pair can be tedious. It would be great to use the built-in
-JavaScript language features to access the content of a pair.
+handling a pair can be cumbersome. It would be great to use the built-in
+JavaScript language features to access the elements of a pair.
 
 \subsubsection{Iterable Pair}
 \label{subsub:Iterable Pair}
-Listing~\ref{lst:pair_iterable} demonstrates the implementation of an iterable 
-pair. Still, pair operates only with functions. However, it additionally defines the
-|[Symbol.iterator]| property:
+Listing~\ref{lst:pair_iterable} demonstrates the implementation of an iterable
+pair. Still, pair operates only with functions. However, it additionally
+defines the |[Symbol.iterator]| property:
 
 \begin{lstlisting}[
   style=ES6, 

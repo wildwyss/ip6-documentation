@@ -266,7 +266,7 @@ The advantage of this implementation is that partially processed iterators can
 be further utilized while maintaining their current state, without
 reinitializing the state with a new iteration.
 Operators can only process objects that implement |copy|. That means other
-iterable objects like arrays or |HTMLCollection| are not processable anymore,
+iterable objects like arrays or |HTMLCollection| are not processable any more,
 which is a significant drawback.
 
 \subsubsection{Scenario 2: Placing the State inside the Iterator}
@@ -276,9 +276,9 @@ line~\ref{line:scen_2_state} inside the iterator. Running the code from the
 previous example~\ref{lst:scen_1_demo} using this implementation produces the
 expected output straight away. The distinction lies in the fact that the object
 does not need to be copyable. Each call to |[Symbol.iterator]| creates a new
-state. This type of iterable is immutable. Another advantage is that all
-operators within the Sequence library can handle objects conform to JS
-iteration protocols including JavaScript arrays.
+state. Apart from the iterator, this iterable is immutable. Another advantage
+is that all operators within the Sequence library can handle objects that
+conform to JS iteration protocols!
 
 \begin{lstlisting}[
   style=ES6, 
@@ -299,48 +299,43 @@ const SampleIterable = () => {
 \end{lstlisting}
 
 
-\subsubsection{Comparing the Two Scenarios}
+\subsubsection{Comparing the two Scenarios}
 \label{subsub:Comparing the Two Scenarios}
-In this section, we examined the possibilities for adding state to 
-sequences.\\
 As mentioned in section~\ref{sub:Types of Iterables}, there is a reason for 
-the deep nesting of the iterator into the iterbale object. 
-Each iterator can have its own state and is therefore immutable.
-\\
+the deep nesting of the iterator into the iterable object. 
+Each iterator can have its own state and is therefore immutable! \\
 In programming, immutability refers to creating objects that cannot be changed
 once they are created. There are several advantages to using immutability in
-code.
-\\
+code: \\
 Firstly, it helps in creating more reliable and bug-free programs. Since
 immutable objects cannot be modified, there is no risk of accidental changes or
 unintended side effects. This simplifies the code and makes it easier to reason
-about.
-\\
+about. \\
 Secondly, immutability promotes functional programming practices. Immutable
-data structures are the foundation of functional programming, allowing for more
+data structures are crucial in functional programming, allowing for more
 predictable and declarative code that is easier to test.
-\\
-In Scenario 2, the immutable approach has a specific impact on an iterable.
+
+In scenario 2, the immutable approach has a specific impact on an iterable.
 When an iterable is immutable, each time we access its iterator, a new iterator
 instance is returned. This means that it is not possible to process an iterable
-partially or in multiple stages. To achieve this behavior, we need to implement
-Scenario 1.
+partially or in multiple stages. To achieve this behaviour, we need to implement
+scenario 1.
 \\
 Because of the significant benefits of immutability and, consequently, the
-advantages of Scenario 2, we made the decision to implement this concept. As a
-result, when a programmer uses a sequence, they can always depend on receiving
-a new instance of it, guaranteeing consistency.
-
+advantages of scenario 2, the Sequence library uses this concept. This way,
+developers who work with sequences can be confident that they always operate
+with a valid and unused instance that does what they expect.
 
 \subsection{Adding Monadic Functions to Iterables}
 \label{sub:Adding Monadic Functions to Iterables}
-In this last section of this chapter, we will highlight one more function we 
-have left out so far. It is about the function |createMonadicSequence|, which
-can be used to create iterables.
+This last section of this chapter explains the function
+|createMonadicSequence|, which the previous sections left out. Many of the
+operations of the Sequence library use this function for creating new
+sequences.
 
 \subsubsection{A Convenience Function}
 \label{subsub:A Convenience Function}
-Consider Listing~\ref{lst:impl_map} once again showing the implementation of
+Consider listing~\ref{lst:impl_map} once again showing the implementation of
 |map|. This implementation uses a function |mapIterator|, which returns an
 object containing a function |next|. Thus, |mapIterator| forms an |Iterator|.
 |createMonadicSequence| now receives such an iterator as parameter.
@@ -358,24 +353,21 @@ Listing~\ref{lst:createMonadicSequence} demonstrates the implementation of
  * @param { () => Iterator<_T_> } iterator
  * @returns { SequenceType<_T_> }
  */
- const createMonadicSequence = iterator => {
-   *'\label{line:start_createMonadicSequence}'* const result = {[Symbol.iterator]: iterator};
+ const createMonadicSequence = iterator => { *'\label{line:start_createMonadicSequence}'*
+    const result = {[Symbol.iterator]: iterator};
     return setPrototype(result);
 };*'\label{line:end_createMonadicSequence}'*
 \end{lstlisting}
 
 Line~\ref{line:start_createMonadicSequence}
-to~\ref{line:end_createMonadicSequence} implement the responsibility of the
-function |createMonadicSequence|:
+to~\ref{line:end_createMonadicSequence} implement the functionality of
+|createMonadicSequence|:
 
 \begin{itemize}
   \item{Assign the passed iterator to the |[Symbol.iterator]| property}
   \item{Add the sequence prototype to the resulting object}
 \end{itemize}
 
-Many of the operations of the Sequence library use this code.
-Outsourcing the code helps to improve the code base's overview and readability.
-The following section explains what the prototype is all about.
 
 \subsubsection{Sequence Prototype}
 \label{subsub:Sequence Prototype}
@@ -383,7 +375,7 @@ The following section explains what the prototype is all about.
 JavaScript objects inherit features from one another.}\\ 
 Multiple objects can use the same implementation of functions simultaneously if
 they have the same prototype.\\
-\textit{Note}: An object can have just \textit{one} prototype. Hierarchies
+\textit{Note:} An object can have just \textit{one} prototype. Hierarchies
 emerge through chaining prototypes, meaning setting the prototype of a
 prototype.
 
@@ -406,22 +398,24 @@ const Prototype = () => null;
 Prototype.getName = function () { return this.name; };
 
 // Creating an object with a name
-const tobi = { name : "Tobi" };
+const tw = { name : "Tobias Wyss" };
 
 
 // Setting the prototype
-Object.setPrototypeOf(tobi, Prototype);
+Object.setPrototypeOf(tw, Prototype);
 
-console.log(tobi.getName());
-// => Logs 'Tobi' 
+console.log(tw.getName());
+// => Logs 'Tobias Wyss' 
 \end{lstlisting}
 
 
-The function |setPrototype| on line~\ref{line:setPrototype} adds the sequence
-prototype to an iterable using the function |setPrototypeOf|. This causes some
-functions to be accessible on each SequenceType using the |.| (dot) notation. These are,
-among others, monadic functions. You will read more about Monads and their
-purpose in chapter~\ref{chap:Monads in JavaScript}.
+The function |setPrototype| on line~\ref{line:setPrototype} of
+listing~\ref{lst:set_prototype} adds the sequence prototype to an iterable
+using the function |setPrototypeOf|. This causes some functions to be
+accessible on each sequence using the "|.|" (dot) notation. These are, among
+others, monadic functions. You will read more about Monads and their purpose in
+chapter~\ref{chap:Monads in JavaScript}. This chapter explains as well why it
+is useful to access some functions the given object.
 \begin{lstlisting}[
   style=ES6,
   caption=Implementation of setPrototype,
@@ -442,10 +436,11 @@ purpose in chapter~\ref{chap:Monads in JavaScript}.
 \subsubsection{The SequenceType} % (fold)
 \label{subsub:The SequenceType}
 
-The SequenceType represents a sequence and the monadic functions defined on it. 
-Listing~\ref{lst:sequence_type} shows the definition of the type.
-Furthermore, |toString|, |pipe| and equals |"=="| are also functions we decided to add to the
-prototype. Having these functions on each SequenceType is convenient.
+The |SequenceType| is the JSDoc representation of a sequence.
+Listing~\ref{lst:sequence_type} shows the definition of the type. Furthermore,
+|toString|, |pipe|, and equals |"=="| are also functions accessible via the
+prototype. Having these functions on each |SequenceType| is very convenient,
+as they improve readability and usability.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -468,28 +463,27 @@ prototype. Having these functions on each SequenceType is convenient.
  */
 \end{lstlisting}
 
-Why is this necessary? With this approach, we can ensure that sequences become
-monadic but still iterable. Monadic APIs can thus also process sequences. An
-example of this is JINQ. Chapter~\ref{sec:API_JINQ} discusses JINQ in detail.
+This approach ensures that sequences become monadic but still iterable.
+Monadic APIs can thus also process sequences. An example of such an API is
+JINQ, which section~\ref{sec:API_JINQ} discusses in detail.
 
 \subsubsection{SequenceType vs. Iterable} % (fold)
 \label{subsub:SequenceType vs. Iterable}
-The SequenceType describes an object which is iterable and having their
-prototype set to SequencePrototype. An object of type iterable is just
-iterable. This means, every operation or operator receives an object of type iterable as
-parameter and returns then an object of type SequenceType.
-
+The |SequenceType| describes iterable objects iterable having their
+prototype set to |SequencePrototype|. An object of type iterable is just
+iterable. In fact, every operator of the Sequence library receives an iterable as
+parameter and returns than an object of type |SequenceType|.
 
 \subsubsection{Turning an Iterable into a SequenceType}
 \label{subsub:Turn Iterables into SequenceType}
-Sometimes the SequenceType must be set on an arbitrary iterable. For example,
+Sometimes the |SequenceType| must be set to an arbitrary iterable. For example,
 if you want to use the monadic functions on a JavaScript array. To make this
 possible, the Sequence library provides a |toMonadicIterable| function.
 Listing~\ref{lst:casting_iterables} shows the
-implementation of it. This function takes an arbitrary iterable and returns an
-SequenceType mapped by |id| \footnote{The id (identity) function always
+implementation of it. This function takes an arbitrary iterable and returns a
+|SequenceType| mapped by |id|\footnote{The id (identity) function always
 returns the value passed to it.}. 
-Therefore, the returning object is then of the desired type SequenceType.
+Therefore, the returned object is then of the desired type |SequenceType|.
 
 \begin{lstlisting}[
   style=ES6, 
