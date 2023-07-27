@@ -1,10 +1,10 @@
 \chapter{Effective Testing}
 \label{chap:Effective_Testing}
-This chapter discusses the test strategy of the Sequence library. The start
-explains which instruments are already available from the Kolibri Toolkit and
+This chapter explains the test strategy of the Sequence library. The start
+shows the instruments already available from the Kolibri Toolkit and
 how we used them. After that, we focus on the testing table. 
 This is the core of the implemented testing framework during this project,
-exciting details are covered in depth. The end of the Chapter discusses some
+exciting details are covered in depth. The end of the chapter discusses some
 advanced concepts regarding property-based testing.
 
 \section{Motivation}
@@ -13,8 +13,8 @@ When implementing a library, testing is an essential task. With the constant
 increase of functionalities, the number of tests also grows. Therefore, it
 brings many benefits to implementing tests in a standardized and generalized
 way. This leads to a robust and leakless testing framework and, thus, a solid
-code base. We called our implementation of the generalization testing table
-An explanation in detail follows in Section~\ref{sec:Testing Table}. \\
+code base. We called our implementation of the generalization "testing table".
+An explanation in detail follows in section~\ref{sec:Testing Table}. \\
 Such a testing strategy has significant advantages. The following
 non-concluding list shows an excerpt of the most important:
 
@@ -27,12 +27,12 @@ non-concluding list shows an excerpt of the most important:
   \item{Easier to understand test cases}
 \end{itemize}
 
-The generalization of testing is possible for functions which meet similar
-constraints. This enables to write configurations for such functions
-under test, which are checked against these rules. Suppose a new particular case, probably a bug, is
-discovered during the development that has to be handled. In that case, it can
-be added to these rules and thus be tested in a central location and easily
-checked against all configurations.
+The generalization of testing is possible for functions that meet similar
+constraints. This enables to write configurations for such functions under
+test, which the testing framework then checks against these rules. Suppose a
+new particular case, probably a bug, is discovered during the development that
+also affects previous implementations. Then a new test is added to the rules,
+which runs automatically against all testing configurations!
 
 \section{Kolibri Testing Framework}
 \label{sec:Kolibri Test Framework}
