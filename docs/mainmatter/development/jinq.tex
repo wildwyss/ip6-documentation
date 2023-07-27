@@ -123,7 +123,7 @@ JINQ uses a pattern analogue to the Builder pattern
 \cite[Ch.~3.2]{gang_of_four_depa} to create a new structure which can be
 used to transform the initially passed monad. \\
 Have a look at the function on line~\ref{line:jinq_impl1} of
-Listing~\ref{lst:jinq_impl}: If |from| is called, a new builder is created.
+listing~\ref{lst:jinq_impl}: If |from| is called, a new builder is created.
 |from| expects a monad, which serves as the starting point of the builder. The
 next operation executed on the builder operates on this monad. |result| then
 returns the monad created based on the builder.
@@ -134,7 +134,7 @@ builder!
 
 \begin{lstlisting}[
   style=ES6,
-  caption=How is where implemented?,
+  caption=JINQ works on monads,
   label={lst:jinq_impl}
 ]
 // jinq.js
@@ -176,14 +176,14 @@ const where = monad => predicate => {
 You may have already guessed it - the implementation of |where| is almost
 precisely the implementation of |keepEven|! It is more general because the
 predicate |x % 2 === 0| is outsourced to a function called |predicate|. See
-line~\ref{line:jinq_where_impl1} in Listing~\ref{lst:jinq_where_impl}: |and|
+line~\ref{line:jinq_where_impl1} in listing~\ref{lst:jinq_where_impl}: |and|
 keeps a value matching the predicate using |monad.pure| or discards it
 otherwise using |monad.empty|.\\
 Line~\ref{line:jinq_where_impl2} then wraps the resulting monad in a new
 builder instance and returns it.
 
 Another notable function of JINQ is |pairWith| - its implementation is shown in
-Listing~\ref{lst:jinq_pairwith_impl}. Use it to combine a data source with
+listing~\ref{lst:jinq_pairwith_impl}. Use it to combine a data source with
 another one (or even with itself):
 
 \begin{lstlisting}[
@@ -210,7 +210,7 @@ calls |and| on |monad1| and combines it with |monad2|. \\
 So when combining two sequences, every element of the first sequence gets
 paired up with every element of the second sequence. One could argue that this
 will take too much memory and could be more efficient. But let us step back and
-think about Section 2.3, which discusses the laziness of sequences. |monad1|
+think about section~\ref{subsub:Lazy Evaluate Iterables}, which discusses the laziness of sequences. |monad1|
 (a sequence in the current example) is evaluated lazily! So never all
 combinations will be materialized in memory at once!
 % subsubsection How does JINQ work? (end)
@@ -218,8 +218,8 @@ combinations will be materialized in memory at once!
 \subsubsection{Creating Sequences using JINQ} % (fold)
 \label{subsub:Creating Sequences using JINQ}
 A list comprehension in Haskell is an expression form that allows generating
-lists in a declarative way. See \cite[Chapter 5]{hutton_pih_2016} for an
-in depth introduction to list comprehensions. \\
+lists in a declarative way. See \cite[Ch. 5]{hutton_pih_2016} for an
+in-depth introduction to list comprehensions. \\
 Listing~\ref{lst:list_comp_hs} creates a list using a list comprehension in
 Haskell:
 
@@ -253,20 +253,20 @@ console.log(pairs.fmap(show).toString());
 // => Logs '[[2,1],[3,2],[4,3],[5,4]]'
 \end{lstlisting}
 
-Of course, list comprehensions in Haskell provide more syntacitcal sugar than
+Of course, list comprehensions in Haskell provide more syntactical sugar than
 JINQ. Nevertheless, JINQ provides an easy way to create sequences based on
-rules, coming quite close to a list comprehension.
+rules and, thus, comes close to a list comprehension.
 % subsubsection Creating Sequences using JINQ (end)
 
 \subsubsection{Using the JSONMonad to process lists of JavaScript objects} % (fold)
 \label{subsub:Using the JSONMonad to process lists of JavaScript objects}
-The |JSONMonad| provides arrays of JavaScript objects with a monadic API. The
+The |JSONMonad| gives arrays of JavaScript objects with a monadic API. The
 |JSONMonad| makes them, therefore, compatible with JINQ. This is especially
 useful when JavaScript Objects are created from JSON because they often have
 missing or nullable fields. The monadic operations of |JSONMonad| deal with
 that and ensure that querying nullable attributes do not cause problems.
 
-The Listing~\ref{lst:jsonmonad_data} dives right into an example defining two
+The listing~\ref{lst:jsonmonad_data} dives right into an example defining two
 records that are related to each other. The first one contains data about an
 ancient battle, while the second one contains data about the heroes of the
 battle. The |heroId| connects these two records. The battle had a |winner| and
@@ -299,8 +299,8 @@ Listing~\ref{lst:jsonmonad_example} combines these two data sources using JINQ.
 Line~\ref{line:jsonmonad_example1} wraps the |battleData| with the |JSONMonad|
 to become queriable. |select| then accesses the property |winner| and from
 there the property |outstandingHeroes|. Line~\ref{line:jsonmonad_example2}
-pairs the second data source before Line~\ref{line:jsonmonad_example3}, then
-destructures the |Pair| and only keeps the heroes (from the second data source)
+pairs the second data source before line~\ref{line:jsonmonad_example3}, then
+destructures the pair and only keeps the heroes (from the second data source)
 that belong to the winning team (from the first data source).
 
 \begin{lstlisting}[
@@ -326,7 +326,7 @@ console.log(...outstandingHeroNames);
 \label{subsub:JINQ_Conclusion}
 Monadic APIs allow the building of very general abstractions that can handle a
 wide variety of data types, even if they seem to have nothing in common at
-first glance - such as a sequence or a Maybe! JINQ showcases an excellent
+first glance - such as a sequence or a maybe! JINQ showcases an excellent
 instance of such a general abstraction - its operations only compose generic
 monadic functions. Nevertheless, JINQs operations have very expressive names
 describing their purpose, making it easy to use JINQ with different data types!
