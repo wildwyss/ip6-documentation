@@ -535,9 +535,6 @@ This enables for testing many cases written in a few lines of code.
 
 \subsubsection{An advanced Example}
 \label{subsub:An advanced Example}
-|mconcat| is an operation to flatten an iterable of iterables. If |mconcat|
-follows certain laws, the sequence forms a monoid under this
-operation.~\cite{haskell_monoid}
 Listing~\ref{lst:lr_identity_mconcat} shows the definition of the identity law
 for the function |<>| in Haskell which concatenates two lists:
 
@@ -552,10 +549,12 @@ x <> mempty = x
 mempty <> x = x
 \end{lstlisting}
 
-The |<>| operator is defined on the semigroup, a monoid subset.
 Listing~\ref{lst:lr_identity_mconcat} demonstrates that a list $x$ concatenated
-with |nil|, the empty list, equals the original one. As |<>|, |mconcat| is also
-associative and a concatenation with the neutral element (the empty sequence)
+with |nil|, the empty list, equals the original one. 
+Besides |<>| there is also |mconcat|. |mconcat| allows flattening a list consisting
+of further lists to a single list. This operation is often used and, therefore,
+also exists in the Sequence library. As |<>|, |mconcat| is also
+associative and a concatenation with the neutral element (the empty list)
 has no influence on the result.\\ 
 With the previously shown implementation of the invariant based testing, it
 becomes possible to test these laws for |mconcat|!
@@ -574,17 +573,16 @@ addToTestingTable(testSuite)(
       toMonadicIterable([ newSequence(2), newSequence(2), newSequence(2) ]),
     operation:  () => mconcat,
     expected:   [0, 1, 2, 0, 1, 2, 0, 1, 2],
-    invariants: [
-      it => mconcat([nil, it]) ["=="] (it),*'\label{line:mconcat_first_invariant}'*
-      it => mconcat([it, nil]) ["=="] (it),*'\label{line:mconcat_second_invariant}'*
-      it => [...mconcat([PureSequence(1),it])].length > [...it].length,
-    ],
+    invariants: [*'\label{line:mconcat_first_invariant}'*
+      it => mconcat([nil, it]) ["=="] (it),
+      it => mconcat([it, nil]) ["=="] (it),
+      // ...
+    ],*'\label{line:mconcat_second_invariant}'*
   })
 )
 \end{lstlisting}
 
-Let us focus on line~\ref{line:mconcat_first_invariant} and 
-\ref{line:mconcat_second_invariant}.
+Let us focus on lines~\ref{line:mconcat_first_invariant}-\ref{line:mconcat_second_invariant}.
 The property |invariants| expect an array of functions. Each of these
 functions represents a law. Therefore, the function injects an arbitrary
 iterable called |it|, and the law must hold for it.
@@ -599,11 +597,11 @@ up. Such occurrences could lead to program errors or unexpected behaviour.
 Consequently, we implemented a test case addressing this scenario and added it
 to the testing table. By adding just one more test, the entire Sequence library
 could be examined for this behaviour, allowing for further improvements and
-finding the same bug in other functions!
-\\
+finding the same bug in other functions!\\
 Another example concerns the behaviour of operators and operations when dealing
-with empty iterables. As soon as a test configuration provides an invariant,
-this test runs against the empty sequence.\\
+with empty iterables. When a test configuration provides an invariant,
+it is automatically tested against the empty sequence! This is a powerful way
+to ensure that invariants apply to all types of sequences.\\
 Furthermore, another special test case is the |TEST_PURITY|, which ensures that
 the state of an iterable is in the proper location. This safeguards against
 unexpected side effects, promoting a more reliable program execution.
@@ -612,8 +610,8 @@ unexpected side effects, promoting a more reliable program execution.
 \label{sub:Conclusion}
 When implementing large code bases, having a solid test framework is crucial.
 Structured extension of the test suite during development leads to extensive
-core functionality testing. Thus, the core becomes even more robust when the
-code base grows!
+core functionality testing. Thus, the core of the library becomes even more
+robust when the code base grows!
 \newline
 The standardization and generalization of tests using a testing table imply that
 writing tests for new functionalities takes less time and ensures better
