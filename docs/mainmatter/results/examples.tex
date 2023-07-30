@@ -139,11 +139,11 @@ The following examples use |JINQ| to browse and process a JSON files.
 
 \subsubsection{Find all Students}
 \label{subsub:Find all Students}
-We want to filter out all participants that have
-a student ID. As you can see in the excerpt of the JSON file in
-Listing~\ref{lst:json_file_devs}, the property |switch-edu-id| is
-not defined for all persons. Because the |JsonMonad| works in the background with
-|MaybeType|, such situations can be processed without null handling.
+We want to filter out all participants that have a student ID. As you can see
+in the excerpt of the JSON file in listing~\ref{lst:json_file_devs}, the
+property |switch-edu-id| is not defined for all persons. Because the
+|JsonMonad| works in the background with |MaybeType|, such situations can be
+processed without null handling.
 
 \begin{lstlisting}[
   style=json, 
@@ -177,6 +177,8 @@ not defined for all persons. Because the |JsonMonad| works in the background wit
  ]
 \end{lstlisting}
 
+Using JINQ it is straightforward to access the desired students by just using
+the function |where|:
 
 \begin{lstlisting}[
   style=ES6, 
@@ -195,9 +197,9 @@ const findAllStudentIds = developers => {
 \label{subsub:Find Sophia's Programming Languages}
 
 This example combines two JSON files. We use the JSON file from the previous
-example and the one from Listing~\ref{lst:json_file_lang}.
+example and the one from listing~\ref{lst:json_file_lang} below.
 Listing~\ref{lst:jinq_sophias_langs} shows the code that finds Sophia's 
-favorite programming languages by combining two JSON files using |pairWith|. 
+favourite programming languages by combining two JSON files using |pairWith|. 
 
 \begin{lstlisting}[
   style=json, 
@@ -220,7 +222,10 @@ favorite programming languages by combining two JSON files using |pairWith|.
   }
 ]
 \end{lstlisting}
-
+This is also comparatively easy to do with JINQ. |pairWith| allows adding a
+second data source to the current one, forming all possible combinations. The
+function |where| then keeps only the needed pairs. A simple mapping at the end
+outputs the names of the programming languages!
 \begin{lstlisting}[
   style=ES6, 
   caption=JINQ example - find Sophia's programming languages,
@@ -238,7 +243,8 @@ const sophiasProgrammingLanguages = (devs, languages) =>
 
 \subsection{Numerical Differentiation}
 \label{sub:Numerical Differentiation}
-This example shows a mathematical use case, the numberical differentiation using Sequences.
+This example shows a mathematical use case, the numerical differentiation using
+sequences.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -247,12 +253,9 @@ This example shows a mathematical use case, the numberical differentiation using
   ]
 const halve   = x => x / 2;
 const repeatF = (f, x) => _.Sequence(x, _ => true, f);
-
 const halves = h0 => repeatF( halve, h0);
 
-
 const slope = f => x => h => (f(x + h) - f(x)) / h;
-
 const differentiate = h0 => f => x => _.map ( slope(f)(x) ) (halves(h0));
 \end{lstlisting}
 
@@ -262,27 +265,37 @@ Listing~\ref{lst:diff_sequences} implements the following steps:
 \begin{itemize}
   \item{|repeatF| repeatedly applies the function $f$ to a value of the
     previous calculated result, starting with $x$.}
-  \item{ |halves| is using |repeatF| and |halve| to halve a value $h0$. With
-      that, the value $h0$ is halved repearedly.} 
+  \item{ |halves| is using |repeatF| and |halve| to halve a value $h0$.} 
     \item{|slope| calculates the slope of a function $f$ at the position $x$
       with delta $h$.}
  \end{itemize}
 
-We already have everything needed to be able to differentiate.  The function
-differentiate calculates at a given point $x$ the slope more and more exactly.
-Since this is an infinite Sequence, we have to define one more function.
-Listing~\ref{lst:impl_within} shows the function |within|, which allows differentiating until a
-given epsilon.
+This code already provides everything needed for differentiation! The function
+|differentiate| calculates the slope of a function at a given point $x$ more
+and more exactly.
+Listing~\ref{lst:diff_seq_usage} uses these functions to determine the the
+slope at $x = 1$ of the function |parabola| defined on line~\ref{line:diffs}:
+
+\begin{lstlisting}[
+  style=ES6, 
+  caption=Differentiation using sequences,
+  label={lst:diff_sequences}
+  ]
+const parabola = x => x * x; *'\label{line:diffs}'*
+
+const diffs = differentiate(0.5)(parabola)(1);
+\end{lstlisting}
+
+Since |diffs| contains an infinite sequence, one further
+function is still needed.
+Listing~\ref{lst:impl_within} shows the function |within|, which allows
+differentiating until two successive values are smaller than a given epsilon:
 
 \begin{lstlisting}[
   style=ES6, 
   caption=Implementation of within,
   label={lst:impl_within}
   ]
-const parabola = x => x * x;
-
-const diffs = differentiate(0.5)(parabola)(1); *'\label{line:diffs}'*
-
 const within = eps => sequence => {
   const [a, rest] = _.uncons(sequence);
   const [b]       = _.uncons(rest);
@@ -297,13 +310,10 @@ const slopeOfFAtX = within(0.000_1)(diffs);
 Listing~\ref{lst:impl_within} defines the following implementations:
 
 \begin{itemize}
-  \item{|parabola| is the function to work with in this example}
-  \item{On line~\ref{line:diffs}, |diffs| defines a function to differentiate the |parabola| at point $1$ with
-    starting value $h0$ of $0.5$.}
-  \item{|within| calculates recursively the slope of the |parabola| using the
-      sequence |diffs| until a satisfying accuracy. 
-    \item{ At the end, |slopeOfFAtX| calculates the slope with the given parameters. }
-    }
+  \item |within| calculates recursively the slope of the |parabola| using the
+    sequence |diffs| until a satisfying accuracy. Because of the lazyness of
+    the sequence, |within| only calculates as many slopes as needed!
+  \item At the end, |slopeOfFAtX| calculates the slope with the given parameters.
 \end{itemize}
 
 
@@ -321,7 +331,7 @@ algorithm to JavaScript.
 
 \subsubsection{How does the Algorithm work?} % (fold)
 \label{subsub:How does the Algorithm work?}
-The following explanation is meant to give a brief explanation for the
+The following explanation is meant to give a brief overview for the
 algorithm, allowing to understand the preceding code. For a deeper
 understanding of the algorithm, consider ~\cite[Ch. 5]{hughes_why_1989} or the
 section "Incremental Development" in Frege Goodness~\cite{frege_goodness}.
@@ -343,16 +353,16 @@ other. \\
 A function (called |evalFunction|) does this evaluation - if the algorithm has
 won the game on a field, it evaluates to 1 if it has lost to -1, in all other
 cases, to 0.\\
-The |evalFunction| is mapped via the tree (where higher-order functions come into
-play): Each node is assigned its static value. This results in a new tree with
-the value of |evalFunction| assigned instead of all possible fields.\\
-
+The |evalFunction| is mapped over the tree (where higher-order functions come
+into play) - each node is assigned its static value, saying how promising the
+playfield of this node is. This results in a new tree with the value of
+|evalFunction| assigned instead of all possible fields.\\
 
 \paragraph{What is the best Move?}
 The tree's root is the current playing field - the algorithm cannot know from
 the root which moves are good and which are not. The previously mentioned
 |evalFunction| will evaluate to 0 for most nodes directly after the root.
-Therefore, the computer also calculates all subsequent moves. The values of the
+Therefore, the computer also calculates subsequent moves. The values of the
 lowest calculated nodes are then propagated upwards to the root. 
 
 The function |maximize| goes through to the lowest precalculated level. It
@@ -472,7 +482,9 @@ const treeMap = f => ([a, sub]) => Pair(f(a))(map(treeMap(f))(sub));
 
 \paragraph{Building trees and processing the Game Board} 
 Listing~\ref{lst:tictactoe_gametree} shows the functions for building a game
-tree.
+tree. |unfold| is a function that takes a value (for example, a board) and
+creates new values of the same types of it (for example, all boards possibly
+arising in one move).
 \begin{lstlisting}[
   style=ES6, 
   caption=Tic tac toe game tree,
@@ -503,6 +515,7 @@ const gameTree = board => buildTree(moves)(board);
 
 Listing~\ref{lst:tictactoe_move} includes the |moves| function. This function
 calculates all possible moves for a player based on the current playing field.
+If a player has already won, it returns an empty sequence.
 \begin{lstlisting}[
   style=ES6, 
   caption=Tic tac toe move function,
@@ -665,9 +678,10 @@ const prune = n => tree => {
 
 \paragraph{Putting it all together}
 The following functions evaluate a playing field. \\ 
-The function |nextBoardBy| calculates the next move for the computer. The
-number |lookaheads| defines how many turns the algorithm calculates in advance.
-Based on these calculations the algorithm chooses the next move.
+The function |nextBoard| calculates the best possible next move for the
+computer. The number |lookaheads| defines how many turns the algorithm
+calculates in advance. Based on these calculations the algorithm chooses the
+next move.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -708,7 +722,7 @@ const nowValue = lookahead => board =>
  * }
  */
 const nextBoard = lookahead => inFields => {
-  const currentBoard = {whosTurn: Computer, fields: inFields};
+  const currentBoard = { whosTurn: Computer, fields: inFields };
   // get all possible
   const possibleMoves  = moves (currentBoard);
   if (isEmpty(possibleMoves)) return currentBoard;
