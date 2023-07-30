@@ -6,7 +6,7 @@
 JavaScript already includes some concepts known from functional programming.
 For example, it supports higher-order functions, arrow functions or
 auto-currying of function parameters.\\
-However, it also lacks many concepts included in languages as Haskell. Based on
+However, it also lacks many concepts included in languages such as Haskell. Based on
 the previously mentioned language characteristics, it is possible to recreate some of
 these missing features. The Haskell standard library, for example, has a wide range of
 operations to transform or evaluate lists~\cite{haskell_list}. JavaScript, on the other hand, only
@@ -23,9 +23,9 @@ type classes in JavaScript. The type class monad, for example, makes it
 possible to write more abstract functions that can handle a wide variety of
 data structures. 
 
-The resulting artifacts integrate seamlessly into the Web UI toolkit
+The resulting artefacts integrate seamlessly into the Web UI toolkit
 "Kolibri"~\cite{kolibri}. On the one hand, this integration means that the
-artifacts belong to the toolkit. On the other hand, they maintain the high
+artefacts belong to the toolkit. On the other hand, they maintain the high
 standards of the Kolibri. These standards include high code quality, expressed
 by automated tests, fully typed JavaScript using JSDoc, and keeping the
 Kolibri's zero dependency approach. For this, things like specific data
@@ -84,7 +84,7 @@ mainly consists of two parts:\\
 \end{enumerate}
 
 Automated unit tests ensure the correctness of the two previously explained
-artifacts. Since many operations of the Sequence library must ensure the same
+artefacts. Since many operations of the Sequence library must ensure the same
 properties, testing in a structured way is necessary. A  so-called testing
 table represents this structure. This testing table allows writing general
 tests which assert specific properties applying to every operation. Newly
@@ -144,5 +144,12 @@ To achieve essential goals we followed certain concepts and methods:
 
 \section*{Reader Guidance} % (fold)
 \label{sec:Reader Guidance}
-
+This thesis consists of 2 parts. The first part (chapters 2-6) deals with
+conceptual aspects. Each chapter focuses on a specific part of the thesis and
+explains all concepts and ideas behind it. These chapters, therefore, give a
+deep understanding of the work.\\
+The second part (chapters 7-8) summarizes the thesis. Chapter~\ref{chap:api}
+gives an overview of the whole API without going into depth.
+Chapter~\ref{chap:results} evaluates the work and concludes. It also contains
+different examples showing the power of the implemented artefacts.
 % section Reader Guidance (end)

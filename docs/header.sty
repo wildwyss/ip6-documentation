@@ -142,6 +142,29 @@ threshold=0                                                                 %blo
 \usepackage{xstring}
 \let\oldref\ref%ursprüngliches \ref speichern
 \AtBeginDocument{
-  \renewcommand{\ref}[1]{\StrLeft{#1}{3}[\firstthree]\IfStrEq{\firstthree}{lst}{\oldref{#1}}{\IfStrEq{\firstthree}{lin}{\oldref{#1}}{\hyperref[{#1}]{\oldref*{#1} "\nameref*{#1}"}}}}
+\renewcommand{\ref}[1]{%
+  \StrLeft{#1}{3}[\firstthree]%
+  \IfStrEq{\firstthree}{lst}{%
+    \oldref{#1}%
+  }{%
+    \IfStrEq{\firstthree}{lin}{%
+      \oldref{#1}%
+    }{%
+      \IfStrEq{\firstthree}{fig}{%
+        \oldref{#1}%
+      }{%
+        \IfStrEq{\firstthree}{tab}{%
+          \oldref{#1}%
+        }{%
+          \IfStrEq{\firstthree}{img}{%
+            \oldref{#1}%
+          }{%
+            \hyperref[{#1}]{\oldref*{#1}: "\nameref*{#1}"}%
+          }%
+        }%
+      }%
+    }%
+  }%
+}
 }
 
