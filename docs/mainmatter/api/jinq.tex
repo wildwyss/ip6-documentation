@@ -1,12 +1,10 @@
 \section{JINQ} % (fold)
 \label{sec:API_JINQ}
-Write JINQ queries (JavaScript language integrated queries) with every monadic type.
+Write JINQ queries (JavaScript language integrated queries) for every monadic type.
 \newline
-For further details and explanations consider the documentation in
-section \ref{sub:Introducing JINQ}.
+For further details and explanations consider section \ref{sub:Introducing JINQ}.
 \newline
-To create a monadic type, visit the section~\ref{chap:Monads in JavaScript}.
-
+To create a monadic type, visit chapter~\ref{chap:Monads in JavaScript}.
 
 \subsection{Functions}
 \label{sub:JINQ_Functions}
@@ -16,13 +14,13 @@ JINQ provides the following functions:
   \centering
   \begin{tabularx}{\textwidth}{| l | X |} \hline
     \textbf{Name}       & \textbf{Description} \\ \hline
-    \texttt{from}       & Serves as starting point to enter JINQ and specifies a data source \\ \hline 
-    \texttt{map}        & Maps the current value to a new value \\ \hline 
-    \texttt{select}     & Alias for \texttt{map} (same functionality) \\ \hline 
-    \texttt{where}      & Only keeps the items that fulfill the predicate \\ \hline 
-    \texttt{inside}     & Maps the current value to a new \texttt{MonadType} \\ \hline 
-    \texttt{pairWith}   & Combines the underlying data structure with the given data structure as \texttt{PairType} \\ \hline 
-    \texttt{result}     & Returns the result of this query\\ \hline 
+    \texttt{from}       & serves as starting point to enter JINQ and specifies a data source \\ \hline 
+    \texttt{map}        & maps the current value to a new value \\ \hline 
+    \texttt{select}     & alias for \texttt{map} (same functionality) \\ \hline 
+    \texttt{where}      & only keeps the items that fulfill the predicate \\ \hline 
+    \texttt{inside}     & maps the current value to a new \texttt{MonadType} \\ \hline 
+    \texttt{pairWith}   & combines the underlying data structure with the given data structure as \texttt{PairType} \\ \hline 
+    \texttt{result}     & returns the result of this query\\ \hline 
 
   \end{tabularx}
   \caption{JINQ functions}
@@ -34,7 +32,7 @@ JINQ provides the following functions:
 
 \subsubsection{Even Numbers}
 \label{subsub:JINQ_Even Numbers}
-Generating a Sequence of even numbers using JINQ and a Range as data source:
+Generating a sequence of even numbers using JINQ and a range as data source:
 \newline
 \textit{Note:} Since |result| returns a |MonadType|, casting is needed
 for converting with |show|.
@@ -60,7 +58,7 @@ console.log(_.show(/** @type SequenceType */ result));
 
 \subsubsection{Pythagorean Triple}
 \label{subsub:JINQ_Pythagorean Triple}
-Searching for all Pythagorean Triple~\cite{pythagorean_triple} between 1 and 10.
+Searching for all pythagorean triples~\cite{pythagorean_triple} between 1 and 10.
 
 \begin{lstlisting}[
   style=ES6, 

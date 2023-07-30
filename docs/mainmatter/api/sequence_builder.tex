@@ -19,9 +19,9 @@ individually.
   \centering
   \begin{tabularx}{\textwidth}{| l | X |} \hline
     \textbf{Name}    & \textbf{Description} \\ \hline
-    \texttt{prepend} & Adds one or more elements to the beginning of the \texttt{Sequence}\\ \hline 
-    \texttt{append}  & Adds one or more elements to the end of the \texttt{Sequence} \\ \hline 
-    \texttt{build}   & The built phase and returns a \texttt{SequenceType} which iterates over the added elements. \\ \hline 
+    \texttt{prepend} & adds one or more elements to the beginning of the sequence\\ \hline 
+    \texttt{append}  & adds one or more elements to the end of the sequence\\ \hline 
+    \texttt{build}   & builds a sequence containing the previously passed elements \\ \hline 
    \end{tabularx}
   \caption{SequenceBuilder functions}
   \label{tab:sb_functions}
@@ -29,7 +29,7 @@ individually.
 
 \subsection{Examples}
 \label{sub:sb_Examples}
-Creating a Sequence from different values and |Iterable|s:
+Creating a sequence from different values and iterables:
 
 \begin{lstlisting}[
   style=ES6, 

@@ -6,11 +6,10 @@ could also be improved or extended. This section describes those extensions.
 \subsection{Extensions to Maybe} % (fold)
 \label{sub:Extensions to Maybe}
 The data structure |Maybe| introduced in section~\ref{sec:Wrapping values in a
-context} was already part of the Kolibri before this project work. Now it also
-supports monadic operations.to the Sequence, |Maybe| has a prototype, providing
-the monadic functions. \\ 
-Listing~\ref{lst:monadic_ops_maybe_in_action} shows these monadic operations on
-Maybe in action:
+context} was already part of the Kolibri before this project work. Now the
+prototype of |Maybe| also supports monadic operations.\\
+Listing~\ref{lst:monadic_ops_maybe_in_action} shows these monadic operations of
+|Maybe| in action:
 
 \begin{lstlisting}[
   style=ES6,
@@ -30,19 +29,19 @@ const nothing = Nothing;
 
 // fmap 
 const justMapped    = just   .fmap(x => 2*x); // results in 10
-const nothingMapped = nothing.fmap(x => 2*x); // Mapping Nothing - nothing happens!
-evalMaybe(justMapped);      // => Logs '10'
-evalMaybe(nothingMapped);   // => Logs 'There was no value!' 
+const nothingMapped = nothing.fmap(x => 2*x); // nothing happens!
+evalMaybe(justMapped);                        // => Logs '10'
+evalMaybe(nothingMapped);                     // => Logs 'There was no value!' 
 
 // and
 const justAnd    = just   .and(x => nothing); // Turns this value into Nothing
 const nothingAnd = nothing.and(x => just);    // Can't change Nothing
-evalMaybe(justAnd);         // => Logs 'There was no value!'
-evalMaybe(nothingAnd);      // => Logs 'There was no value!' 
+evalMaybe(justAnd);                           // => Logs 'There was no value!'
+evalMaybe(nothingAnd);                        // => Logs 'There was no value!' 
 
 // pure
-evalMaybe(just.pure(2));    // => Logs '2', Same as Just(2)
-evalMaybe(nothing.pure(2)); // => Logs '2', Same as Just(2)
+evalMaybe(just.pure(2));                      // => Logs '2', Same as Just(2)
+evalMaybe(nothing.pure(2));                   // => Logs '2', Same as Just(2)
 
 // empty
 evalMaybe(just.empty());    // => Logs 'There was no value!', Same as Nothing

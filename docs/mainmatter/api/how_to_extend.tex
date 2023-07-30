@@ -1,13 +1,7 @@
 \section{How to Extend the Library}
 \label{sec:How to Extend the Library}
-This Chapter gives a quick start to extending the Sequence library. Because
-applications are versatile, you may want to add further functionality to the
-Library. Therefore, this Chapter explains the relevant steps to simplify the entry.
-\newline
-Whether you want to add a constructor, an operator, or a terminal operation is
-similar. Below is an example of an operator. You can adapt the procedure for
-the others.
-
+Since applications are versatile, you may want to add further functionality
+to the library. This section shows how to extend the Sequence library.
 \subsection{Adding a new Operator}
 \label{sub:Adding a new Operator}
 In this scenario, we include |concat| to the Sequence library. |concat| is the
@@ -16,19 +10,23 @@ operation that appends one |Iterable| to another.
 \subsubsection{Kind of the Operation}
 \label{subsub:Kind of the Operation}
 The library distinguishes between operators and terminal operations. The
-difference depends on the return type. If a function returns an |Iterable|, it
-is an operator. It is a terminal operation if it produces a different type than an
-|Iterable|, such as |isEmpty|.
-Since |concat| returns an |Iterable|, we include the related files into the
-operations folder.
+difference depends on the return type. If a function takes a sequence and
+returns a sequence, it is an operator. \\ 
+It is a terminal operation if it takes a sequence and produces a different type
+than a sequence, such as |isEmpty|.
+\newline
+\textit{Note:}It doesn't matter if you want to add a constructor, an operator, or a terminal
+operation to the sequence library - the procedure is always the same. The
+following example can, therefore, also be applied to constructors and terminal
+operations.
 
 \subsubsection{Directory Structure}
 \label{subsub:Directory Structure}
-|concat| has its folder in the operations directory. Therefore, we create a
-|concat.js| and a |concatTest.js| file in the folder |concat|. The reasoning for 
-splitting tests into a separate file is that it leads to a better overview and faster
-navigation between the particular functionalities. Figure~\ref{fig:concat_dir}
-shows the relevant directories.
+Each operation of the Sequence library consists of two files: a test file and
+an implementation file. Therefore, we create a |concat.js| and a
+|concatTest.js| file in a new folder |concat| in the existing folder
+|operators|. This helps keep overview and finding desired files faster.
+Figure~\ref{fig:concat_dir} shows the relevant directories.
 
 \begin{figure}[H]
 \dirtree{%
@@ -53,7 +51,8 @@ shows the relevant directories.
 \label{subsub:Exports and Imports}
 All artifacts of the Sequence library are available via the |sequence.js| file.
 To make |concat| support this, we export it via the |operators.js| file.
-Listings~\ref{lst:concat_export} and \ref{lst:concat_export_operators} shows the corresponding statements.
+Listings~\ref{lst:concat_export} and \ref{lst:concat_export_operators} show the
+corresponding statements:
 
 \begin{lstlisting}[
   style=ES6, 
@@ -78,7 +77,7 @@ export * from "./concat/concat.js"
 \end{lstlisting}
 
 The same principle applies to the test files. Importing the |concatTest.js| in
-|operatorsTest.js| enables to run of the test cases.
+|operatorsTest.js| enables to run the test cases.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -92,25 +91,22 @@ import "./concat/concat.js"
 
 \subsection{Implementing a new Operator}
 \label{subsub:Implementing a new Operator}
-Now we're getting down to the nitty-gritty.
-Because great software engineers start with the tests, we do that first.
 
-\subsubsection{Write the Tests}
+\subsubsection{Writing the Tests}
 \label{subsub:Write the Tests}
-Chapter~\ref{chap:Effective_Testing} has already explained testing in detail. Therefore, we will only deal 
-with the practical part here.
+The first user of a new operator of the Sequence library is usually a test!
+Therefore, we start by writing the tests.\\
+\textit{Note:} Chapter~\ref{chap:Effective_Testing} explains testing of the
+Sequence library in detail. This sections therefore does not cover how this
+exactly works.
 \newline
-Let us start with the imports. For testing reasons, we need the following
-functionalities:
+Let us start with the imports. A test needs the following dependencies:
 
 \begin{itemize}
   \item{TestSuite}
   \item{addToTestingTable}
   \item{createTestConfig}
 \end{itemize}
-
-\textit{Note:} You may need additional imports to implement the tests itself.
-\newline
 Now you are ready to create a test config and, optionally, some special cases.
 Creating a test config requires the following steps:
 
@@ -160,11 +156,13 @@ If so, then everything is fine.
 
 \textit{Note:} While running the tests, always observe the console.
 
-\subsubsection{Write the Functionality}
+\subsubsection{Writing the Functionality}
 \label{subsub:Write the Functionality}
-Now you are in a comfortable position to implement the function against tests.
-For this, we create a function |concat| in the file |concat.js|.
-Probably, you can use existing functionalities of the Sequence library to implement them. A list of all
-provided functionality is in Chapter~\ref{sub:api_Constructors} - \ref{sub:api_Terminal Operations}.
+Now you are in a comfortable position to implement your code against tests.
+For this, create a function |concat| in the file |concat.js|!
+Probably, you can use existing functionalities of the Sequence library for your
+implementation. Sections~\ref{sub:api_Constructors} - \ref{sub:api_Terminal
+Operations} provide a list of all provided functionality of the Sequence
+library.
 \newline
 Again, run the tests and be proud if everything is running!
