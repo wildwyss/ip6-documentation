@@ -1,50 +1,50 @@
 \section{Future Features}
 \label{sec:Future Features}
-This Chapter describes possible extensions for the Sequence library. During our
-work, some ideas emerged that were not feasible for the time being for various
-reasons. In this chapter, we address the most promising features and discuss
-why it makes sense to implement them at a later time.
+During the project, some ideas emerged that were not feasible for the time
+being for various reasons. This section describes these possible extensions for
+the standard library.
 
 \subsection{Logging}
 \label{sub:Logging}
 Logging is a topic that has come up several times. On the one hand, it appears
 during the implementation of the Sequence library, but also through feedback
-from a test proband of the user test. In the previous Computer Science project from the fifth
-semester IP5~\cite{wild_ip5_2023} we implemented a functional logging framework. 
-This would also be useful to include in the Sequence library. Especially in case of errors, analyzing
-debug or tracing messages from the involved functions would be helpful. Currently, the logging
-framework is only included in a part of the test framework. But this could be
-extended in a next step.
+from a test proband of the user test. In the predecessor project, we implemented
+a logging framework~\cite{wild_ip5_2023}. This would also be useful to include
+in the Sequence library. Especially in case of errors, analyzing debug or
+tracing messages from the involved functions would be helpful. Currently, the
+logging framework is only included in a part of the test framework. But this
+could be extended in a next step.
 
 \subsection{Operators and Operations}
 \label{sub:Operators and Operations}
-Following are some possible extensions for the Sequence library.
+Following are some possible extensions for the Sequence library:
 
-\subsubsection{uncons}
+\subsubsection{uncons for empty Sequences}
 \label{subsub:uncons}
-|uncons| is an operation that returns the first and the rest of an iterable in a
-pair. Basically, this operation is already included in the sequence library.
-But only as an un-safe variant. That means, |uncons| applied to an empty list
-fails. Thus one would have a version, which for example, wraps the result in a
-|MaybeType|. |uncons| on an empty list would then return |Nothing|. The
-api documentation page~\cite{hoogle_uncons} describes the function in detail.
+|uncons| is an operation that returns the head and the rest of an iterable in a
+pair. The Sequence library already includes this operation.
+But it does not work on empty sequences! Meaning |uncons| applied to an
+empty iterable fails. Thus, one would have a version, which for example, wraps the
+result in a |MaybeType|. |uncons| on an empty list would then return |Nothing|.
+The API documentation page~\cite{hoogle_uncons} describes the function in
+detail.
 
 \subsubsection{tail}
 \label{subsub:tail}
-|tail|~\cite{hoogle_tail} is a useful function that removes the first element of an |Iterable|
-and returns the rest of it. By implementing tail, one have to pay attention to
-empty |Iterable| single element case. An option could be to return a
-|MaybeType|. |Nothing|, if the list has one or zero elements, and
-|Just| including the result otherwise.
+|tail|~\cite{hoogle_tail} is a useful function that removes the first element
+of an |Iterable| and returns the rest of it. By implementing |tail|, one has to
+pay attention to empty or single-valued iterables, which do not have a tail. An
+option could be to return a |MaybeType|. |Nothing|, if the list has one or zero
+elements, and |Just| including the result otherwise.
 
 \subsubsection{unfoldr}
 \label{subsub:unfoldr}
-|unfoldr| is a powerful concept of creating sequences of data. It would
-supplement the options to make new |Iterable| beside the |Sequence|
-constructor. It works on a |MaybeType|. |unfoldr| creates an |Iterable| which returns
-a |PairType| wrapped in Just with the value of the current iteration and the next
-element. If the stop condition is fulfilled, |unfoldr| return |Nothing|. For
-further information, have a look at the documentation on hoogle~\cite{hoogle_unfoldr}.
+|unfoldr| is a powerful concept for creating lists in Haskell. It would
+supplement the options to create new sequences besides the |Sequence|
+constructor. In Haskell, it works using a |Maybe|. |unfoldr| creates a list that returns 
+a |Pair| wrapped in |Just| with the value of the current iteration and the next
+element. If the stop condition is fulfilled, |unfoldr| returns |Nothing|. For
+further information, look at the documentation on ~\cite{hoogle_unfoldr}.
 
 \subsubsection{iterate}
 \label{subsub:iterate}
@@ -56,23 +56,26 @@ the function to the calculated value. You will find more information about
 \subsection{JINQ Functions}
 \label{sub:JINQ Functions}
 It is possible to get errors when working with |JINQ| and JSON Monad by grabbing
-not present values. That means if a function in select accesses a property
+not present properties. That means if a function in |select| accesses a property
 which is not defined, it will throw an error. This kind of null-case handling
 takes a lot of work. To remedy this situation, having error-safe functions like
-|safeSelect| to access probably present values would be excellent.
+|safeSelect| to access probably not existing values would be excellent.
 
 \subsection{Applications}
 \label{sub:Applications}
 \subsubsection{Fixpoint Sequence}
 \label{subsub:Fixpoint Sequence}
 In the mathematical context, having a tool for approximations is helpful. A
-constructor for such a case could be the Fixpoint Sequence. It allows us to
+constructor for such a case could be the Fixpoint sequence. It allows us to
 find an approximation with a given number of iterations or by providing a value
-of minimal deviation.
+of minimal deviation. The function |within| describes by
+section~\ref{sub:Numerical Differentiation} already serves a good starting
+point.
 
-\subsubsection{A Kind of Scalpel}
-\label{subsub:A Kind of Scalpel}
-Scalpel~\cite{scalpel} is a Haskell library to scrap web content. Building a similar
-application based on the present implementations could be possible. With |JINQ|
-and |JsonMonad|, we already have a scraping tool for JSON Objects. A future
-implementation could use a similar approach to develop such an application.
+\subsubsection{Use JINQ to process HTML}
+\label{subsub:Use JINQ to process HTML}
+Scalpel~\cite{scalpel} is a Haskell library to scrap web content. Building a
+similar application based on the present implementations could be possible.
+With |JINQ| and |JsonMonad|, the standard library already contains a scraping
+tool for JSON Objects. A future implementation could use a similar approach to
+develop such an application.
