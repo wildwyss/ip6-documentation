@@ -2,16 +2,15 @@
 \label{sec:Examples}
 This section shows some examples implemented with the
 Sequence library to demonstrate the variable usage.
-The following we cover easy-to-understand and more sophisticated
-examples.  Consult the listed sources to understand the applications
-thoroughly if there are some unclarities.
+The following covers easy-to-understand and more sophisticated
+examples. Consult the listed sources to understand the applications
+thoroughly if something is unclear.
 
 \subsection{Fibonacci Sequence}
 \label{sub:Fibonacci Sequence}
 This is an example of a specialized sequence constructor.
 Listing~\ref{lst:fibonacci_sequence} shows the implementation of the Fibonacci 
-Sequence~\cite[p.~36]{math_diskrete_2011}. 
-%S36
+sequence~\cite[p.~36]{math_diskrete_2011}. 
 \begin{lstlisting}[
   style=ES6, 
   caption=FibonacciSequence implementation,
@@ -36,15 +35,16 @@ const incrFn  = ([fst, snd]) => Pair(snd)(fst + snd);
 const FibonacciSequence = 
                     map(pair => pair(snd))(Sequence(start, whileFn, incrFn));
 \end{lstlisting}
-The |FibonacciSequence| generates the Fibonacci sequence using the
-|Sequence| and |Pair| constructor. The |map| function extracts the current Fibonacci number
-from the pair returned by the sequence.
+The |FibonacciSequence| generates the Fibonacci sequence using the |Sequence|
+and |Pair| constructor. The incrementation function produces a pair containing
+the last returned value and the value to be returned.  The |map| function then
+extracts the current Fibonacci number from the pair returned by the sequence.
 
 \subsection{Fizz Buzz}
 \label{sub:Fizz Buzz}
 Fizz Buzz is a simple game played with numbers, typically in a group setting. Players
 take turns counting upward, but instead of saying numbers divisible by 3, they
-say "Fizz," and instead of numbers divisible by 5, they say "Buzz." If a number
+say "Fizz", and instead of numbers divisible by 5, they say "Buzz". If a number
 is divisible by both 3 and 5, they say "FizzBuzz". This game also serves as a 
 programming task.
 \newline
@@ -54,7 +54,7 @@ Sequence library.
 
 First, let us look at the simplest form in listing~\ref{lst:simple_fizzbuzz}. 
 The fizzes and buzzes are combined in a
-sequence. If neither a fizz nor a buzz occurs, the number is output:
+sequence. If neither a fizz nor a buzz occurs, the sequence returns a number.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -62,7 +62,7 @@ sequence. If neither a fizz nor a buzz occurs, the number is output:
   label={lst:simple_fizzbuzz}
   ]
 const limit    = 15;
-const range    = Range(limit);
+const range    = Range(1, limit);
 const fizzez   = cycle(["", "", "fizz"]);
 const buzzez   = cycle(["", "", "", "", "buzz"]);
 
@@ -70,7 +70,7 @@ const pattern  = zipWith((fizz, buzz) => fizz + buzz)(fizzez)(buzzez);
 const fizzbuzz = zipWith((num, str) => str === "" ? num : str)(range)(pattern);
 
 console.log(...take(limit)(fizzbuzz));
-// => Logs '0 1 "fizz" 3 "buzz" ... 10 "fizz" 12 13 "fizzbuzz"'
+// => Logs '1 2 "fizz" 4 "buzz" ... 11 "fizz" 13 14 "fizzbuzz"'
 \end{lstlisting}
 
 Now we are extending the application to add new rules during the runtime:
@@ -110,23 +110,20 @@ const buildFizzBuzz = () => {
 };
 \end{lstlisting}
 Listing~\ref{lst:fizz_buzz} shows two functions, |createSequenceForRule|, and
-|buildFizzBuzz|. 
+|buildFizzBuzz|. \\ 
 |createSequenceForRule| is called with an argument |rule| representing a
 |Number| and a |String|. The returned infinite sequence then contains the
-corresponding text at each multiple of the |rule|s |Number|. In the remaining places, it
-contains an empty |String|. The function |buildFizzBuzz| reduces all sequences
-representing a rule to a single sequence. As a demonstration,
-Figure~\ref{fig:fizzbuzz_control} and \ref{fig:fizzbuzz_result} shows a
-screenshot of a simple application, which shows two rules and the resulting
-sequence. The implementation enables adding new rules at runtime. 
+corresponding text at each multiple of the |rule|s |Number|. In the remaining
+places, it contains an empty |String|. \\ 
+The function |buildFizzBuzz| reduces all sequences representing a rule to a
+single sequence. As a demonstration, figure~\ref{fig:fizzbuzz_control} and
+\ref{fig:fizzbuzz_result} shows a screenshot of a simple application, which
+shows two rules and the resulting sequence. The implementation enables adding
+new rules at runtime. 
 
-\begin{figure}[H]
-\centering
-\begin{minipage}{.5\textwidth}
-  \centering
-  \includegraphics[width=.6\linewidth]{./mainmatter/pictures/fizzbuzz_control.png}
-  \captionof{figure}{Fizz Buzz controls}
-  \label{fig:fizzbuzz_control}
+\begin{figure}[H] \centering \begin{minipage}{.5\textwidth} \centering
+\includegraphics[width=.6\linewidth]{./mainmatter/pictures/fizzbuzz_control.png}
+\captionof{figure}{Fizz Buzz controls} \label{fig:fizzbuzz_control}
 \end{minipage}%
 \begin{minipage}{.5\textwidth}
   \centering
