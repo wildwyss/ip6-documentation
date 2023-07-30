@@ -33,7 +33,8 @@ and their answers.
 
 \subsubsection{Findings and Improvements} % (fold)
 \label{subsub:seq_findings_and_improvements}
-We decided to include following findings in the Sequence library:
+We decided to include following findings from the user tests in the Sequence
+library:
 \begin{itemize}
   \item \textbf{Renaming untilFunction}: Creating sequences using the sequence
     constructor worked well for everyone. The meaning of the parameters was
@@ -43,24 +44,25 @@ We decided to include following findings in the Sequence library:
     |false| when the sequence ends. (This suggestion was handed in by a
     solution)
   \item \textbf{Better type documentation in JSDoc}: The IDEs have problems
-    correctly displaying type information for curried functions (Ref. 2).
-    Therefore, the already often used JSDoc annotation |@haskell| , which
+    correctly displaying type information for curried functions.
+    Therefore, the already often used JSDoc annotation |@haskell|, which
     describes the type signature of a function as in Haskell, is added
     everywhere.
 \end{itemize}
 The following are great ideas but are beyond the scope of this project to
-implement. Find detailed information about all of them in the
-Section~\ref{sub:Operators and Operations}.
+implement:
 \begin{itemize}
   \item \textbf{unfoldr}: This suggestion was handed in by a solution
   \item \textbf{uncons with empty sequences}: This suggestion was handed in by a solution
 \end{itemize}
+Section~\ref{sub:Operators and Operations} lists them as future features and
+describes them.
 
 \subsubsection{Conclusion} % (fold)
 \label{subsub:usertesting_conlusion}
-Almost everyone uses operators as |map|, |filter|, |take|, |reduce|
-frequently when working with lists. So the Sequence library brings much-needed
-functions. (\ref{sub:ut_q2}) \\ 
+Almost everyone frequently uses |map|, |filter|, |take| or |reduce| operations
+when working with lists. So the Sequence library brings much-needed functions.
+(\ref{sub:ut_q2}) \\ 
 Figure~\ref{fig:usertest_q1} concludes the overall opinion about the Sequence
 library very well. It shows that most users think that it can be an
 advantage in their next project.
@@ -108,9 +110,9 @@ We decided to include following findings into JINQ:
   \item \textbf{Better Introduction to JINQ}: Two people suggest using
     |JSONMonad()| directly inside of |from| (text answer~\ref{sub:ut_q13}).
     However, this makes no sense since JINQ can handle arbitrary monads. Thus,
-    the documentation provided did not provide a sufficient overview.
+    the documentation provided did not give a sufficient overview.
     Therefore, the JSDoc of JINQ must give a better introduction to the topic.
-    Additional examples should show the usage using different monads.
+    Additional examples should show the usage of JINQ using different monads.
   \item \textbf{Revise JSDoc (functions and examples)}: Nearly a quarter of the participants found JINQ
     challenging (\ref{sub:ut_q8}). This shows that these concepts needed to be
     sufficiently well introduced. From the solutions given to us, it is evident
@@ -125,12 +127,12 @@ We decided to include following findings into JINQ:
       with SQL.
 \end{itemize}
 
-The following are great ideas but are beyond the scope of this project to
-implement. Find detailed information about all of them in the
-Section~\ref{sub:JINQ Functions}.
+The following is a great idea but is beyond the scope of this project to
+implement. Find detailed information about it in the section~\ref{sub:JINQ
+Functions}, explaining future features of JINQ.
 \begin{itemize}
   \item \textbf{Error handling}: Several people had trouble with null values,
-    mainly when, for example, when calling a  function on a non-existent object
+    mainly when calling a  function on a non-existent object
     property in a |select| or a |where| (text answer~\ref{sub:ut_q13}, and
     handed in solution). In the discussion, the idea came up to
     provide functions like |notNull|, |safeWhere| or |safeMap| to catch this.
@@ -142,10 +144,10 @@ Section~\ref{sub:JINQ Functions}.
 Although JINQ still has room for improvement, the general feedback is very
 good. Almost all find it helpful to search JSON structures using JINQ
 (\ref{sub:ut_q10}). The majority already found the current state of JINQ easy
-to use \ref{sub:ut_q8}.
+to use (\ref{sub:ut_q8}).
 
-As Figure~\ref{fig:usertest_q2} shows, most people think that JINQ can be an asset in a future
-project:
+As figure~\ref{fig:usertest_q2} shows, most people think that JINQ can be an
+asset in a future project:
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}
@@ -183,40 +185,12 @@ coordinates{(9,4) (3,3) (0,2) (1,1)};
 
 \subsection{General Findings} % (fold)
 \label{sub:General Findings}
-The questionnaire concludes with general questions. Among other things, the
-closing explains how effectively IDEs support JSDoc and whether the testers
-find this useful. Most participants used IntelliJ or WebStorm for testing
-(~\ref{sub:ut_q15}). Figure~\ref{fig:usertest_q3} shows that the IDE was an excellent help for this test. Thus, It
-makes sense to write a detailed JSDoc. Code navigation, code completion, etc.,
-are also popular with users in JavaScript. With the right IDEs, this also works
-very well.
-%\begin{figure}[H]
-%\begin{tikzpicture}
-%\begin{axis}[
-%% instead of scaling
-%width=\textwidth / 2, % Breite des Charts
-%title={"My IDE provided me with helpful support during the user test." (\ref{sub:ut_q16})},
-%ybar,  % Art des Charts                                            
-%ymin=0, % y min
-%ymax=12, % y max
-%%ylabel style={color=darkgray},
-%%xlabel style={font=\small},
-%bar width=20, % Breite der Balken (in points)
-%nodes near coords, % Labels oberhalb der Bars
-%ylabel={Number of mentions},
-%grid=both, % Zeilen ds Grids
-%grid style={line width=.1pt, draw=gray!10},
-%major grid style={line width=.2pt,draw=gray!50},
-%minor y tick num=4,
-%xtick=data,
-%% use explicit ticklabels instead of symbolc x coords
-%xticklabels={Strongly Agree, Agree, Disagree, Strongly Disagree},
-%xticklabel style={ rotate=-20 },
-%]
-%\addplot[black,fill=blue!30!white]
-%coordinates{ (1,10) (2,2) (3,1) (4,0) };
-%\end{axis}
-%\end{tikzpicture}
+The questionnaire concludes with general questions. The closing asks how
+effectively IDEs support JSDoc and whether the testers find this useful. Most
+participants used IntelliJ or WebStorm for testing (\ref{sub:ut_q15}).
+Figure~\ref{fig:usertest_q3} shows that the IDE was an excellent help for this
+test. Thus, It makes sense to write a detailed JSDoc. With the right IDEs, code
+navigation, code completion, etc., work very well.
 
 \begin{figure}[H]
 \centering
