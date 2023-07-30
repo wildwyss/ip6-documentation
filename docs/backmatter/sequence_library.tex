@@ -1,83 +1,21 @@
-\chapter{API}
-\label{chap:app_API}
-
+% irgendwo
 \newcommand{\passthrough}[1]{#1}
 
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-
 \hypertarget{api}{%
-\section{Sequence Library}\label{api}}
+\section{API}\label{api}}
 
 \hypertarget{fa229d10-532a-4f04-9805-8fdc4881587a}{%
-\subsection{Constructors}\label{sub:appendix_constructors} }
+\subsection{Constructors}\label{fa229d10-532a-4f04-9805-8fdc4881587a}}
 
-All functions listed below create new
-\passthrough{\lstinline!Sequence!}s from non-sequence values. They are
-therefore called constructors.
-
-\hypertarget{6a313d03-9822-4a0c-a825-1a6a51264d55}{%
-\subsubsection{Sequence}\label{6a313d03-9822-4a0c-a825-1a6a51264d55}}
-
-The \passthrough{\lstinline!incrementFunction!} should change the value
-(make progress) in a way that the \passthrough{\lstinline!ntilFunction!}
-function can recognize the end of the sequence.
-
-Contract:
-
-\begin{itemize}
-\tightlist
-\item
-  \passthrough{\lstinline!incrementFunction!} \&
-  \passthrough{\lstinline!whileFunction!} should not refer to any
-  mutable state variable (because of side effect) in the closure.
-\end{itemize}
-
-\textbf{Returns}: \passthrough{\lstinline!SequenceType<\_T\_>!}
-
-\textbf{Parameters}
-
-\begin{longtable}[]{
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}@{}}
-
-\toprule\noalign{}
-Name & Type & Description \\
-\midrule\noalign{}
-\endfirsthead
-\toprule\noalign{}
-Name & Type & Description \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\passthrough{\lstinline!start!} & \passthrough{\lstinline!Number!} & the
-first value to be returned by this sequence \\
-\passthrough{\lstinline!whileFuncion!} &
-\passthrough{\lstinline!(\_T\_) => Boolean!} & returns false if the
-iteration should stop \\
-\passthrough{\lstinline!incrementFunction!} &
-\passthrough{\lstinline!(\_T\_) => T!} & calculates the next value based
-on the previous \\
-\end{longtable}
-
-\textbf{Example}
-
-\begin{lstlisting}[label=559ccb9f-6cec-4f05-b202-041bc70395bf]
-const start      = 0;
-const whileF     = x => x < 3;
-const incrementF = x => x + 1;
-const sequence   = Sequence(start, whileF, incrementF);
-                                                       
-console.log(...sequence);
-// => Logs '0, 1, 2'
-\end{lstlisting}
+All functions listed below create new sequences from non-sequence
+values. They are therefore called constructors.
 
 \hypertarget{eb038883-6cbc-4daf-ad04-f8c2e25f9a33}{%
 \subsubsection{nil}\label{eb038883-6cbc-4daf-ad04-f8c2e25f9a33}}
 
-This constant represents a sequence with no values in it.
+This constant represents a sequence containing no values.
 
 \textbf{Returns}: \passthrough{\lstinline!SequenceType<*>!}
 
@@ -93,7 +31,7 @@ console.log(...emptySequence);
 \hypertarget{c35d49b1-5a40-4fb7-b9cd-225357873654}{%
 \subsubsection{PureSequence}\label{c35d49b1-5a40-4fb7-b9cd-225357873654}}
 
-Creates a Sequence which contains just the given value.
+Creates a sequence which contains just the given value.
 
 \textbf{Returns}: \passthrough{\lstinline!SequenceType<\_T\_>!}
 
@@ -114,7 +52,7 @@ Name & Type & Description \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-\passthrough{\lstinline!value!} & \passthrough{\lstinline!\_T\_!} & The
+\passthrough{\lstinline!value!} & \passthrough{\lstinline!\_T\_!} & the
 single value \\
 \end{longtable}
 
@@ -127,10 +65,57 @@ console.log(...seq);
 // => Logs '1'
 \end{lstlisting}
 
-\hypertarget{f195d9e4-f348-46ee-9ddf-a56012126598}{%
-\subsubsection{repeat}\label{f195d9e4-f348-46ee-9ddf-a56012126598}}
+\hypertarget{e7e1ec85-cbd1-4fcc-82b6-64656687aa6d}{%
+\subsubsection{Range}\label{e7e1ec85-cbd1-4fcc-82b6-64656687aa6d}}
 
-Returns a sequence that will repeatedly yield the value of
+Creates a range of numbers between two inclusive boundaries, that
+implements the JS iteration protocols. First and second boundaries can
+be specified in arbitrary order, step size is always the third
+parameter.
+
+\textbf{Returns}: \passthrough{\lstinline!SequenceType<\_T\_>!}
+
+\textbf{Parameters}
+
+\begin{longtable}[]{
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}@{}}
+
+\toprule\noalign{}
+Name & Type & Description \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Name & Type & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\passthrough{\lstinline!firstBoundary!} &
+\passthrough{\lstinline!Number!} & the first boundary of the range \\
+\passthrough{\lstinline!secondBoundary!} &
+\passthrough{\lstinline!Number!} & optionally the second boundary of the
+range \\
+\passthrough{\lstinline!step!} & \passthrough{\lstinline!Number!} & the
+size of a step, processed during each iteration \\
+\end{longtable}
+
+\textbf{Example}
+
+\begin{lstlisting}[label=a80a2826-2fd4-4453-9a72-3115be56483c]
+const range               = Range(3);
+const [five, three, one]  = Range(1, 5, -2);
+const [three, four, five] = Range(5, 3);
+                                            
+console.log(...range);
+// => Logs '0, 1, 2, 3'
+\end{lstlisting}
+
+\hypertarget{b8320e90-38a3-4df2-9770-a69376449fe3}{%
+\subsubsection{repeat}\label{b8320e90-38a3-4df2-9770-a69376449fe3}}
+
+Returns a Sequence that will repeatedly yield the value of
 \passthrough{\lstinline!arg!} when iterated over.
 \passthrough{\lstinline!repeat!} will never be exhausted.
 
@@ -153,8 +138,8 @@ Name & Type & Description \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-\passthrough{\lstinline!arg!} & \passthrough{\lstinline!\_T\_!} & The
-value to repeat. \\
+\passthrough{\lstinline!arg!} & \passthrough{\lstinline!\_T\_!} & the
+value to repeat \\
 \end{longtable}
 
 \textbf{Example}
@@ -193,9 +178,9 @@ Name & Type & Description \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-\passthrough{\lstinline!n!} & \passthrough{\lstinline!Number!} & How
+\passthrough{\lstinline!n!} & \passthrough{\lstinline!Number!} & how
 many times the valued should be repeated \\
-\passthrough{\lstinline!x!} & \passthrough{\lstinline!\_T\_!} & The
+\passthrough{\lstinline!x!} & \passthrough{\lstinline!\_T\_!} & the
 value to repeat \\
 \end{longtable}
 
@@ -208,11 +193,22 @@ console.log(...trues);
 // => Logs 'true, true, true'
 \end{lstlisting}
 
-\hypertarget{46837924-fa5a-4411-ba84-7dea9a3152bc}{%
-\subsubsection{StackSequence}\label{46837924-fa5a-4411-ba84-7dea9a3152bc}}
+\hypertarget{b80b5d30-4053-4091-842b-ddc5e8cb7195}{%
+\subsubsection{Sequence}\label{b80b5d30-4053-4091-842b-ddc5e8cb7195}}
 
-Creates a \passthrough{\lstinline!SequenceType!} on top of the given
-\passthrough{\lstinline!stack!}.
+The \passthrough{\lstinline!incrementFunction!} should change the value
+(make progress) in a way that the \passthrough{\lstinline!ntilFunction!}
+function can recognize the end of the sequence.
+
+Contract:
+
+\begin{itemize}
+\tightlist
+\item
+  \passthrough{\lstinline!incrementFunction!} \&
+  \passthrough{\lstinline!untilFunction!} should not refer to any
+  mutable state variable (because of side effect) in the closure.
+\end{itemize}
 
 \textbf{Returns}: \passthrough{\lstinline!SequenceType<\_T\_>!}
 
@@ -233,8 +229,54 @@ Name & Type & Description \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-\passthrough{\lstinline!stack!} & \passthrough{\lstinline!stack!} & Each
-iteration returns the next element of this stack. \\
+\passthrough{\lstinline!start!} & \passthrough{\lstinline!Number!} & the
+first value to be returned by this sequence \\
+\passthrough{\lstinline!whileFunction!} &
+\passthrough{\lstinline!(\_T\_) => Boolean!} & returns false if the
+iteration should stop \\
+\passthrough{\lstinline!incrementFunction!} &
+\passthrough{\lstinline!(\_T\_) => T!} & calculates the next value based
+on the previous \\
+\end{longtable}
+
+\textbf{Example}
+
+\begin{lstlisting}[label=5406966c-7de8-40e2-a7bc-d4b4bf19446e]
+const start      = 0;
+const untilF     = x => x < 3;
+const incrementF = x => x + 1;
+const sequence   = Sequence(start, untilF, incrementF);
+                                                       
+console.log(...sequence);
+// => Logs '0, 1, 2'
+\end{lstlisting}
+
+\hypertarget{d2f69237-b438-43d6-ba25-b401cd07e451}{%
+\subsubsection{StackSequence}\label{d2f69237-b438-43d6-ba25-b401cd07e451}}
+
+Creates a \passthrough{\lstinline!SequenceType!} on top of the given
+\passthrough{\lstinline!stack!}.
+
+\textbf{Returns}: \passthrough{\lstinline!SequenceType<\_T\_>!}
+
+\textbf{Parameters}
+
+\begin{longtable}[]{
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}@{}}
+\toprule\noalign{}
+Name & Type & Description \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Name & Type & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\passthrough{\lstinline!stack!} & \passthrough{\lstinline!stack!} & each
+iteration returns the next element of this stack \\
 \end{longtable}
 
 \textbf{Example}
@@ -258,10 +300,10 @@ given tuple.
 \textbf{Parameters}
 
 \begin{longtable}[]{
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.466666}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}@{}}
-
+  
 \toprule\noalign{}
 Name & Type & Description \\
 \midrule\noalign{}
@@ -273,8 +315,8 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!count!} &
-\passthrough{\lstinline!(f:ArrayApplierType<\_T\_>) => any!} & Each
-iteration returns an element of the tuple. \\
+\passthrough{\lstinline!(f:ArrayApplierType<\_T\_>) => any!} & each
+iteration returns an element of the tuple \\
 \end{longtable}
 
 \textbf{Example}
@@ -288,112 +330,17 @@ console.log(...tupleSequence);
 // => Logs '1, 2, 3'
 \end{lstlisting}
 
-\hypertarget{ed041adb-4774-4c16-a585-05c2eaf8e235}{%
-\subsection{Generators}\label{sub:appendix_generators}}
-
-
-\hypertarget{68f6afbc-de45-4843-9b8c-ab5ca8806c10}{%
-\subsubsection{AngleSequence}\label{68f6afbc-de45-4843-9b8c-ab5ca8806c10}}
-
-Creates a Sequence which generates evenly spaced angles between 0 and
-360.
-
-\textbf{Returns}: \passthrough{\lstinline!SequenceType<Number>!}
-
-\textbf{Parameters}
-
-\begin{longtable}[]{
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}@{}}
-
-\toprule\noalign{}
-Name & Type & Description \\
-\midrule\noalign{}
-\endfirsthead
-\toprule\noalign{}
-Name & Type & Description \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\passthrough{\lstinline!count!} & \passthrough{\lstinline!Number!} & the
-amount of angles to create. \\
-\end{longtable}
-
-\textbf{Example}
-
-\begin{lstlisting}[label=b94dc362-c081-4bfa-9d61-5c838e57a755]
-const angles = AngleSequence(4);
-                                
-console.log(...angles);
-// Logs => '0, 90, 180, 270'
-\end{lstlisting}
-
-\hypertarget{94f121b1-5195-4c3d-9814-bd0d04af5c3d}{%
-\subsubsection{FibonacciSequence}\label{94f121b1-5195-4c3d-9814-bd0d04af5c3d}}
-
-Generates the Fibonacci sequence.
-
-\textbf{Returns}: \passthrough{\lstinline!SequenceType<Number>!}
-
-\textbf{Example}
-
-\begin{lstlisting}[label=6c80be8d-46ac-46b5-8bb9-055c77fa5a32]
-const fibonacciNumbers = FibonacciSequence();
-const result           = take(8)(fibonacciNumbers);
-                                                   
-console.log(...result);
-// => Logs '1, 1, 2, 3, 5, 8, 13, 21'
-\end{lstlisting}
-
-\hypertarget{1984969b-ab43-4b4e-9089-49211b60162c}{%
-\subsubsection{PrimeNumberSequence}\label{1984969b-ab43-4b4e-9089-49211b60162c}}
-
-Generates the sequence of prime numbers.
-
-\textbf{Returns}: \passthrough{\lstinline!SequenceType<Number>!}
-
-\textbf{Example}
-
-\begin{lstlisting}[label=177f3653-2cbd-4c00-86df-09f69914c634]
-const primeNumbers = PrimeNumberSequence();
-const primes       = take(4)(primeNumbers);
-                                           
-console.log(...primes);
-// => Logs '2, 3, 5, 7'
-\end{lstlisting}
-
-\hypertarget{ba6a35dc-6b39-4e8d-9ab5-f04ec32009b3}{%
-\subsubsection{SquareNumberSequence}\label{ba6a35dc-6b39-4e8d-9ab5-f04ec32009b3}}
-
-Generates the sequence of square numbers.
-
-\textbf{Returns}: \passthrough{\lstinline!SequenceType<Number>!}
-
-\textbf{Example}
-
-\begin{lstlisting}[label=c165f899-ffa4-43ac-bf8a-3fe162f8bcb1]
-const squares = SquareNumberSequence();
-const result  = take(5)(squares);
-                                       
-console.log(...result);
-// => Logs '1, 4, 9, 16, 25'
-\end{lstlisting}
-
 \hypertarget{569b08a0-06b3-45e3-b4e9-576f534c5301}{%
-\subsection{Operators}\label{sub:appendix_operators} }
+\subsection{Operators}\label{569b08a0-06b3-45e3-b4e9-576f534c5301}}
 
-All of the following functions operate on
-\passthrough{\lstinline!Sequence!}s and
-\passthrough{\lstinline!Iterble!}s. They all return a new
-\passthrough{\lstinline!Sequence!}.
+All of the following functions operate on sequences and iterables. They
+all return a new sequence.
 
 \hypertarget{ac6d2b03-9c43-4e0e-8308-92102a526003}{%
 \subsubsection{bind}\label{ac6d2b03-9c43-4e0e-8308-92102a526003}}
 
 Applies the given function to each element of the
-\passthrough{\lstinline!Iterable!} and flattens it afterward. @Note This
+\passthrough{\lstinline!Iterable!} and flattens it afterward. Note: This
 operation adds a monadic API to the
 \passthrough{\lstinline!SequenceType!}.
 
@@ -402,10 +349,9 @@ operation adds a monadic API to the
 \textbf{Parameters}
 
 \begin{longtable}[]{
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.56666666}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}@{}}
-
 \toprule\noalign{}
 Name & Type & Description \\
 \midrule\noalign{}
@@ -418,10 +364,9 @@ Name & Type & Description \\
 \endlastfoot
 \passthrough{\lstinline!bindFn!} &
 \passthrough{\lstinline!<\_U\_>(bindFn: (\_T\_) => Iterable<\_U\_>)!} &
-This function will be applied to each element of the
-\passthrough{\lstinline!Iterable!} \\
+this function will be applied to each element of the iterable \\
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operator \\
 \end{longtable}
 
 \textbf{Example}
@@ -438,9 +383,8 @@ console.log(...result);
 \hypertarget{341a8910-fef6-491a-ad04-e13dbd302b95}{%
 \subsubsection{catMaybes}\label{341a8910-fef6-491a-ad04-e13dbd302b95}}
 
-The catMaybes function takes an \passthrough{\lstinline!Iterable!} of
-\passthrough{\lstinline!MaybeType!}s and returns a
-\passthrough{\lstinline!SequenceType!} of all the Just's values.
+The catMaybes function takes an iterable of maybes and returns a
+sequence of all the Just's values.
 
 \textbf{Returns}: \passthrough{\lstinline!SequenceType<\_T\_>!}
 
@@ -450,7 +394,7 @@ The catMaybes function takes an \passthrough{\lstinline!Iterable!} of
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}@{}}
-
+  
 \toprule\noalign{}
 Name & Type & Description \\
 \midrule\noalign{}
@@ -462,8 +406,8 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!it!} &
-\passthrough{\lstinline!Iterable<MaybeType<\_T\_>>!} & The receiver of
-this operator. \\
+\passthrough{\lstinline!Iterable<MaybeType<\_T\_>>!} & the receiver of
+this operator \\
 \end{longtable}
 
 \textbf{Example}
@@ -489,7 +433,7 @@ Adds the second iterable to the first iterables end.
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}@{}}
-
+  
 \toprule\noalign{}
 Name & Type & Description \\
 \midrule\noalign{}
@@ -501,11 +445,10 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!it1!} &
-\passthrough{\lstinline!Iterable<\_T\_>!} & The receiver of this
-operator. \\
+\passthrough{\lstinline!Iterable<\_T\_>!} & the receiver of this
+operator \\
 \passthrough{\lstinline!it2!} &
-\passthrough{\lstinline!Iterable<\_T\_>!} & The
-\passthrough{\lstinline!Iterable!} to concat. \\
+\passthrough{\lstinline!Iterable<\_T\_>!} & the iterable to concat \\
 \end{longtable}
 
 \textbf{Example}
@@ -532,7 +475,7 @@ Adds the given element to the front of an iterable.
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}@{}}
-
+  
 \toprule\noalign{}
 Name & Type & Description \\
 \midrule\noalign{}
@@ -544,9 +487,9 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!element!} & \passthrough{\lstinline!\_T\_!} &
-The value to put in front. \\
+the value to put in front \\
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operator \\
 \end{longtable}
 
 \textbf{Example}
@@ -563,9 +506,8 @@ console.log(...consed);
 \hypertarget{9e681fc2-fb6e-4844-853e-d8238b44a848}{%
 \subsubsection{cycle}\label{9e681fc2-fb6e-4844-853e-d8238b44a848}}
 
-Ties a finite \passthrough{\lstinline!Iterable!} into a circular one, or
-equivalently, the infinite repetition of the original
-\passthrough{\lstinline!Iterable!}.
+Ties a finite iterable into a circular one, or equivalently, the
+infinite repetition of the original iterable.
 
 \textbf{Returns}: \passthrough{\lstinline!SequenceType<\_T\_>!}
 
@@ -587,7 +529,7 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operator \\
 \end{longtable}
 
 \textbf{Example}
@@ -625,10 +567,10 @@ Name & Type & Description \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-\passthrough{\lstinline!count!} & \passthrough{\lstinline!Number!} & The
-amount ofelements to drop \\
+\passthrough{\lstinline!count!} & \passthrough{\lstinline!Number!} & the
+amount of elements to drop \\
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operator \\
 \end{longtable}
 
 \textbf{Example}
@@ -667,10 +609,10 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!predicate!} &
-\passthrough{\lstinline!Predicate<\_T\_>!} & Drops elements fulfilling
-this predicate. \\
+\passthrough{\lstinline!Predicate<\_T\_>!} & drops elements fulfilling
+this predicate \\
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operator \\
 \end{longtable}
 
 \textbf{Example}
@@ -680,13 +622,13 @@ const numbers = [0, 1, 2, 3, 4, 5];
 const dropped = dropWhile(el => el < 2)(numbers);
                                                  
 console.log(...dropped);
-// Logs '2, 3, 4, 5'
+// => Logs '2, 3, 4, 5'
 \end{lstlisting}
 
 \hypertarget{c353a5b1-74a9-4860-8859-5cb1db0001ed}{%
 \subsubsection{map}\label{c353a5b1-74a9-4860-8859-5cb1db0001ed}}
 
-Transforms each element using the given \{@link Functor function\}.
+Transforms each element using the given function.
 
 \textbf{Returns}: \passthrough{\lstinline!SequenceType<\_U\_>!}
 
@@ -708,10 +650,10 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!mapper!} &
-\passthrough{\lstinline!Functor<\_U\_, \_T\_>!} & Is applied on each
-element. \\
+\passthrough{\lstinline!Functor<\_U\_, \_T\_>!} & is applied on each
+element \\
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operator \\
 \end{longtable}
 
 \textbf{Example}
@@ -727,8 +669,7 @@ console.log(...numbers);
 \hypertarget{3dce9274-3bb4-45df-95d1-5e63e59c508b}{%
 \subsubsection{mconcat}\label{3dce9274-3bb4-45df-95d1-5e63e59c508b}}
 
-Flatten an \passthrough{\lstinline!Iterable!} of
-\passthrough{\lstinline!Iterable!}s.
+Flatten an iterable of iterables.
 
 \textbf{Returns}: \passthrough{\lstinline!SequenceType<\_T\_>!}
 
@@ -750,8 +691,8 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!it!} &
-\passthrough{\lstinline!Iterable<Iterable<\_T\_>>!} & The receiver of
-this operator. \\
+\passthrough{\lstinline!Iterable<Iterable<\_T\_>>!} & the receiver of
+this operator \\
 \end{longtable}
 
 \textbf{Example}
@@ -767,8 +708,7 @@ console.log(...result);
 \hypertarget{de7946de-4204-4528-9d70-80292415d206}{%
 \subsubsection{pipe}\label{de7946de-4204-4528-9d70-80292415d206}}
 
-Transforms the given \passthrough{\lstinline!Iterable!} using the passed
-operators.
+Transforms the given iterable using the passed operators.
 
 \textbf{Returns}: \passthrough{\lstinline!SequenceType<\_T\_> | *!}
 
@@ -791,9 +731,9 @@ Name & Type & Description \\
 \endlastfoot
 \passthrough{\lstinline!transformers!} &
 \passthrough{\lstinline!SequenceOperation<*!}\emph{\passthrough{\lstinline!,*!}}\passthrough{\lstinline!>!}
-& The operators to apply . \\
+& the operators to apply \\
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operator \\
 \end{longtable}
 
 \textbf{Example}
@@ -812,7 +752,7 @@ console.log(...piped);
 \hypertarget{fa673517-e861-4391-b582-0decb366cb72}{%
 \subsubsection{rejectAll}\label{fa673517-e861-4391-b582-0decb366cb72}}
 
-Only keeps elements which does not fulfill the given predicate.
+Only keeps elements which do not fulfil the given predicate.
 
 \textbf{Returns}: \passthrough{\lstinline!SequenceType<\_T\_>!}
 
@@ -834,10 +774,10 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!predicate!} &
-\passthrough{\lstinline!Predicate<\_T\_>!} & Ignores elements fulfilling
-this predicate. \\
+\passthrough{\lstinline!Predicate<\_T\_>!} & ignores elements fulfilling
+this predicate \\
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operator \\
 \end{longtable}
 
 \textbf{Example}
@@ -852,7 +792,7 @@ console.log(...filtered);
 \hypertarget{cfd0f69c-c3d5-4e1b-90f6-c7f1dd9d258e}{%
 \subsubsection{retainAll}\label{cfd0f69c-c3d5-4e1b-90f6-c7f1dd9d258e}}
 
-Only keeps elements which fulfill the given predicate.
+Only keeps elements which fulfil the given predicate.
 
 \textbf{Returns}: \passthrough{\lstinline!SequenceType<\_T\_>!}
 
@@ -874,10 +814,10 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!predicate!} &
-\passthrough{\lstinline!Predicate<\_T\_>!} & Keeps elements fulfilling
-this predicate. \\
+\passthrough{\lstinline!Predicate<\_T\_>!} & keeps elements fulfilling
+this predicate \\
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operator \\
 \end{longtable}
 
 \textbf{Example}
@@ -892,7 +832,7 @@ console.log(...filtered);
 \hypertarget{cfab75a9-3295-4c45-be64-d5e9dc24f024}{%
 \subsubsection{reverse\$}\label{cfab75a9-3295-4c45-be64-d5e9dc24f024}}
 
-Processes the \passthrough{\lstinline!Iterable!} backwards.
+Processes the iterable backwards.
 
 \textbf{Returns}: \passthrough{\lstinline!SequenceType<\_T\_>!}
 
@@ -914,7 +854,7 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operator \\
 \end{longtable}
 
 \textbf{Example}
@@ -929,8 +869,8 @@ console.log(...reversed);
 \hypertarget{2a8b7db1-3dc9-494e-9b73-5921e8508471}{%
 \subsubsection{snoc}\label{2a8b7db1-3dc9-494e-9b73-5921e8508471}}
 
-Adds the given element to the end of the
-\passthrough{\lstinline!Iterable!}.
+Adds the given element to the end of the iterable. It is the opposite of
+\passthrough{\lstinline!cons!}
 
 \textbf{Returns}: \passthrough{\lstinline!SequenceType<\_T\_>!}
 
@@ -952,9 +892,9 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!element!} & \passthrough{\lstinline!\_T\_!} &
-The element to add. \\
+the element to add \\
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operator \\
 \end{longtable}
 
 \textbf{Example}
@@ -990,10 +930,10 @@ Name & Type & Description \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-\passthrough{\lstinline!count!} & \passthrough{\lstinline!Number!} & The
+\passthrough{\lstinline!count!} & \passthrough{\lstinline!Number!} & he
 amount of elements to keep \\
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operator \\
 \end{longtable}
 
 \textbf{Example}
@@ -1031,9 +971,9 @@ Name & Type & Description \\
 \endlastfoot
 \passthrough{\lstinline!predicate!} &
 \passthrough{\lstinline!Predicate<\_T\_>!} & keeps elements until this
-predicate fails. \\
+predicate fails \\
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operator \\
 \end{longtable}
 
 \textbf{Example}
@@ -1048,9 +988,7 @@ console.log(...result);
 \hypertarget{9bca8d6e-83f7-4964-87ac-3f1be94d150d}{%
 \subsubsection{zip}\label{9bca8d6e-83f7-4964-87ac-3f1be94d150d}}
 
-Zip takes two \passthrough{\lstinline!Iterable!}s and returns an
-\passthrough{\lstinline!Iterable!} of corresponding
-\passthrough{\lstinline!Pair!}s.
+Zip takes two iterables and returns an iterable of corresponding pairs.
 
 \textbf{Returns}: \passthrough{\lstinline!SequenceType<\_T\_>!}
 
@@ -1072,11 +1010,10 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!it1!} &
-\passthrough{\lstinline!Iterable<\_T\_>!} & The receiver of this
-operator. \\
+\passthrough{\lstinline!Iterable<\_T\_>!} & the receiver of this
+operator \\
 \passthrough{\lstinline!it2!} &
-\passthrough{\lstinline!Iterable<\_U\_>!} & The second
-\passthrough{\lstinline!Iterable!} \\
+\passthrough{\lstinline!Iterable<\_U\_>!} & zthe second iterable \\
 \end{longtable}
 
 \textbf{Example}
@@ -1134,18 +1071,18 @@ console.log(...zipped);
 \end{lstlisting}
 
 \hypertarget{fe5771c4-997c-4878-97c6-42d757c1418a}{%
-\subsection{Terminal Operations}\label{sub:appendix_terminal_operations}}
+\subsection{Terminal
+operations}\label{fe5771c4-997c-4878-97c6-42d757c1418a}}
 
-All the following operations transform an
-\passthrough{\lstinline!Iterable!} into a single value.
+All of the following operations transform an iterable into a single
+value.
 
 \hypertarget{bd20be56-f445-48bf-bdf2-a716e1236a4d}{%
 \subsubsection{eq\$}\label{bd20be56-f445-48bf-bdf2-a716e1236a4d}}
 
-Checks the equality of two
-non-infinite\passthrough{\lstinline!Iterable!}s.
+Checks the equality of two non-infinite iterables.
 
-\emph{Note:} Two iterables are considered as equal if they contain or
+\emph{Note}: Two iterables are considered as equal if they contain or
 create the exactly same values in the same order. Use
 \passthrough{\lstinline!["=="]!} defined on the SequencePrototype to
 perform a comparison in a more readable form.
@@ -1170,11 +1107,10 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!it1!} &
-\passthrough{\lstinline!Iterable<\_T\_>!} & The first
-\passthrough{\lstinline!Iterable!} \\
+\passthrough{\lstinline!Iterable<\_T\_>!} & The first iterable \\
 \passthrough{\lstinline!it2!} &
-\passthrough{\lstinline!Iterable<\_T\_>!} & The receiver of this
-operator. \\
+\passthrough{\lstinline!Iterable<\_T\_>!} & the receiver of this
+operation \\
 \end{longtable}
 
 \textbf{Example}
@@ -1195,10 +1131,10 @@ Performs a reduction on the elements from right to left, using the
 provided start value and an accumulation function, and returns the
 reduced value.
 
-Since \passthrough{\lstinline!foldr!} reduces the
-\passthrough{\lstinline!Iterable!} from right to left, it needs O(n)
-memory to run the function. Therefore \passthrough{\lstinline!reduce$!}
-is the better alternative for most cases
+Since \passthrough{\lstinline!foldr!} reduces the iterable from right to
+left, it needs O(n) memory to run the function. Therefore
+\passthrough{\lstinline!reduce$!} is the better alternative for most
+cases
 
 \textbf{Returns}: \passthrough{\lstinline!\_T\_!}
 
@@ -1222,10 +1158,10 @@ Name & Type & Description \\
 \passthrough{\lstinline!accumulationFn!} &
 \passthrough{\lstinline!BiFunction<\_U\_, \_T\_, \_T\_>!} & the
 reduction function \\
-\passthrough{\lstinline!start!} & \passthrough{\lstinline!\_T\_!} & The
+\passthrough{\lstinline!start!} & \passthrough{\lstinline!\_T\_!} & the
 first value \\
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operation \\
 \end{longtable}
 
 \textbf{Example}
@@ -1263,10 +1199,10 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!callback!} &
-\passthrough{\lstinline!Consumer<\_T\_>!} & The callback to execute for
-each element. \\
+\passthrough{\lstinline!Consumer<\_T\_>!} & the callback to execute for
+each element \\
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operation \\
 \end{longtable}
 
 \textbf{Example}
@@ -1305,7 +1241,7 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operation \\
 \end{longtable}
 
 \textbf{Example}
@@ -1321,7 +1257,8 @@ console.log(result);
 \hypertarget{4f9c8f02-8045-4c55-980b-19761e4a0c5c}{%
 \subsubsection{isEmpty}\label{4f9c8f02-8045-4c55-980b-19761e4a0c5c}}
 
-Returns true, if the iterables head is undefined.
+Returns \passthrough{\lstinline!true!}, if the iterables head is
+undefined.
 
 \textbf{Returns}: \passthrough{\lstinline!Boolean!}
 
@@ -1343,7 +1280,7 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operation \\
 \end{longtable}
 
 \textbf{Example}
@@ -1359,8 +1296,7 @@ console.log(result);
 \hypertarget{f5d04902-359f-4b27-b811-851551c0d1fe}{%
 \subsubsection{max\$}\label{f5d04902-359f-4b27-b811-851551c0d1fe}}
 
-Returns the largest element of a \textbf{non-empty}
-\passthrough{\lstinline!Iterable!}.
+Returns the largest element of a \textbf{non-empty} iterable.
 
 Note:
 
@@ -1395,11 +1331,11 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operation \\
 \passthrough{\lstinline!comparator!} &
-\passthrough{\lstinline!BiPredicate<\_T\_,\_T\_>!} & An optional
+\passthrough{\lstinline!BiPredicate<\_T\_,\_T\_>!} & an optional
 comparing function which returns true if the second argument is larger
-than the first. \\
+than the first \\
 \end{longtable}
 
 \textbf{Example}
@@ -1415,9 +1351,9 @@ console.log(maximum);
 \hypertarget{acc84b7e-1143-48cb-888d-767e0d324309}{%
 \subsubsection{safeMax\$}\label{acc84b7e-1143-48cb-888d-767e0d324309}}
 
-Returns the largest element of an \passthrough{\lstinline!Iterable!}.
+Returns the largest element of an iterable.
 
-See the Note to \passthrough{\lstinline!max$!}.
+See the note to \passthrough{\lstinline!max$!}.
 
 \textbf{Returns}: \passthrough{\lstinline!MaybeType<\_T\_>!}
 
@@ -1439,11 +1375,11 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operation \\
 \passthrough{\lstinline!comparator!} &
-\passthrough{\lstinline!BiPredicate<\_T\_,\_T\_>!} & An optional
+\passthrough{\lstinline!BiPredicate<\_T\_,\_T\_>!} & an optional
 comparing function which returns true if the second argument is larger
-than the first. \\
+than the first \\
 \end{longtable}
 
 \textbf{Example}
@@ -1461,7 +1397,7 @@ maybeMax
 \hypertarget{4262f292-d5a6-4e34-acfa-e4a74506c1c1}{%
 \subsubsection{min\$}\label{4262f292-d5a6-4e34-acfa-e4a74506c1c1}}
 
-Returns the smallest element of a \textbf{non-empty} \{@link Iterable\}.
+Returns the smallest element of a \textbf{non-empty} iterable
 
 See the Note to \passthrough{\lstinline!max$!}.
 
@@ -1489,11 +1425,11 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operation \\
 \passthrough{\lstinline!comparator!} &
-\passthrough{\lstinline!BiPredicate<\_T\_,\_T\_>!} & An optional
+\passthrough{\lstinline!BiPredicate<\_T\_,\_T\_>!} & an optional
 comparing function which returns true if the first argument is smaller
-than the second. \\
+than the second \\
 \end{longtable}
 
 \textbf{Example}
@@ -1509,7 +1445,9 @@ console.log(minimum);
 \hypertarget{22fcb726-cee7-4692-9189-a7f90875accc}{%
 \subsubsection{safeMin\$}\label{22fcb726-cee7-4692-9189-a7f90875accc}}
 
-Returns the smallest element of an \passthrough{\lstinline!Iterable!}.
+Returns the smallest element of an iterable.
+
+See the Note to \passthrough{\lstinline!max$!}.
 
 \textbf{Returns}: \passthrough{\lstinline!MaybeType<\_T\_>!}
 
@@ -1551,12 +1489,13 @@ maybeMin
 \end{lstlisting}
 
 \hypertarget{8e9a31f3-adef-4efe-b6bd-884d685ebc44}{%
-\subsubsection{foldl\$}\label{8e9a31f3-adef-4efe-b6bd-884d685ebc44}}
+\subsubsection{reduce\$ /
+foldl\$}\label{8e9a31f3-adef-4efe-b6bd-884d685ebc44}}
 
 Performs a reduction on the elements, using the provided start value and
 an accumulation function, and returns the reduced value.
 
-\passthrough{\lstinline!foldl$!} is an alias for
+Note: \passthrough{\lstinline!foldl$!} is an alias for
 \passthrough{\lstinline!reduce$!}
 
 \textbf{Returns}: \passthrough{\lstinline!\_T\_!}
@@ -1581,10 +1520,10 @@ Name & Type & Description \\
 \passthrough{\lstinline!accumulationFn!} &
 \passthrough{\lstinline!BiFunction<\_T\_, \_U\_, \_T\_>!} & the
 reduction function \\
-\passthrough{\lstinline!start!} & \passthrough{\lstinline!\_T\_!} & The
+\passthrough{\lstinline!start!} & \passthrough{\lstinline!\_T\_!} & the
 first value \\
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operation \\
 \end{longtable}
 
 \textbf{Example}
@@ -1594,14 +1533,13 @@ const number = [0, 1, 2, 3, 4, 5];
 const res = foldl$((acc, cur) => acc + cur, 0)(numbers);
                                                         
 console.log(res);
-// => logs '15'
+// => Logs '15'
 \end{lstlisting}
 
 \hypertarget{6a4d6129-8352-449e-84de-cb0b60fbf845}{%
 \subsubsection{show}\label{6a4d6129-8352-449e-84de-cb0b60fbf845}}
 
-Transforms the passed \passthrough{\lstinline!Iterable!} to a
-\passthrough{\lstinline!String!}.
+Transforms the passed iterable into a \passthrough{\lstinline!String!}.
 
 \textbf{Returns}: \passthrough{\lstinline!String!}
 
@@ -1623,9 +1561,9 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!it!} & \passthrough{\lstinline!Iterable<\_T\_>!}
-& The receiver of this operator. \\
+& the receiver of this operation \\
 \passthrough{\lstinline!maxValues!} & \passthrough{\lstinline!Number!} &
-optional: The amount of elements that should be printed at most \\
+optional: the amount of elements that should be printed at most \\
 \end{longtable}
 
 \textbf{Example}
@@ -1635,7 +1573,7 @@ const numbers = [0, 1, 2, 3, 4, 5];
 const text    = show(numbers, 3);
                                    
 console.log(text);
-// Logs '[0,1,2]'
+// => Logs '[0,1,2]'
 \end{lstlisting}
 
 \hypertarget{235974db-05c7-4513-8478-7d9ca31e50b4}{%
@@ -1665,8 +1603,8 @@ Name & Type & Description \\
 \bottomrule\noalign{}
 \endlastfoot
 \passthrough{\lstinline!iterable!} &
-\passthrough{\lstinline!Iterable<\_T\_>!} & The receiver of this
-operator. \\
+\passthrough{\lstinline!Iterable<\_T\_>!} & the receiver of this
+operation \\
 \end{longtable}
 
 \textbf{Example}
@@ -1679,3 +1617,282 @@ console.log("head:", head, "tail:", ...tail);
 // => Logs 'head: 0 tail: 1 2 3 4'
 \end{lstlisting}
 
+\hypertarget{7ab5394b-94c8-49fd-b747-3fafa3764d32}{%
+\subsection{The Prototype of the
+Sequence}\label{7ab5394b-94c8-49fd-b747-3fafa3764d32}}
+
+Some functions are also available via the prototype of the sequence.
+
+\hypertarget{4e16908d-1d8b-4712-9b4c-00431a8bdb0c}{%
+\subsubsection{and}\label{4e16908d-1d8b-4712-9b4c-00431a8bdb0c}}
+
+This is the same as \passthrough{\lstinline!bind!}.
+
+Applies the given function to each element of the sequence and flattens
+it afterward. Note: This operation adds a monadic API to the
+\passthrough{\lstinline!SequenceType!}.
+
+\textbf{Returns}: \passthrough{\lstinline!SequenceType<\_U\_>!}
+
+\textbf{Parameters}
+
+\begin{longtable}[]{
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.56666666}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}@{}}
+
+\toprule\noalign{}
+Name & Type & Description \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Name & Type & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\passthrough{\lstinline!bindFn!} &
+\passthrough{\lstinline!<\_U\_>(bindFn: (\_T\_) => Iterable<\_U\_>)!} &
+this function will be applied to each element of the iterable \\
+\end{longtable}
+
+\textbf{Example}
+
+\begin{lstlisting}[label=18e442c6-6467-4e19-bc9b-7679259b6817]
+const numbers = Range(3);
+const bindFn  = el => take(el)(repeat(el));
+const result  = numbers.and(bindFn);
+                                           
+console.log(...result);
+// => Logs '1, 2, 2, 3, 3, 3'
+\end{lstlisting}
+
+\hypertarget{24c00685-c1a1-48d1-9430-91d7bb8d798a}{%
+\subsubsection{fmap}\label{24c00685-c1a1-48d1-9430-91d7bb8d798a}}
+
+This is the same as \passthrough{\lstinline!map!}.
+
+Transforms each element using the given function.
+
+\textbf{Returns}: \passthrough{\lstinline!SequenceType<\_U\_>!}
+
+\textbf{Parameters}
+
+\begin{longtable}[]{
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}@{}}
+
+\toprule\noalign{}
+Name & Type & Description \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Name & Type & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\passthrough{\lstinline!mapper!} &
+\passthrough{\lstinline!Functor<\_U\_, \_T\_>!} & is applied on each
+element \\
+\end{longtable}
+
+\textbf{Example}
+
+\begin{lstlisting}[label=d2a3e994-68fb-4dca-a954-00bb8432648a]
+const numbers = Range(2);
+const mapped  = numbers.fmap(el => el * 2);
+                                           
+console.log(...numbers);
+// => Logs '0, 2, 4'
+\end{lstlisting}
+
+\hypertarget{3d33c9f7-0aaa-425e-8772-3ef34221985a}{%
+\subsubsection{empty}\label{3d33c9f7-0aaa-425e-8772-3ef34221985a}}
+
+This is the same as \passthrough{\lstinline!nil!}.
+
+This functions returns a sequence containing no values.
+
+\textbf{Returns}: \passthrough{\lstinline!SequenceType<*>!}
+
+\textbf{Example}
+
+\begin{lstlisting}[label=ec0f0760-4956-481e-97d0-799b1f33e68d]
+const emptySequence = Range(3).empty();
+                              
+console.log(...emptySequence);
+// => Logs '' (nothing)
+\end{lstlisting}
+
+\hypertarget{86a0c0de-ecd3-49d6-8e0a-454e59ba0722}{%
+\subsubsection{pure}\label{86a0c0de-ecd3-49d6-8e0a-454e59ba0722}}
+
+This is the same as \passthrough{\lstinline!PureSequence!}.
+
+Creates a sequence which contains just the given value.
+
+\textbf{Returns}: \passthrough{\lstinline!SequenceType<\_T\_>!}
+
+\textbf{Parameters}
+
+\begin{longtable}[]{
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}@{}}
+
+\toprule\noalign{}
+Name & Type & Description \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Name & Type & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\passthrough{\lstinline!value!} & \passthrough{\lstinline!\_T\_!} & the
+single value \\
+\end{longtable}
+
+\textbf{Example}
+
+\begin{lstlisting}[label=b4b19961-9849-4688-8afe-9c635af8eda4]
+const seq = Range(3).pure(1);
+                            
+console.log(...seq);
+// => Logs '1'
+\end{lstlisting}
+
+\hypertarget{573dc5de-90b1-4591-8db4-da62a82d831b}{%
+\subsubsection{toString}\label{573dc5de-90b1-4591-8db4-da62a82d831b}}
+
+This is the same as \passthrough{\lstinline!show!}.
+
+Transforms this sequence into a \passthrough{\lstinline!String!}.
+
+\textbf{Returns}: \passthrough{\lstinline!String!}
+
+\textbf{Parameters}
+
+\begin{longtable}[]{
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}@{}}
+
+\toprule\noalign{}
+Name & Type & Description \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Name & Type & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\passthrough{\lstinline!maxValues!} & \passthrough{\lstinline!Number!} &
+optional: the amount of elements that should be printed at most \\
+\end{longtable}
+
+\textbf{Example}
+
+\begin{lstlisting}[label=3b9092ce-ad67-4baa-a872-a38a7455ebb4]
+const numbers = Range(6);
+const text    = range.toString(3);
+                                   
+console.log(text);
+// => Logs '[0,1,2]'
+\end{lstlisting}
+
+\hypertarget{e862d602-1a86-4fc9-8159-7b7d136c9ed6}{%
+\subsubsection{pipe}\label{e862d602-1a86-4fc9-8159-7b7d136c9ed6}}
+
+This is the same as \passthrough{\lstinline!pipe!}.
+
+Transforms this sequence using the passed operators.
+
+\textbf{Returns}: \passthrough{\lstinline!SequenceType<\_T\_> | *!}
+
+\textbf{Parameters}
+
+\begin{longtable}[]{
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}@{}}
+
+\toprule\noalign{}
+Name & Type & Description \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Name & Type & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\passthrough{\lstinline!transformers!} &
+\passthrough{\lstinline!SequenceOperation<*!}\emph{\passthrough{\lstinline!,*!}}\passthrough{\lstinline!>!}
+& the operators to apply \\
+\end{longtable}
+
+\textbf{Example}
+
+\begin{lstlisting}[label=30162c8f-03dd-4637-92b6-d142debe1612]
+const numbers = Range(5);
+const piped   = numbers.pipe(
+                 retainAll(n => n % 2 === 0),
+                 map(n => 2*n),
+                 drop(2)
+               );
+                                           
+console.log(...piped);
+// => Logs '0, 4, 8'
+\end{lstlisting}
+
+\hypertarget{1b04f6d9-570a-4d48-9d9b-416f9e24870e}{%
+\subsubsection{\texorpdfstring{\texttt{==}}{==}}\label{1b04f6d9-570a-4d48-9d9b-416f9e24870e}}
+
+This is the same as \passthrough{\lstinline!eq$!}.
+
+Checks the equality of this iterable with the given iterable.
+
+\emph{Note}: Two iterables are considered as equal if they contain or
+create the exactly same values in the same order. Use
+\passthrough{\lstinline!["=="]!} defined on the SequencePrototype to
+perform a comparison in a more readable form.
+
+\textbf{Returns}: \passthrough{\lstinline!Boolean!}
+
+\textbf{Parameters}
+
+\begin{longtable}[]{
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.33333333}}@{}}
+
+\toprule\noalign{}
+Name & Type & Description \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Name & Type & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\passthrough{\lstinline!that!} &
+\passthrough{\lstinline!Iterable<\_T\_>!} & the other (finite) iterable
+to compare with \\
+\end{longtable}
+
+\textbf{Example}
+
+\begin{lstlisting}[label=99a9d6a3-56f6-4aba-8e0b-cfb53094b323]
+const numbers = [0, 1, 2, 3];
+const range   = Range(3);
+const result  = range ["=="] (numbers);
+                                    
+console.log(result);
+// => Logs 'true'
+\end{lstlisting}
