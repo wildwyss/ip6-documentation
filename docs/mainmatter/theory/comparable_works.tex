@@ -2,9 +2,9 @@
 \label{sec:Comparable Works}
 This section explains projects that influenced this thesis. All of them are
 similar to the implemented artefacts but differ fundamentally since the
-standard library was built explicitly for the Kolibri and supports the |Pair|
-and |Stack| types. Furthermore, it does not introduce new dependencies to other
-projects or dependency management systems.
+standard library was built explicitly for the Kolibri, also supporting its
+|Pair| and |Stack| types. Furthermore, it does not introduce new dependencies
+to other projects or dependency management systems.
 
 \subsection{Lodash} % (fold)
 \label{sub:Lodash}
@@ -23,15 +23,15 @@ the regular Lodash module. Both library versions provide much less precise
 typing than this standard library.\\
 The Sequence library additionally supports monadic operations described in
 section~\ref{sec:Monads in JavaScript}. Thus, the Sequence
-library allows generic functionalities based on the monadic API, such as JINQ,
-to be used.
+library allows using generic functionalities based on the monadic API, such as
+JINQ.
 % subsection Lodash (end)
 
 \subsection{rxjs} % (fold)
 \label{sub:rxjs}
 rxjs~\cite{rxjs_2023} offers very similar functionality as the Sequence library.
 However, these functions work with a reactive data structure called
-|Observable|. Nevertheless, rxjs served several times as a good template for
+|Observable|. Nevertheless, rxjs served several times as a good role model for
 design decisions. The idea to combine multiple operators using |pipe| comes
 from rxjs.
 % subsection rxjs (end) section Comparable Works (end)
@@ -40,8 +40,7 @@ from rxjs.
 \label{sub:Lambda Calculus for Practical JavaScript}
 "Lambda Calculus for Practical JavaScript"~\cite{andermatt_lambda_2022}
 provides an introduction and some applications of lambda calculus in
-JavaScript. Things like |Pair|, the commonly used function |id|, or even the
-implementation of the Immutable data structure |Stack| come from this project
+JavaScript. The immutable data structure |Stack| comes from this project
 work. The constructor |StackSequence| provided by the Sequence library offers
 the possibility to make a |Stack| iterable. 
 % subsection Lambda Calculus for Practical JavaScript (end)
