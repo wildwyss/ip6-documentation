@@ -1,10 +1,5 @@
 \section{Description of the Application Domain}
 \label{sec:Description of the Application Domain}
-This section provides a brief overview of the Kolibri Web UI Toolkit and its
-working environment. We explore the functional standard library's
-significance in this context. Additionally, the chapter concludes by discussing
-the potential interest and target audience for such a toolkit.
-
 \subsection{Functional Programming in JavaScript}
 \label{sub:Functional Programming in JavaScript}
 JavaScript is omnipresent on the web client side. In many aspects, JavaScript
@@ -24,7 +19,7 @@ Therefore, the language provides the following features:
 Listing~\ref{lst:curried_fn_in_js} shows these concepts with some examples.
 First, on line~\ref{line:start_plus} the arrow function |plus| defines a function that expects two arguments in curried style.
 Then, the function is partially evaluated by passing one argument to it. 
-The result is a new function |plusOne|. This process is called partial application. 
+The result is a new function |plusOne|. This process is called partial application.
 |plusOne| is now a function that expects one more argument
 to evaluate the result. Passing the next argument calculates the addition and
 stores the result in the variable |result| on line~\ref{line:end_plus}.
@@ -68,10 +63,6 @@ function is stored in |commentResultFn,| which itself becomes a function. The
 actual computation and output of results occur only when |commentResultFn| is
 called on line~\ref{line:comment_result_fn}. This example showcases how 
 functions can be treated as regular objects.
-\\
-With these functional concepts, writing robust code in JavaScript is possible. 
-And that is where the Kolibri toolkit comes in. You will learn more about the
-Kolibri toolkit in the next sections.
 
 \subsection{The Kolibri Web UI Toolkit}
 \label{sub:The Kolibri Web UI Toolkit}
@@ -90,7 +81,7 @@ with a standard library based on functional concepts.
 \label{sub:The Basis of the Project}
 This work continues the previous project from the fifth semester of Computer
 Science studies. Therefore, we have already dealt with the topic before this thesis,
-but on a smaller scale. This predecessor project includes a Logging Framework
+but on a smaller scale. This predecessor project's artefacts include a Logging Framework
 for the Kolibri toolkit and the first version of the functional standard
 library. These results made it possible to develop the library to its current
 state. By researching the literature and trying different approaches, a

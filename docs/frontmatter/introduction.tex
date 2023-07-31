@@ -19,7 +19,7 @@ on these iteration protocols, providing operations analogous to the Haskell
 standard library.
 
 However, another goal is to examine how it is possible to implement Haskell
-type classes in JavaScript. The type class monad, for example, makes it
+type classes in JavaScript. The type class "monad", for example, makes it
 possible to write more abstract functions that can handle a wide variety of
 data structures. 
 
@@ -49,8 +49,8 @@ mainly consists of two parts:\\
     library.\\
     Operations performed on sequences are static functions that do not belong
     to an object or a class. This means they are not accessible using the dot
-    on a sequence but are imported using ES6 modules, which brings several
-    advantages:
+    on a sequence but are imported using ES6 modules~\cite{mdn_modules_2023},
+    which brings several advantages:
       \begin{enumerate}
         \item The Sequence library is easily extensible. Without changing existing
           code, anyone can add new operations.
@@ -62,7 +62,7 @@ mainly consists of two parts:\\
   same API, which calls when consumed, the underlying iterable.
 
 \item \textbf{Monadic API in JavaScript:} The knowledge gained from the
-  Sequence library enabled adapting the type class "monad" from Haskell into
+  Sequence library enabled adapting the type class monad from Haskell into
   JavaScript. This type class is defined as JSDoc, which allows writing generic
   functions that can handle data structures of various kinds. For a data type
   to be compatible with such a function, it must implement each operation
@@ -80,7 +80,7 @@ mainly consists of two parts:\\
   new type |JsonMonad|, which also implements the monadic API, allows the
   processing of inconsistent JSON files using language-integrated queries and
   thus prevents frequently occurring mistakes. This makes it easier to process
-  data that originates from an API, for example.
+  data that originates from an API.
 \end{enumerate}
 
 Automated unit tests ensure the correctness of the two previously explained
@@ -136,7 +136,7 @@ To achieve essential goals we followed certain concepts and methods:
     library. Test users solve various tasks with the help of the functional
     standard library and complete a questionnaire about them. The questionnaire
     aims to determine whether the users find the library easy to use and to
-    receive general suggestions for improvement—findings from this flow back
+    receive general suggestions for improvement — findings from this flow back
     into the implementation. Questions with text answers allow capturing the
     general mood of the participants.
 \end{enumerate}
@@ -144,7 +144,7 @@ To achieve essential goals we followed certain concepts and methods:
 
 \section*{Reader Guidance} % (fold)
 \label{sec:Reader Guidance}
-This thesis consists of 2 parts. The first part (chapters 2-6) deals with
+This thesis consists of two parts. The first part (chapters 2-6) deals with
 conceptual aspects. Each chapter focuses on a specific part of the thesis and
 explains all concepts and ideas behind it. These chapters, therefore, give a
 deep understanding of the work.\\
