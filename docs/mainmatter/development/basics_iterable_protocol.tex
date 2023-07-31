@@ -1,13 +1,12 @@
 \chapter{Iterators in JavaScript} % (fold)
 \label{chap:Iterators in JavaScript}
-This chapter explains the concept of iterable and iterator objects and points
-out features and characteristics of it. The sequence is an implementation of an
-iterable. There is a constructor with the same name and a JSDoc type for the
-sequence. Many operations can process a sequence. Together with the sequence,
-they form the "Sequence library". The following discussion covers challenges
-and solutions for creating a robust and user-friendly API.
+This chapter explains the concept of iterable and iterator objects. The
+sequence is an iterable data structure developed during this thesis. Alongside
+many operations to process iterable objects, it forms the "Sequence library".
+Many discussions cover challenges and solutions for creating a robust and
+user-friendly API.
 
-\section{Iterables in General}
+\section{Iterators in General}
 \label{sec:Iterables in General}
 In Computer Science, iterators are a popular concept. An iterator provides
 access to elements of a data structure. It does not matter if the iterator
@@ -20,18 +19,19 @@ Therefore, it is crucial to understand the fundamentals of this concept.
 \label{sub:Iterable data structures in JS}
 JavaScript knows two protocols which define how an object can be used for
 iteration - the iterable protocol and the iterator
-protocol~\cite{mdn_protocols} object, also known as an iterable, represents a
-collection of values. A function call on its iterator, gives access to the next
-element in the collection - there is no way to access a previous value. Once an
-iterator reaches its end, it is considered "used up" - subsequent calls to such
-an exhausted iterator won't produce any meaningful results.
+protocol~\cite{mdn_protocols}. An iterable object, also known as an iterable,
+represents a collection of values. A function call on its iterator, gives
+access to the next element in the collection - there is no way to access a
+previous value. Once an iterator reaches its end, it is considered "used up" -
+subsequent calls to such an exhausted iterator won't produce any meaningful
+results.
 
 \subsubsection{The Iterable Protocol}
 \label{subsub:The Iterable Protocol}
 In JavaScript, an object is considered as iterable if it contains a property
 called |[Symbol.iterator]|. This property signifies that the object is of type
 |Iterable<T>|. Invoking the |[Symbol.iterator]| property, creates an
-iterator that follows the iterator protocol explained in the following section.
+iterator that follows the iterator protocol explained in the next section.
 Objects in JavaScript that implement this property can be utilized with
 destructuring \footnote{The destructuring assignment syntax is a JavaScript
 expression that allows to extract items of iterables into individual
@@ -52,16 +52,16 @@ showcases an example of an object defining the |[Symbol.iterator]| property.
 
 \subsubsection{The Iterator Protocol}
 \label{subsub:The Iterator Protocol}
-Invoking the |[Symbol.iterator]| property obtains an iterator object
-complying to the iterator protocol. It must implement a function |next|, which
-defines how and which values are returned when iterating. Each iteration on an
-iterator calls this function. |next| returns an object, which must
-include two properties: |value| and |done|. The property |value|
-contains the current value of the iteration, while |done| represents the
-information on whether the end of the iterator has been reached. The following
-code \ref{lst:iterator_protocol} shows a simple implementation of it. Each call
-on |next| returns an object with the |value 1|. |done| is always |false| -
-hence the iterator never ends. 
+An invocation of the |[Symbol.iterator]| property of an iterable returns an
+object complying with the iterator protocol. It must implement a function
+|next|, which defines how and which values are returned when iterating. Each
+iteration on an iterator calls this function. |next| returns an object, which
+must include two properties: |value| and |done|. The property |value| contains
+the current value of the iteration, while |done| represents the information on
+whether the end of the iterator has been reached. The code of listing
+\ref{lst:iterator_protocol} shows a simple implementation of it. Each call on
+|next| returns an object with the |value 1|. |done| is always |false| - hence
+the iterator never ends. 
 
 \begin{lstlisting}[
   style=ES6, caption=Iterator protocol,
@@ -154,13 +154,13 @@ interface IteratorReturnResult<TReturn> {
 \end{lstlisting}
 
 \begin{itemize}
-  \item{Line~\ref{line:start_iteration_types}~-~\ref{line:end_iteration_types}: 
-      An |Iterable| is of type |Iterable<T>|, whereas the object returned by the property
-      |[Symbol.Iterator]| is of type |Iterator<...>|. An |Iterator| requires having a property |next|. 
+  \item{Line~\ref{line:start_iteration_types} to~\ref{line:end_iteration_types}: 
+      An iterable is of type |Iterable<T>|, whereas the object returned by the property
+      |[Symbol.Iterator]| is of type |Iterator<...>|. An iterator requires having a property |next|. 
       This is the function that returns values when iterating. These values must be 
       of type |IteratorResult<...>.|
     }
-  \item{Line~\ref{line:start_iteration_result_types}~-~\ref{line:end_iteration_result_types}:
+  \item{Line~\ref{line:start_iteration_result_types} to \ref{line:end_iteration_result_types}:
       |IteratorResult<...>| itself is defined to return an 
       object of type |IteratorReturnResult<...>|, which either is of type
       |IteratorYieldResult| or |IteratorReturnResult|. This object contains the actual 
@@ -182,9 +182,7 @@ listing~\ref{lst:iterable_types}.
 \subsection{Illustration of the JS Iteration Protocol}
 \label{sub:Illustration of the JS Iteration Protocol}
 Listing~\ref{lst:example_js_iteration_protocol} illustrates the behavior of the
-JS iteration protocols more clearly using a sample scenario. Since array is an
-iterable, we can use it for the following demonstration:
-
+JS iteration protocols more clearly using an array:
 \begin{lstlisting}[
   style=ES6, 
   caption=Example: JS Iteration Protocol,
@@ -202,12 +200,12 @@ iterator.next(); // returns { done: true,  value: undefined }
 
 On line~\ref{line:illustraion_create_iterator}, invoking |[Symbol.iterator]|
 returns the iterator of the iterable |list|. 
-After that, we call |next| four times directly on the iterator. Since the
+After that, |next| gets caleld four times directly on the iterator. Since the
 iterable contains only two elements, the third and fourth call on |next|
 returns an object of type |IteratorReturnResult<TReturn>|. Thereby, |done| is
 |true| and |value| is |undefined|. \\
 By using |for...of| and destructuring, an iterable would stop iterating after
-the second call. This means an |for...of| loop runs until the property |done|
+the second call. This means a |for...of| loop runs until the property |done|
 is set to |true|.
 
 \section{Sequence: An iterable Series of Values}
@@ -240,10 +238,10 @@ Defining a sequence requires specifying three essential points:
 \end{enumerate}
 Listing \ref{lst:sequence} on line~\ref{line:seq_args} shows the passing of
 these three elements as arguments to the constructor. To keep the focus on the
-core elements of the sequence, some functionality in listing \ref{lst:sequence}
-is omitted and discussed later. The |next| function, explained by
+core elements of the sequence,  listing \ref{lst:sequence} omits some
+functionality - a following section will discuss it. The |next| function, explained by
 section~\ref{subsub:The Iterator Protocol}, is on
-lines~\ref{line:start_protocol}~-~\ref{line:end_protocol}. It contains the
+lines~\ref{line:start_protocol}~to~\ref{line:end_protocol}. It contains the
 logic to return the next value in an iteration. First, it uses |whileFunction|
 to check if the sequence has finished. If this is not the case, the
 |incrementFunction| calculates the next element, which afterward will be
@@ -304,17 +302,16 @@ Meanwhile, |console.log| writes the elements to the console.
 Line~\ref{line:demo_output} shows the output produced.
 
 
-\subsection{Range - A Real-World Example}
+\subsection{Generating Numbers with a Range}
 \label{sub:Range - A Real-World Example}
 When considering sequences, a common requirement is to generate a series of
 numbers, often with a specified starting point, an end value, and adjustable
 increments. This is a classic definition of implementing a range.
 Ranges are built into many programming languages such as
 Haskell~\cite{haskell_list}, Python~\cite{python_range} or
-Kotlin~\cite{kotlin_ranges}. Therefore, we also implemented a range using the
-sequence constructor. 
+Kotlin~\cite{kotlin_ranges}.
 
-Listing~\ref{lst:range_haskell} shows the construction of a range in Haskell.
+Listing~\ref{lst:range_haskell} shows the construction of a range in Haskell:
 \begin{lstlisting}[
   style=Haskell,
   caption=Range in Haskell,
@@ -326,8 +323,8 @@ ghci> r
 ghci> r = [1..] -- contains an infinite range
 \end{lstlisting}
 
-Listing~\ref{lst:kolibri_range} demonstrates different ways to initialize a
-range using the Sequence library.
+Listing~\ref{lst:kolibri_range} demonstrates different ways to initialize the
+range of the Sequence library:
 
 \begin{lstlisting}[
   style=ES6, 
@@ -390,17 +387,18 @@ const Range = (fstBoundary, sndBoundary = 0, step = 1) => {
 \end{lstlisting}
 
 While closely examining the features of a range, we will also cover the functions
-|normalize| and |hasReachedEnd| to explain them in more detail.
+|normalize| and |hasReachedEnd| to explain them in more detail later in this
+chapter.
 
 \subsubsection{Features}
 \label{subsub:Features}
 
 \begin{itemize}
-  \item \textbf{Parametrization:} The range takes 1–3 parameters. The
+  \item \textbf{Parametrization:} The range takes 1 to 3 parameters. The
     parameters specify the lower limit, the upper limit, and the step size. If
   not all parameters are set, the range uses suitable default values.
 \item \textbf{Interchangeable boundaries:} The order of the lower and the upper
-  limit is Interchangeable when creating a new range.
+  limit is interchangeable when creating a new range.
 \item \textbf{Negative boundaries and step:} The boundaries and the step size
   of the range can be positive or negative integers.
 \end{itemize}
@@ -412,7 +410,7 @@ and the option for positive or negative step values. Initially, the range
 boundaries are normalized based on the step value. This normalization
 determines which boundary will contain the first generated number and which
 will represent the last number.
-The following figure~\ref{fig:norm-flowchart} explains the process in detail.
+The following figure~\ref{fig:norm-flowchart} explains the process in detail:
 
 \begin{figure}[H]
     \centering
