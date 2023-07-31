@@ -5,9 +5,8 @@ introduces the sources and explains their meaning for this work.
 
 \subsection{Why Functional Programming Matters}
 \label{sub:Functional Programming Matters}
-
 Why Functional Programming Matters~\cite{hughes_why_1989} by John Hughes gives
-an impressive insight into functional programming. Mainly higher-order
+an impressive insight into functional programming, mainly higher-order
 functions, and laziness is discussed intensively. This paper strongly
 influenced the development of the standard library, as it describes many
 concepts and best practices. In addition, the user test is based on an example
@@ -16,8 +15,8 @@ Furthermore, this paper has improved our understanding of function composition,
 partial application, and laziness. Therefore, it has enhanced the quality and
 robustness of the standard library. \\
 The Sequence library, part of the functional standard library, implements ideas
-functionalities described in this paper. It is a prominent part of this thesis,
-allowing to write good, modularized, and reusable code.
+and functionalities described in this paper. It is a prominent part of this
+thesis, allowing to write good, modularized, and reusable code.
 Chapter~\ref{chap:Modularizing Programs} deals with these ideas in depth.
 
 
@@ -47,9 +46,9 @@ concepts in more detail.
 \label{sub:MDN - Iteration Protocols}
 The Mozilla Firefox page describing the iteration
 protocols~\cite{mdn_protocols} is the basis for developing the Sequence
-library. The page contains all relevant facts about Iterable and Iterators.
+library. The page contains all relevant facts about iterables and iterators.
 Section~\ref{sec:Iterables in General} explains the implementation
-of protocols.
+of these protocols.
 
 \subsection{LINQ}
 \label{sub:LINQ}
@@ -59,5 +58,5 @@ data sources in a fluent and declarative way. This declarative nature makes it
 straightforward to write queries and understand them later. JINQ, which emerged
 in this project, is based on the same ideas. LINQ heavily inspired the naming
 and the scope of JINQ, enabling users familiar with LINQ to use JINQ
-immediately. Chapter~\ref{sec:Query different Data Structures} discusses JINQ
+immediately. Section~\ref{sec:Query different Data Structures} discusses JINQ
 in detail.
