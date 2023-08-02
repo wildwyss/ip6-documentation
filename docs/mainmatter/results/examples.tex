@@ -74,6 +74,15 @@ console.log(...take(limit)(fizzbuzz));
 // => Logs '1 2 "fizz" 4 "buzz" ... 11 "fizz" 13 14 "fizzbuzz"'
 \end{lstlisting}
 
+As you observe, the entire setup relies on the sequence. We define three
+distinct endless sequences. A range generates a line of numbers, while |cycle|
+produces an unending repetition for "fizzes" and "buzzes". Memory usage remains
+minimal. Subsequently, the individual sequences merge through |zipWith|, yielding
+a new sequence. This uncomplicated setup underscores that working with
+sequences is declarative, straightforward, and highly understandable.
+\\
+
+
 Now we are extending the application to add new rules during the runtime:
 
 \begin{lstlisting}[
