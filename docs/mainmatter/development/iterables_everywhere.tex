@@ -2,9 +2,9 @@
 \label{sec:Iterables Everywhere}
 The JS iteration protocols are suitable for a wide variety of data structures.
 With the Sequence library defining many operations for iterables, it makes
-sense to make more objects iterable. For example, the Kolibri Web UI Toolkit
-defines the immutable data structure "pair", for which there are noteworthy
-applications if it is iterable. 
+sense to make more objects iterable. \\
+The Kolibri Web UI Toolkit defines the immutable data structure "pair", for
+which there are noteworthy applications if it is iterable.
 \subsection{Making immutable Data Structures iterable}
 \label{sub:Making immutable Data Structures iterable}
 Listing~\ref{lst:pair_non_iterable} defines the type pair and shows its usage:
@@ -33,7 +33,7 @@ console.log(one + " " + two);
 \end{lstlisting}
 
 The only way to make a pair immutable is to build it using functions. The type 
-signature on line~\ref{line:start_pair_type}~-~\ref{line:end_pair_type} shows 
+signature on line~\ref{line:start_pair_type}~to~\ref{line:end_pair_type} shows
 that the first two arguments are arbitrary values. Pair stores these two values
 in its closure scope, the only scope in JavaScript that can not be changed in
 any way from outside.

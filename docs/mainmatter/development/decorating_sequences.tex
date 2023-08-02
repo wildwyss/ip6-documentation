@@ -56,8 +56,8 @@ uses this approach to create operations to transform sequences.
 \subsubsection{Processing Iterables with Functions}
 \label{subsub:Processing Iterables with Functions}
 In the following, |map| serves as a representative for any function of the
-Sequence library. We call such functions operators, according
-to the package they are in.
+Sequence library. The Sequence library calls such functions operators, according
+to the module they are in.
 Listing~\ref{lst:impl_map} shows how |map| processes a sequence. The
 implementation uses the decorator approach just mentioned. |map| decorates a
 sequence on line~\ref{line:obj_mapped}.
@@ -66,7 +66,7 @@ The function signature of |map| on line~\ref{line:args} shows that a client
 can invoke |map| with two arguments:
 
 \begin{enumerate}
-  \item{A mapper-function capable of transforming an element of any |Iterable|}
+  \item{A mapping-function to transform one single element.}
   \item{An object of type |Iterable<T>|}
 \end{enumerate}
 
@@ -108,8 +108,8 @@ iteration protocols. We define this object on line~\ref{line:obj_mapped} as
 iteration protocols specify only this single function, it is the only one that
 must be exposed. The newly created object |mapped| forwards function
 calls on |next| to the inner function |next|, on line~\ref{line:inner_next}.
-The |mapper| function processes the result and returns it. So |map|
-decorates the function |next| of the inner iterable.
+The |mapper| function then processes the result and returns it. So |map|
+\textit{decorates} the function |next| of the inner iterable.
 
 \subsection{Benefits of the Decorator Approach}
 \label{sub:Benefits of the Decorator Approach}
@@ -117,7 +117,7 @@ decorates the function |next| of the inner iterable.
 \label{subsub:Standalone Functions}
 In an object-oriented approach, the sequence object would provide a function
 |map|. Therefore, such operators are available by using the dot notation,
-similar to Java implementing the Stream API \cite{java_stream}. 
+similar to Java implementing the Stream API \cite{java_stream}.
 However, with the approach of providing independent functions, there 
 are three significant advantages:
 
@@ -134,15 +134,15 @@ are three significant advantages:
     functionality from the outside. }
 \end{enumerate}
 
-Additionally, the |operators| implement their arguments in a curried-style.
-Passing the receiver at the last position allows the use of eta-reduction in
-many situations. More about this in section~\ref{sec:Placing the Receiver at
-the End}.
+Additionally, the |operators| implement their arguments in a curried style and
+accept the receiving iterable at the last position. This allows using
+eta-reduction and other advantages, as section~\ref{sec:Placing the Receiver at the End} outlines.
 
 \subsubsection{Stateful Decorating}
 \label{subsub:Stateful Decorating}
-A state is present when operators decorate iterables or implement 
-additional functionalities. 
+A state is present as soon as operators decorate iterables or implement 
+additional functionalities. In the case of |map| this state is the function
+|mapper| and the iterator of the inner iterable.
 
 There are two valid possibilities for including the state:
 \begin{enumerate}
@@ -156,7 +156,7 @@ In both variants, ensuring the underlying object remains unchanged is crucial.
 Listing~\ref{lst:scen_1} shows an example of a sequence generating numbers from
 zero to five. On line ~\ref{line:scen_1_state}, value |i| works as a counter 
 and represents the state. 
-A call to |SampleIterator| creates a state which is valid for the entire 
+A call to |SampleIterable| creates a state which is valid for the entire
 iterable's lifetime.
 
 \begin{lstlisting}[
@@ -177,8 +177,8 @@ const SampleIterable = () => {
 
 Listing~\ref{lst:scen_1_demo} shows a possible program flow. The program first
 creates an object of |SampleIterable|, maps it and processes an element on the
-original object. Note, that on line~\ref{line:scen1_map} |map| also uses the
-same |Iterable|. Line~\ref{line:scen1_output} shows an expected result.
+original object. So both for loops work on the same underlying iterable.
+Line~\ref{line:scen1_output} shows an expected result.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -250,7 +250,7 @@ const map = mapper => iterator => {
 
  return {
    [Symbol.iterator]: () => ({ next }),
-   copy: () => map(mapper)(inner)*'\label{line:return_copy_map}'* 
+   copy: () => map(mapper)(inner)*'\label{line:return_copy_map}'*
  };
 };
 \end{lstlisting}
@@ -263,11 +263,11 @@ dealing with iterables must implement it. Thus, implementation errors are
 almost certain. On the other hand, it is an extra effort from a performance point 
 of view. It means more function calls and also larger call stacks to manage.
 The advantage of this implementation is that partially processed iterators can
-be further utilized while maintaining their current state, without
+be further utilized while maintaining their current state without
 reinitializing the state with a new iteration.
-Operators can only process objects that implement |copy|. That means other
-iterable objects like arrays or |HTMLCollection| are not processable any more,
-which is a significant drawback.
+Operators can only process objects that implement |copy|.
+Other iterable objects are not processable any more, which is a significant
+drawback.
 
 \subsubsection{Scenario 2: Placing the State inside the Iterator}
 \label{subsub:Scenario 2}
@@ -277,8 +277,8 @@ previous example~\ref{lst:scen_1_demo} using this implementation produces the
 expected output straight away. The distinction lies in the fact that the object
 does not need to be copyable. Each call to |[Symbol.iterator]| creates a new
 state. Apart from the iterator, this iterable is immutable. Another advantage
-is that all operators within the Sequence library can handle objects that
-conform to JS iteration protocols!
+is that all Sequence library operators can handle any object conforming to the
+JS iteration protocols!
 
 \begin{lstlisting}[
   style=ES6, 
@@ -304,7 +304,7 @@ const SampleIterable = () => {
 \label{subsub:Comparing the Two Scenarios}
 As mentioned in section~\ref{sub:Types of Iterables}, there is a reason for 
 the deep nesting of the iterator into the iterable object. 
-Each iterator can have its own state and is therefore immutable! \\
+Each iterator can have its own state and the iterable itself is immutable! \\
 In programming, immutability refers to creating objects that cannot be changed
 once they are created. There are several advantages to using immutability in
 code: \\
@@ -318,7 +318,7 @@ predictable and declarative code that is easier to test.
 
 In scenario 2, the immutable approach has a specific impact on an iterable.
 When an iterable is immutable, each time we access its iterator, a new iterator
-instance is returned. 
+instance is returned.
 This means it is impossible to process an iterable partially or in multiple stages.
 To achieve this behaviour, we need to implement scenario 1.
 \\
@@ -338,10 +338,10 @@ sequences.
 \label{subsub:A Convenience Function}
 Consider listing~\ref{lst:impl_map} once again showing the implementation of
 |map|. This implementation uses a function |mapIterator|, which returns an
-object containing a function |next|. Thus, |mapIterator| forms an |Iterator|.
+object containing a function |next|. Thus, |mapIterator| forms an iterator.
 |createMonadicSequence| now receives such an iterator as parameter.
 Listing~\ref{lst:createMonadicSequence} demonstrates the implementation of
-|createMonadicSequence|.
+|createMonadicSequence|:
 
 \begin{lstlisting}[
   style=ES6, 
@@ -380,12 +380,11 @@ they have the same prototype.\\
 emerge through chaining prototypes, meaning setting the prototype of a
 prototype.
 
-A prototype is just a function. As already mentioned, in JavaScript functions
-are objects as well. Therefore, you can define any properties on them. A static
-function |setPrototypeOf| adds this prototype to an existing object. Thus, any
-properties set on the prototype become available to that object. These
-properties can access the current object directly with the keyword |this|.
-Listing~\ref{lst:js_set_proto} shows how this works for any object:
+A prototype is just a function. A static function |setPrototypeOf| adds this
+prototype to an existing object. Thus, any properties set on the prototype
+become available to that object. These properties can access the current object
+directly with the keyword |this|. Listing~\ref{lst:js_set_proto} shows how this
+works for any object:
 
 \begin{lstlisting}[
   style=ES6,
@@ -414,9 +413,8 @@ The function |setPrototype| on line~\ref{line:setPrototype} of
 listing~\ref{lst:set_prototype} adds the sequence prototype to an iterable
 using the function |setPrototypeOf|. This causes some functions to be
 accessible on each sequence using the "|.|" (dot) notation. These are, among
-others, monadic functions. You will read more about Monads and their purpose in
-chapter~\ref{chap:Monads in JavaScript}. 
-This chapter also explains why accessing some functions on a given object is helpful.
+others, monadic functions. You will read more about monads and their purpose in
+
 \begin{lstlisting}[
   style=ES6,
   caption=Implementation of setPrototype,
@@ -440,10 +438,10 @@ JSDoc is the optional type system of JavaScript~\cite{jsdoc_use_2023}. As the
 name says, it is pure documentation, therefore, not enforceable. Since newer
 IDEs support it very well, it is still very reasonable.\\
 The |SequenceType| is the JSDoc representation of a sequence.
-Listing~\ref{lst:sequence_type} shows the definition of the type. Furthermore,
-|toString|, |pipe|, and equals |"=="| are also functions accessible via the
-prototype. Having these functions on each |SequenceType| is very convenient,
-as they improve readability and usability.
+Listing~\ref{lst:sequence_type} shows the definition of the type. Alongside, the
+monadic functions |toString|, |pipe|, and equals |"=="| are also
+accessible via the prototype. Having these functions on each |SequenceType| is
+very convenient, as they improve readability and usability.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -474,7 +472,7 @@ JINQ, which section~\ref{sec:API_JINQ} discusses in detail.
 \label{subsub:SequenceType vs. Iterable}
 The |SequenceType| describes iterable objects having their
 prototype set to |SequencePrototype|. An object of type iterable is just
-iterable. 
+iterable.
 Every operator of the Sequence library receives an iterable as a parameter and
 returns an object of type |SequenceType|.
 
