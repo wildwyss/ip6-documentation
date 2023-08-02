@@ -17,7 +17,7 @@ Therefore, the language provides the following features:
 \end{itemize}
 
 Listing~\ref{lst:curried_fn_in_js} shows these concepts with some examples.
-First, on line~\ref{line:start_plus} the arrow function |plus| defines a function that expects two arguments in curried style.
+First, on line~\ref{line:start_plus}, the arrow function |plus| defines a function that expects two arguments in curried style.
 Then, the function is partially evaluated by passing one argument to it. 
 The result is a new function |plusOne|. This process is called partial application.
 |plusOne| is now a function that expects one more argument
@@ -60,19 +60,19 @@ as input and generates a new function. To achieve this, the original function,
 referred to as |func| is enclosed within a wrapper function to produce a
 commented result. The outcome of invoking |commentResult| with the |plusOne|
 function is stored in |commentResultFn,| which itself becomes a function. The
-actual computation and output of results occur only when |commentResultFn| is
+actual computation and output of results occur when |commentResultFn| is
 called on line~\ref{line:comment_result_fn}. This example showcases how 
 functions can be treated as regular objects.
 
 \subsection{The Kolibri Web UI Toolkit}
 \label{sub:The Kolibri Web UI Toolkit}
 The web page of the Kolibri describes the toolkit as, "Kolibri wants to be a
-sustainable, high quality toolkit"~\cite{kolibri}, - and it is.
+sustainable, high-quality toolkit"~\cite{kolibri}, - and it is.
 The Kolibri Web UI Toolkit is a collection of JavaScript abstractions. Experts test all
 components, which must satisfy high functional and non-functional standards. An
 essential part of the toolkit is the dependency-less implementation. Thus, it
 represents a certain antithesis to the frameworks dominated by |npm| libraries.
-This is important to fulfill the quality requirements in the long term.\\
+This is important to fulfil the quality requirements in the long term.\\
 The toolkit is under continuous development, with each student project focusing
 on a new topic. The main goal of this thesis is to extend the toolkit
 with a standard library based on functional concepts. 

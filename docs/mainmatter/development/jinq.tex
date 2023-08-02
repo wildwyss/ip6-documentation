@@ -13,9 +13,10 @@ browse lists of JavaScript objects using LINQ.
 Some programming languages offer uniform ways to query different data
 structures in an SQL-like syntax.
 
-C\# calls this concept LINQ (Language Integrated Query). LINQ allows to
-decarlatively query compatible data sources. Listing~\ref{lst:linq_in_csharp}
-shows how to use LINQ to query a simple array of numeric values.
+C\# calls this concept LINQ (Language Integrated Query).
+LINQ allows querying compatible data sources declaratively. 
+Listing~\ref{lst:linq_in_csharp} shows how to use LINQ to query a simple array 
+of numeric values.
 
 \begin{lstlisting}[
   style=sharpc,
@@ -56,7 +57,7 @@ which provides additional operations to work with a sequence. All of these
 operations are available through the sequence prototype. Since these
 operations work solely on the committed properties of the JS iteration
 protocols, the function |toMonadicIterable|, explained in
-section~\ref{sec:Iterables Everywhere} can quickly turn them into a monadic
+section~\ref{sec:Iterables Everywhere}, can quickly turn them into a monadic
 sequence.\\
 With that, a more extensive API is now available to every data structure
 conforming to the JS iteration protocols. This monadic API makes it possible to
@@ -71,7 +72,7 @@ in section~\ref{subsub:The MonadType}. So JINQ can handle monadic iterables and
 every monadic type, such as the type maybe introduced in
 section~\ref{sub:Doing the same in JavaScript}.\\
 \textit{Note:} All operations supported by JINQ are explained in detail in 
-section~\ref{sec:API_JINQ}. This sections descibres how JINQ works
+section~\ref{sec:API_JINQ}. This section describes how JINQ works
 internally.
 
 Listing~\ref{lst:keepeven_recap} shows again the function |keepEven| already
@@ -112,10 +113,10 @@ within moments what this function does, as it reads almost like prose!\\
 This is the power of these abstractions - types must only follow a
 minimal API to be compatible with JINQ. Additionally, they are very readable.
 
-\textit{Note:} As explained before, JINQ works only on the monadic API. So you
-can just as well use the monadic functions to achieve the same. However, the
-example |keepEven| shows that it is easier to work with JINQ and save lines of
-code.
+\textit{Note:} As explained before, JINQ works only on the monadic API.
+You can use the monadic functions to achieve the same.
+However, the example |keepEven| shows that it is easier to work with JINQ and 
+save lines of code.
 
 \subsubsection{How does JINQ work?} % (fold)
 \label{subsub:How does JINQ work?}
@@ -158,7 +159,7 @@ showcase how the builder operations work:
 
 \begin{lstlisting}[
   style=ES6,
-  caption=How is where implemented?,
+  caption=Implementation of where,
   label={lst:jinq_where_impl}
 ]
 // jinq.js
@@ -188,13 +189,13 @@ another one (or even with itself):
 
 \begin{lstlisting}[
   style=ES6,
-  caption=How is pairWith implemented?,
+  caption=Implementation of pairWith,
   label={lst:jinq_pairwith_impl}
 ]
 // jinq.js
 // ...
 
-cconst pairWith = monad1 => monad2 => {
+const pairWith = monad1 => monad2 => {
   const processed = monad1.and(x =>
     monad2.fmap(y => Pair(x)(y))
   );
@@ -211,7 +212,7 @@ So when combining two sequences, every element of the first sequence gets
 paired up with every element of the second sequence. One could argue that this
 will take too much memory and could be more efficient. But let us step back and
 think about section~\ref{subsub:Lazy Evaluate Iterables}, which discusses the laziness of sequences. |monad1|
-(a sequence in the current example) is evaluated lazily! So never all
+(a sequence in the current example) is evaluated lazily! Therefore, never all
 combinations will be materialized in memory at once!
 % subsubsection How does JINQ work? (end)
 
@@ -220,7 +221,7 @@ combinations will be materialized in memory at once!
 A list comprehension in Haskell is an expression form that allows generating
 lists in a declarative way. See \cite[Ch. 5]{hutton_pih_2016} for an
 in-depth introduction to list comprehensions. \\
-Listing~\ref{lst:list_comp_hs} creates a list using a list comprehension in
+Listing~\ref{lst:list_comp_hs} creates a list using list comprehension in
 Haskell:
 
 \begin{lstlisting}[
@@ -262,11 +263,11 @@ rules and, thus, comes close to a list comprehension.
 \label{subsub:Using the JSONMonad to process lists of JavaScript objects}
 The |JSONMonad| gives arrays of JavaScript objects with a monadic API. The
 |JSONMonad| makes them, therefore, compatible with JINQ. This is especially
-useful when JavaScript Objects are created from JSON because they often have
+useful when JavaScript objects are created from JSON because they often have
 missing or nullable fields. The monadic operations of |JSONMonad| deal with
 that and ensure that querying nullable attributes do not cause problems.
 
-The listing~\ref{lst:jsonmonad_data} dives right into an example defining two
+Listing~\ref{lst:jsonmonad_data} dives right into an example defining two
 records that are related to each other. The first one contains data about an
 ancient battle, while the second one contains data about the heroes of the
 battle. The |heroId| connects these two records. The battle had a |winner| and
@@ -297,8 +298,8 @@ const heroes = JSON.parse(`
 
 Listing~\ref{lst:jsonmonad_example} combines these two data sources using JINQ.
 Line~\ref{line:jsonmonad_example1} wraps the |battleData| with the |JSONMonad|
-to become queriable. |select| then accesses the property |winner| and from
-there the property |outstandingHeroes|. Line~\ref{line:jsonmonad_example2}
+to become queryable. |select| then accesses the property |winner| and from
+there, the property |outstandingHeroes|. Line~\ref{line:jsonmonad_example2}
 pairs the second data source before line~\ref{line:jsonmonad_example3}, then
 destructures the pair and only keeps the heroes (from the second data source)
 that belong to the winning team (from the first data source).

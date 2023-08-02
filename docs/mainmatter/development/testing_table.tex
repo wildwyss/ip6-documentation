@@ -1,10 +1,10 @@
 \chapter{Effective Testing}
 \label{chap:Effective_Testing}
 This chapter explains the testing strategy of the Sequence library. The start
-shows the instruments already available from the Kolibri Toolkit and
+shows the instruments already available from the Kolibri Web UI Toolkit and
 how we used them. After that, we focus on the testing table. 
 This is the core of the implemented testing framework during this project,
-exciting details are covered in depth. The end of the chapter discusses some
+and exciting details are covered in depth. The end of the chapter discusses some
 advanced concepts regarding property-based testing.
 
 \section{Motivation}
@@ -52,12 +52,12 @@ An example of a summary report shows figure~\ref{fig:test_report}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{mainmatter/pictures/test_report.png}
-    \caption{Example Test Report}
+    \caption{Example test report}
     \label{fig:test_report}
 \end{figure}
 
 
-To demonstrate how to work with the test suitec, examine the following
+To demonstrate how to work with the test suite, examine the following
 listing~\ref{lst:testsuit_demo}:
 
 \begin{lstlisting}[
@@ -76,10 +76,10 @@ Description of the functionalities:
 
 \begin{itemize}
   \item{|TestSuite|: A |TestSuite| contains the test cases and is identified by a
-    name. This name represents the suite on the summary page on
+    name. This name represents the suite on the summary page in 
   figure~\ref{fig:test_report} when executing.}
   \item{|run|: executes all tests containing the |TestSuite|.}
-  \item{|add|: A function for including a test case into |TestStuite|. Its
+  \item{|add|: A function for including a test case into |TestSuite|. Its
       parameters are a string |name| and a callback which provides the test.}
 \end{itemize}
 
@@ -220,15 +220,15 @@ config-based testing approach, which enables generalizing test cases for the
 Sequence library.
 
 The architecture consists of three main parts:
-\begin{itemize}
-  \item{A table containing all testing functions.}
-  \item{Configuration objects to define test properties.}
-  \item{A function |addToTestingTable| which includes all tests from the testing
-    table into a given test suite.}
-\end{itemize}
+\begin{enumerate}
+  \item{A table containing all testing functions}
+  \item{Configuration objects to define test properties}
+  \item{A function |addToTestingTable| includes all tests from the testing
+    table into a given test suite}
+\end{enumerate}
 
 Each constructor and operator of the Sequence library has its configuration
-that specifies the test behavior. Likewise, each has its |TestSuite|. 
+that specifies the test behaviour. Likewise, each has its |TestSuite|. 
 
 \subsection{Configuring the Testing Table}
 \label{sub:Configuring the Testing Table}
@@ -237,8 +237,8 @@ In order to test operators and constructors using the testing table, it is
 necessary to implement a test configuration.
 Listing~\ref{lst:config_reduce} shows the testing file of the function |reduce|. 
 Lines~\ref{line:start_test_config}-\ref{line:end_test_config} define the test 
-configuration. Special cases not handled by the testing table follow later in
-the same file from line~\ref{line:additional_test_cases} on.
+configuration. The testing table does not handle special cases. Those follow 
+later in the same file from line~\ref{line:additional_test_cases} on.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -291,7 +291,7 @@ properties are available and the purpose of it:
                       defined in property |iterable|.
                     & 
                     y  \\ 
-    |excludedTests|   & An optional array of testing function to exclude tests
+    |excludedTests|   & An optional array of testing functions to exclude tests
                       in the testing table. 
                     & n 
                     \\
@@ -325,7 +325,7 @@ Listing~\ref{lst:testing_table} shows the implementation.
 
 \begin{lstlisting}[
   style=ES6, 
-  caption=Testing Table,
+  caption=Testing table,
   label={lst:testing_table}
   ]
 const testingTable = [
@@ -340,8 +340,9 @@ const testingTable = [
 
 An object in the table includes two properties:
 \begin{itemize}
-\item{A string representing its name. The name is important for displaying an accurate error message if the test fails.}
-\item{A function to test a specific behavior}
+\item{A string representing its name. The name is important for displaying an 
+  accurate error message if the test fails}
+\item{A function to test a specific behaviour}
 \end{itemize}
 
 Each function of the testing table expects as argument a test configuration
@@ -350,7 +351,7 @@ exemplary the implementation of |testSimple|.
 
 \begin{lstlisting}[
   style=ES6, 
-  caption=Implementaion Test Simple,
+  caption=Implementation test simple,
   label={lst:test_simple}
   ]
 /**
@@ -387,7 +388,7 @@ For this purpose, it executes the following tasks:
   iterables as section~\ref{sub:Additional Assertions} explains.} 
 \end{itemize}
 
-The testing table includes test-functions to examine the following behaviors of
+The testing table includes test-functions to examine the following behaviours of
 implementations of the Sequence library:
 
 \begin{itemize}
@@ -414,7 +415,7 @@ Line~\ref{line:filtering_tests} filters out tests excluded by the
 configuration. 
 \begin{lstlisting}[
   style=ES6, 
-  caption=The addToTestingTable function,
+  caption=Implementation of addToTestingTable,
   label={lst:impl_addToTestingTable}
   ]
 export { addToTestingTable }
@@ -467,7 +468,7 @@ equal to the original when reversed two times.
 
 \begin{lstlisting}[
   style=ES6, 
-  caption=Test Configuration reverse,
+  caption=Test configuration reverse,
   label={lst:test_config_reverse}
   ]
 const testSuite = TestSuite("Sequence: operation reverse$");
@@ -531,7 +532,7 @@ const invariantPenetration = invariant => assert => {
 
 Line~\ref{line:list_of_parameters} defines a list with several parameters of
 type |Iterable|. Each parameter tests if the invariant of |reverse| holds. 
-This enables for testing many cases written in a few lines of code.
+This enables testing many cases written in a few lines of code.
 
 \subsubsection{An advanced Example}
 \label{subsub:An advanced Example}
@@ -597,10 +598,10 @@ up. Such occurrences could lead to program errors or unexpected behaviour.
 Consequently, we implemented a test case addressing this scenario and added it
 to the testing table. By adding just one more test, the entire Sequence library
 could be examined for this behaviour, allowing for further improvements and
-finding the same bug in other functions!\\
+finding the same bug in other functions.\\
 Another example concerns the behaviour of operators and operations when dealing
 with empty iterables. When a test configuration provides an invariant,
-it is automatically tested against the empty sequence! This is a powerful way
+it is automatically tested against the empty sequence. This is a powerful way
 to ensure that invariants apply to all types of sequences.\\
 Furthermore, another special test case is the |TEST_PURITY|, which ensures that
 the state of an iterable is in the proper location. This safeguards against

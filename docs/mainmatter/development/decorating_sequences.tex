@@ -10,7 +10,7 @@ following sections. In object-oriented programming, the decorator pattern is a
 widely used concept: An object decorates another, as the name implies. As a 
 result, an outer object holds an inner object, while both implement the same 
 interface. The outer object forwards requests to the inner one. This enables
-the outer to modify (decorate) the behavior of the inner. 
+the outer to modify (decorate) the behaviour of the inner.
 Figure \ref{fig:seq_decorator} shows how a decorator forwards the receiving calls and 
 transfers the answer back to the client.
 
@@ -40,14 +40,14 @@ transfers the answer back to the client.
 
     \end{call}                                                                    
   \end{sequencediagram}    
-  \caption{Decorator Sequence Diagram}
+  \caption{Decorator sequence diagram}
   \label{fig:seq_decorator}
 \end{figure}
 
 The decorator pattern is often used in object-oriented programming languages 
 because of its ability to add functionality to an object at runtime. It is also 
 possible to add extended functionality to a single class object. This pattern
-gives a great way to modify the behavior of iterables! The Sequence library
+gives a great way to modify the behaviour of iterables! The Sequence library
 uses this approach to create operations to transform sequences.
 
 \subsection{Processing Sequences}
@@ -106,9 +106,9 @@ Because |map| decorates iterables, it also returns an object adhering to JS
 iteration protocols. We define this object on line~\ref{line:obj_mapped} as
 |mapped|. Consequently, |map| also has a function called |next|. Since the JS
 iteration protocols specify only this single function, it is the only one that
-must be exposed. The object newly created object |mapped| forwards function
+must be exposed. The newly created object |mapped| forwards function
 calls on |next| to the inner function |next|, on line~\ref{line:inner_next}.
-The |mapper| function then processes the result and returns it. So |map|
+The |mapper| function processes the result and returns it. So |map|
 decorates the function |next| of the inner iterable.
 
 \subsection{Benefits of the Decorator Approach}
@@ -117,7 +117,7 @@ decorates the function |next| of the inner iterable.
 \label{subsub:Standalone Functions}
 In an object-oriented approach, the sequence object would provide a function
 |map|. Therefore, such operators are available by using the dot notation,
-similar to Java implements the Stream API \cite{java_stream}. 
+similar to Java implementing the Stream API \cite{java_stream}. 
 However, with the approach of providing independent functions, there 
 are three significant advantages:
 
@@ -134,23 +134,22 @@ are three significant advantages:
     functionality from the outside. }
 \end{enumerate}
 
-Additionally, the |operators| implement their arguments in a curried-style,
-passing the receiver at the last position allows the use of eta-reduction in
-many situations. More about this in section~\ref{subsub:Placing the Receiver at
+Additionally, the |operators| implement their arguments in a curried-style.
+Passing the receiver at the last position allows the use of eta-reduction in
+many situations. More about this in section~\ref{sec:Placing the Receiver at
 the End}.
 
 \subsubsection{Stateful Decorating}
 \label{subsub:Stateful Decorating}
-A state is present as soon as operators decorate iterables or implement 
+A state is present when operators decorate iterables or implement 
 additional functionalities. 
 
-There are two valid possibilities for including state:
+There are two valid possibilities for including the state:
 \begin{enumerate}
   \item Placing the state into the closure scope of the iterable.
   \item Implementing the state into the closure scope of the iterator.
 \end{enumerate}
-In both variants, it is crucial to ensure that the underlying object remains
-unchanged.
+In both variants, ensuring the underlying object remains unchanged is crucial.
 
 \subsubsection{Scenario 1: Placing the State inside the Iterable}
 \label{subsub:Scenario 1}
@@ -158,7 +157,7 @@ Listing~\ref{lst:scen_1} shows an example of a sequence generating numbers from
 zero to five. On line ~\ref{line:scen_1_state}, value |i| works as a counter 
 and represents the state. 
 A call to |SampleIterator| creates a state which is valid for the entire 
-iterbale's lifetime.
+iterable's lifetime.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -223,7 +222,7 @@ const SampleIterable = () => {
   return {
     [Symbol.iterator]: () => ({ next }),
     copy: copy *'\label{line:iterable_copy}'*
-  }
+  };
 };
 \end{lstlisting}
 Since |copy| must be callable from outside, returning it alongside 
@@ -251,7 +250,8 @@ const map = mapper => iterator => {
 
  return {
    [Symbol.iterator]: () => ({ next }),
-   copy: () => map(mapper)(inner)*'\label{line:return_copy_map}'* };
+   copy: () => map(mapper)(inner)*'\label{line:return_copy_map}'* 
+ };
 };
 \end{lstlisting}
 On line~\ref{line:copy_of_inner}, |map| references a copy of the original
@@ -292,9 +292,10 @@ const SampleIterable = () => {
       let i = 0; *'\label{line:scen_2_state}'*
       return {
         next: () => ({ done: i > 5, value: i++ })
-      }
-    }
+      };
+    };
   };
+
 };
 \end{lstlisting}
 
@@ -317,9 +318,9 @@ predictable and declarative code that is easier to test.
 
 In scenario 2, the immutable approach has a specific impact on an iterable.
 When an iterable is immutable, each time we access its iterator, a new iterator
-instance is returned. This means that it is not possible to process an iterable
-partially or in multiple stages. To achieve this behaviour, we need to implement
-scenario 1.
+instance is returned. 
+This means it is impossible to process an iterable partially or in multiple stages.
+To achieve this behaviour, we need to implement scenario 1.
 \\
 Because of the significant benefits of immutability and, consequently, the
 advantages of scenario 2, the Sequence library uses this concept. This way,
@@ -379,7 +380,7 @@ they have the same prototype.\\
 emerge through chaining prototypes, meaning setting the prototype of a
 prototype.
 
-A prototype is just a function. As already mentioned in JavaScript functions
+A prototype is just a function. As already mentioned, in JavaScript functions
 are objects as well. Therefore, you can define any properties on them. A static
 function |setPrototypeOf| adds this prototype to an existing object. Thus, any
 properties set on the prototype become available to that object. These
@@ -414,8 +415,8 @@ listing~\ref{lst:set_prototype} adds the sequence prototype to an iterable
 using the function |setPrototypeOf|. This causes some functions to be
 accessible on each sequence using the "|.|" (dot) notation. These are, among
 others, monadic functions. You will read more about Monads and their purpose in
-chapter~\ref{chap:Monads in JavaScript}. This chapter explains as well why it
-is useful to access some functions the given object.
+chapter~\ref{chap:Monads in JavaScript}. 
+This chapter also explains why accessing some functions on a given object is helpful.
 \begin{lstlisting}[
   style=ES6,
   caption=Implementation of setPrototype,
@@ -471,10 +472,11 @@ JINQ, which section~\ref{sec:API_JINQ} discusses in detail.
 
 \subsubsection{SequenceType vs. Iterable} % (fold)
 \label{subsub:SequenceType vs. Iterable}
-The |SequenceType| describes iterable objects iterable having their
+The |SequenceType| describes iterable objects having their
 prototype set to |SequencePrototype|. An object of type iterable is just
-iterable. In fact, every operator of the Sequence library receives an iterable as
-parameter and returns than an object of type |SequenceType|.
+iterable. 
+Every operator of the Sequence library receives an iterable as a parameter and
+returns an object of type |SequenceType|.
 
 \subsubsection{Turning an Iterable into a SequenceType}
 \label{subsub:Turn Iterables into SequenceType}
@@ -489,7 +491,7 @@ Therefore, the returned object is then of the desired type |SequenceType|.
 
 \begin{lstlisting}[
   style=ES6, 
-  caption=Casting an arbitrary Iterable to SequenceType,
+  caption=Casting an arbitrary iterable to SequenceType,
   label={lst:casting_iterables}
   ]
 /**

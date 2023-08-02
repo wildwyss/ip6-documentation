@@ -1,21 +1,21 @@
 \section{How to Extend the Library}
 \label{sec:How to Extend the Library}
-Since applications are versatile, you may want to add further functionality
+Since applications are versatile, you can add further functionality
 to the library. This section shows how to extend the Sequence library.
 \subsection{Adding a new Operator}
 \label{sub:Adding a new Operator}
 In this scenario, we include |concat| to the Sequence library. |concat| is the
-operation that appends one |Iterable| to another.
+operation that appends one iterable to another.
 
 \subsubsection{Kind of the Operation}
 \label{subsub:Kind of the Operation}
-The library distinguishes between operators and terminal operations. The
+The Sequence library distinguishes between operators and terminal operations. The
 difference depends on the return type. If a function takes a sequence and
 returns a sequence, it is an operator. \\ 
 It is a terminal operation if it takes a sequence and produces a different type
 than a sequence, such as |isEmpty|.
 \newline
-\textit{Note:}It doesn't matter if you want to add a constructor, an operator, or a terminal
+\textit{Note:} It doesn't matter if you want to add a constructor, an operator, or a terminal
 operation to the sequence library - the procedure is always the same. The
 following example can, therefore, also be applied to constructors and terminal
 operations.
@@ -114,7 +114,7 @@ Creating a test config requires the following steps:
   \item{Create a |TestSuite| with a meaningful name corresponding to the function you are implementing.}
   \item{|createTestConfig| expects an object of type |SequenceTestConfigType|. Have a look
     to this type or to section~\ref{sub:Configuring the Testing Table} to get the information about the available properties. }
-      \item{If neccessary, add some further test cases using the same TestSuite.}
+      \item{If necessary, add some further test cases using the same TestSuite.}
   \item{Run the |TestSuite| by calling the |run()| function at the end of the file. }
 \end{itemize}
 

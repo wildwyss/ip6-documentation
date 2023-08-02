@@ -17,7 +17,7 @@ Therefore, it is crucial to understand the fundamentals of this concept.
 
 \subsection{Iterable Data Structures in JavaScript}
 \label{sub:Iterable data structures in JS}
-JavaScript knows two protocols which define how an object can be used for
+JavaScript knows two protocols that define how an object can be used for
 iteration - the iterable protocol and the iterator
 protocol~\cite{mdn_protocols}. An iterable object, also known as an iterable,
 represents a collection of values. A function call on its iterator, gives
@@ -30,7 +30,7 @@ results.
 \label{subsub:The Iterable Protocol}
 In JavaScript, an object is considered as iterable if it contains a property
 called |[Symbol.iterator]|. This property signifies that the object is of type
-|Iterable<T>|. Invoking the |[Symbol.iterator]| property, creates an
+|Iterable<T>|. Invoking the |[Symbol.iterator]| property creates an
 iterator that follows the iterator protocol explained in the next section.
 Objects in JavaScript that implement this property can be utilized with
 destructuring \footnote{The destructuring assignment syntax is a JavaScript
@@ -77,7 +77,7 @@ the iterator never ends.
 By combining these two protocols, the result could look like listing
 \ref{lst:protocols}. The constructor |InfiniteOnesIterable| on
 line~\ref{line:ctor_infiniteones} wraps the two
-previously defined implementations. This constructor therefore constructs
+previously defined implementations. Therefore, this constructor constructs
 iterable objects. Since the return value is a number, this is an
 iterable of type |Iterable<Number>|.
 
@@ -101,11 +101,10 @@ for (const _one of InfiniteOnesIterable()) {
 \end{lstlisting}
 
 Because objects created by |InfiniteOnesIterable| adhere to the JS iteration
-protocols, it is possible to use language features like |for..of| and
-destructuring to process these objects as shown on
-line~\ref{line:infiniteones_destructuring} to~\ref{line:infiniteones_forof}.
+protocols, it is possible to use language features like destructuring and |for..of| 
+to process these objects as shown on line~\ref{line:infiniteones_destructuring} to~\ref{line:infiniteones_forof}.
 However, beware of this case. This would lead to an infinite loop because the
-property |done| never becomes |true|. Therefore, the iteration never ends. This
+property |done| never becomes |true|. As a result, the iteration never ends. This
 work shows finite iterables later. For now, the focus is on the protocols.
 Therefore, this example is sufficient at this point.
 \newline
@@ -181,7 +180,7 @@ listing~\ref{lst:iterable_types}.
 
 \subsection{Illustration of the JS Iteration Protocol}
 \label{sub:Illustration of the JS Iteration Protocol}
-Listing~\ref{lst:example_js_iteration_protocol} illustrates the behavior of the
+Listing~\ref{lst:example_js_iteration_protocol} illustrates the behaviour of the
 JS iteration protocols more clearly using an array:
 \begin{lstlisting}[
   style=ES6, 
@@ -200,11 +199,11 @@ iterator.next(); // returns { done: true,  value: undefined }
 
 On line~\ref{line:illustraion_create_iterator}, invoking |[Symbol.iterator]|
 returns the iterator of the iterable |list|. 
-After that, |next| gets caleld four times directly on the iterator. Since the
+After that, |next| gets called four times directly on the iterator. Since the
 iterable contains only two elements, the third and fourth call on |next|
 returns an object of type |IteratorReturnResult<TReturn>|. Thereby, |done| is
 |true| and |value| is |undefined|. \\
-By using |for...of| and destructuring, an iterable would stop iterating after
+Using destructuring and |for...of|, an iterable would stop iterating after
 the second call. This means a |for...of| loop runs until the property |done|
 is set to |true|.
 
@@ -489,7 +488,7 @@ for (const value of Range(4,6,-2)) { console.log(value); }
 for (const value of Range(6,4,-2)) { console.log(value); }
 // => Logs '6, 4'
 
-// range with negatgive boundary
+// range with negative boundary
 for (const value of Range(0,-2,-1)) { console.log(value); }
 // => Logs '0, -1, -1'
 \end{lstlisting}

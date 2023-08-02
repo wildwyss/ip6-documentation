@@ -3,7 +3,7 @@
 In object-oriented languages, the receiver of an operation usually precedes the
 dot. As described in section~\ref{sec:Placing the Receiver at the End}, this
 has some downsides. However, it also brings advantages: The IDE can help you
-find the correct method because the syntax |receiver.| allows the IDE to list
+find the correct method because of the syntax |receiver.| allows the IDE to list
 all operations of the |receiver|'s type - this is the true power of the dot!
 \cite[Ch. "The Power of the Dot"]{frege_goodness} \\ This chapter shows how
 one can exploit the module system of JavaScript to get similar suggestions from
@@ -43,7 +43,7 @@ other modules. |incrFn| and |whileFn| are not exported and, therefore, only
 available in this module.
 % subsection The JavaScript Module System (end)
 
-\subsection{IDE support through modules} % (fold)
+\subsection{IDE Support through modules} % (fold)
 \label{sub:IDE support through modules}
 The module system offers several possibilities to bring autocompletion to
 the IDE using the dot.
@@ -70,7 +70,7 @@ console.log(_.show(seq));
 This allows the developer to access exported symbols of |_| using |_.|. Thanks
 to the |.| (dot) after the module name (|_|), IDEs like IntelliJ IDEA will
 suggest exported members of this module.\\
-Figure~\ref{fig:the_power_of_the_dot_idea_sugg} shows exactly this behavior:
+Figure~\ref{fig:the_power_of_the_dot_idea_sugg} shows exactly this behaviour:
 
 \begin{figure}[H]
   \begin{center}
@@ -108,7 +108,7 @@ console.log(show(seq));
 
 The statement on line~\ref{line:destr_named_import1} destructures the named
 module. Thus, |Sequence| is available as if a developer had imported it
-typically!
+typically.
 
 
 % subsubsection Named Imports (end)
@@ -152,7 +152,7 @@ const allElements = Service.getAll();
 \end{lstlisting}
 
 Since this object can follow a defined interface (for example, using JSDoc), it
-can easily be replaced by just changing the import to another implementation!
+can easily be replaced by just changing the import to another implementation.
 % subsubsection The Namespace object pattern (end)
 
 \subsubsection{Conclusion} % (fold)
@@ -161,7 +161,7 @@ The module system of JavaScript thus offers several possibilities to couple
 loose functions. While namespace objects can fulfil an interface, the
 flexibility of named imports makes it easier for developers to get started with
 a potentially comprehensive library. \\ 
-Both approaches allow the IDE to provide the developer additional support by
+Both approaches allow the IDE to provide the developer with additional support by
 bringing "the power of the dot" to JavaScript modules!
 
 % subsubsection Conclusion (end)

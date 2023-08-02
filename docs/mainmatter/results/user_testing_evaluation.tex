@@ -8,20 +8,20 @@ GitHub repository containing the description of two tasks:
 \begin{enumerate}
 \item \textbf{Numerical differentiation}: The idea is to use sequences to get
   an approximation as close as possible to the slope of a function |f| at point
-  |x|. Lazyness and operations on sequences make this possible.
-\item \textbf{Browse JSON files}: In JavaScript you frequently work with JSON
+  |x|. Laziness and operations on sequences make this possible.
+\item \textbf{Browse JSON files}: In JavaScript, you frequently work with JSON
   files provided by some API. This data is often full of holes, which makes it
   difficult to process. JINQ simplifies this task significantly because it
   fills such gaps automatically. 
 \end{enumerate}
-Both tasks are pleasent use cases of the artefacts of this work.
+Both tasks are pleasant use cases of the artefacts of this work.
 Chapter~\ref{sec:Examples} describes them in detail.\\
 Finally, each participant filled out a questionnaire. This procedure enables
 the detection of difficulties and shows where the API still has room for
 improvement. 
 
 The findings are based on the questionnaire evaluation and the code of three
-participants who handed in their solution. This chapter lists all the
+participants who handed in their solutions. This chapter lists all the
 improvements the user test pointed out. In addition, it concludes the general
 impression collected by the user test.
 Appendix~\ref{chap:app_user_test_results} contains all the user test questions
@@ -33,7 +33,7 @@ and their answers.
 
 \subsubsection{Findings and Improvements} % (fold)
 \label{subsub:seq_findings_and_improvements}
-We decided to include following findings from the user tests in the Sequence
+We decided to include the following findings from the user tests in the Sequence
 library:
 \begin{itemize}
   \item \textbf{Renaming untilFunction}: Creating sequences using the sequence
@@ -105,7 +105,7 @@ coordinates{ (6,4) (4,3) (2,2) (1,1) };
 \subsubsection{Findings and Improvements} % (fold)
 \label{subsub:jinq_finding_and_imrpovements}
 
-We decided to include following findings into JINQ:
+We decided to include the following findings in JINQ:
 \begin{itemize}
   \item \textbf{Better Introduction to JINQ}: Two people suggest using
     |JSONMonad()| directly inside of |from| (text answer~\ref{sub:ut_q13}).
@@ -122,13 +122,13 @@ We decided to include following findings into JINQ:
       JINQ not writing exactly like SQL (handed in code). An SQL query
       |Select NAME from PERSON where AGE > 18| is translated into JINQ via
       |from(PERSON).where(p => p.age > 18).select(p => p.name);| So the order
-      of |select| and |where| is reversed. So the JSDoc of JINQ needs to
+      of |select| and |where| is reversed. Therefore, the JSDoc of JINQ needs to
       mention more clearly that working with JINQ is different than working
       with SQL.
 \end{itemize}
 
 The following is a great idea but is beyond the scope of this project to
-implement. Find detailed information about it in the section~\ref{sub:JINQ
+implement. Find detailed information about it in section~\ref{sub:JINQ
 Functions}, explaining future features of JINQ.
 \begin{itemize}
   \item \textbf{Error handling}: Several people had trouble with null values,

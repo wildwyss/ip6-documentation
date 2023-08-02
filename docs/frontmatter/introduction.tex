@@ -19,9 +19,9 @@ on these iteration protocols, providing operations analogous to the Haskell
 standard library.
 
 However, another goal is to examine how it is possible to implement Haskell
-type classes in JavaScript. The type class "monad", for example, makes it
-possible to write more abstract functions that can handle a wide variety of
-data structures. 
+type classes in JavaScript. 
+For example, the type class "monad" makes it possible to write more abstract functions that can
+handle a wide variety of data structures.
 
 The resulting artefacts integrate seamlessly into the Web UI toolkit
 "Kolibri"~\cite{kolibri}. On the one hand, this integration means that the
@@ -29,7 +29,7 @@ artefacts belong to the toolkit. On the other hand, they maintain the high
 standards of the Kolibri. These standards include high code quality, expressed
 by automated tests, fully typed JavaScript using JSDoc, and keeping the
 Kolibri's zero dependency approach. For this, things like specific data
-structures or the integrated testing framework, which the Kolibri already
+structures or the integrated testing framework, which Kolibri already
 brings, can be used.
 
 % section Problem Statement (end)
@@ -64,13 +64,13 @@ mainly consists of two parts:\\
 \item \textbf{Monadic API in JavaScript:} The knowledge gained from the
   Sequence library enabled adapting the type class monad from Haskell into
   JavaScript. This type class is defined as JSDoc, which allows writing generic
-  functions that can handle data structures of various kinds. For a data type
-  to be compatible with such a function, it must implement each operation
-  defined by the JSDoc type |MonadType|. \\ 
+  functions that can handle data structures of various kinds. 
+  A data type must implement each operation defined by the JSDoc type
+  |MonadType| to be compatible with such a function. \\ 
   The sequence already implements this type completely. Since the Sequence
   library allows converting any iterable into a sequence, these operations are
   available for all iterable objects! To show the versatility of the
-  |MonadType|, an implementation for the already existing Kolibri-type |MaybeType| was
+  |MonadType|, an implementation for the already existing |MaybeType| was
   also added. The definition of the monad in JavaScript allows the
   implementation of language-integrated queries
   (LINQ)~\cite{billwagner_language-integrated_2023}. LINQ allows querying
@@ -84,15 +84,15 @@ mainly consists of two parts:\\
 \end{enumerate}
 
 Automated unit tests ensure the correctness of the two previously explained
-artefacts. Since many operations of the Sequence library must ensure the same
-properties, testing in a structured way is necessary. A  so-called testing
+artefacts. Since many operations of the Sequence library must provide the same
+properties, testing in a structured way is necessary. A so-called testing
 table represents this structure. This testing table allows writing general
 tests which assert specific properties applying to every operation. Newly
 discovered bugs that can potentially occur in all of these operations can thus
 be caught in a single place by one single test.\\
 In addition, some operations must fulfil unique properties or invariants. When
 an operation is performed on a sequence, these invariants must always hold,
-regardless of the underlying sequence. The testing table, therefore, also
+regardless of the underlying sequence. The testing table also
 supports the definition of such invariants as predicates. This allows finding
 bugs occurring in edge cases, such as the empty sequence.
 
@@ -107,7 +107,7 @@ best moves for its turn. Figure~\ref{img:intro_ttt_playfield} shows a screenshot
 application that uses this algorithm:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.4\textwidth]{./mainmatter/pictures/tic-tac-toe-field.jpg}
+    \includegraphics[width=0.9\textwidth]{./mainmatter/pictures/tic-tac-toe-field.png}
     \caption{A website using the algorithm}
     \label{img:intro_ttt_playfield}
 \end{figure}
@@ -127,7 +127,7 @@ To achieve essential goals we followed certain concepts and methods:
   \item \textbf{Test-driven development:} Operations for the sequence are very
     well testable since they are independent of state. Therefore, before
     implementing a new operation, we wrote a test for the main branch of
-    functionality to ensure correct behavior. Before we implemented the next
+    functionality to ensure correct behaviour. Before we implemented the next
     sub-branch, we again wrote a test. Thus, as the functionality grows, so
     does the test coverage. This not only ensures code quality but also makes
     refactorings safer.
@@ -137,7 +137,7 @@ To achieve essential goals we followed certain concepts and methods:
     standard library and complete a questionnaire about them. The questionnaire
     aims to determine whether the users find the library easy to use and to
     receive general suggestions for improvement — findings from this flow back
-    into the implementation. Questions with text answers allow capturing the
+    into the implementation. Questions with text answers allow for capturing the
     general mood of the participants.
 \end{enumerate}
 % subsection  (end)

@@ -54,7 +54,8 @@ Sequence library.
 
 First, let us look at the simplest form in listing~\ref{lst:simple_fizzbuzz}. 
 The fizzes and buzzes are combined in a
-sequence. If neither a fizz nor a buzz occurs, the sequence returns a number.
+sequence. 
+The sequence returns a number if neither a fizz nor a buzz occurs.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -116,10 +117,10 @@ Listing~\ref{lst:fizz_buzz} shows two functions, |createSequenceForRule|, and
 corresponding text at each multiple of the |rule|s |Number|. In the remaining
 places, it contains an empty |String|. \\ 
 The function |buildFizzBuzz| reduces all sequences representing a rule to a
-single sequence. As a demonstration, figure~\ref{fig:fizzbuzz_control} and
-\ref{fig:fizzbuzz_result} shows a screenshot of a simple application, which
-shows two rules and the resulting sequence. The implementation enables adding
-new rules at runtime. 
+single sequence. 
+Figures~\ref{fig:fizzbuzz_control} and \ref{fig:fizzbuzz_result} demonstrate a
+screenshot of a simple application showing two rules and the resulting sequence.
+The implementation enables adding new rules at runtime. 
 
 \begin{figure}[H] \centering \begin{minipage}{.5\textwidth} \centering
 \includegraphics[width=.6\linewidth]{./mainmatter/pictures/fizzbuzz_control.png}
@@ -135,7 +136,7 @@ new rules at runtime.
 
 \subsection{JINQ}
 \label{sub:results JINQ}
-The following examples use |JINQ| to browse and process a JSON files.
+The following examples use |JINQ| to browse and process JSON files.
 
 \subsubsection{Find all Students}
 \label{subsub:Find all Students}
@@ -147,7 +148,7 @@ processed without null handling.
 
 \begin{lstlisting}[
   style=json, 
-  caption=Exerpt of a JSON File including developers,
+  caption=Excerpt of a JSON File including developers,
   label={lst:json_file_devs}
   ]
 [
@@ -203,7 +204,7 @@ favourite programming languages by combining two JSON files using |pairWith|.
 
 \begin{lstlisting}[
   style=json, 
-  caption=Exerpt of a JSON File including programming languages,
+  caption=Excerpt of a JSON File including programming languages,
   label={lst:json_file_lang}
   ]
 [
@@ -225,7 +226,7 @@ favourite programming languages by combining two JSON files using |pairWith|.
 This is also comparatively easy to do with JINQ. |pairWith| allows adding a
 second data source to the current one, forming all possible combinations. The
 function |where| then keeps only the needed pairs. A simple mapping at the end
-outputs the names of the programming languages!
+outputs the names of the programming languages.
 \begin{lstlisting}[
   style=ES6, 
   caption=JINQ example - find Sophia's programming languages,
@@ -270,10 +271,10 @@ Listing~\ref{lst:diff_sequences} implements the following steps:
       with delta $h$.}
  \end{itemize}
 
-This code already provides everything needed for differentiation! The function
+This code already provides everything needed for differentiation. The function
 |differentiate| calculates the slope of a function at a given point $x$ more
 and more exactly.
-Listing~\ref{lst:diff_seq_usage} uses these functions to determine the the
+Listing~\ref{lst:diff_seq_parabola} uses these functions to determine the 
 slope at $x = 1$ of the function |parabola| defined on line~\ref{line:diffs}:
 
 \begin{lstlisting}[
@@ -311,7 +312,7 @@ Listing~\ref{lst:impl_within} defines the following implementations:
 
 \begin{itemize}
   \item |within| calculates recursively the slope of the |parabola| using the
-    sequence |diffs| until a satisfying accuracy. Because of the lazyness of
+    sequence |diffs| until a satisfying accuracy. Because of the laziness of
     the sequence, |within| only calculates as many slopes as needed!
   \item At the end, |slopeOfFAtX| calculates the slope with the given parameters.
 \end{itemize}
@@ -322,12 +323,12 @@ Listing~\ref{lst:impl_within} defines the following implementations:
 This section describes the implementation of the alpha-beta heuristic in
 JavaScript, an algorithm for estimating how good a position a game player is
 in. \\ 
-This algorithm allows building a computer-controlled opponent for a
+This algorithm allows for building a computer-controlled opponent for a
 turn-based game. Hughes explains how the algorithm uses laziness and
 higher-order functions to be modular and extensible in his paper.~\cite[p.
 16]{hughes_why_1989}. As chapter~\ref{chap:Modularizing Programs} describes, the
-Sequence library supports these two concepts, thus allowing to port the
-algorithm to JavaScript.
+Sequence library supports these two concepts, thus allowing the algorithm to 
+port to JavaScript.
 
 \subsubsection{How does the Algorithm work?} % (fold)
 \label{subsub:How does the Algorithm work?}
@@ -752,7 +753,7 @@ algorithm.\\
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.4\textwidth]{./mainmatter/pictures/tic-tac-toe-field.jpg}
+    \includegraphics[width=0.9\textwidth]{./mainmatter/pictures/tic-tac-toe-field.png}
     \caption{A website using the algorithm}
     \label{img:ttt_playfield}
 \end{figure}
@@ -767,7 +768,7 @@ how many moves it can look ahead and returns the new board.
 This example shows impressively how the Sequence library enables developers to
 adapt an algorithm developed for functional programming languages in
 JavaScript.\\
-Of course, copying the algorithm is not possible because JavaScript misses some
+Of course, copying the algorithm is impossible because JavaScript misses some
 language features like pattern matching. Nevertheless, the essential concepts
 and logic of the algorithm can be adopted directly. \\
 It is also exciting how JSDoc allows constructing straightforward talking types

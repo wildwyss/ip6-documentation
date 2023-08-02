@@ -71,7 +71,7 @@ A constructor is anything that creates a sequence without depending on another
 one. So they serve as an entry point to the Sequence library. \\
 Table~\ref{tab:api_ctors} gives an overview of all available constructors. Code
 examples and more information about the constructors delivers the
-appendix~\ref{sub:appendix_constructors}.
+appendix~\ref{sec:appendix_ctor}.
 
 \begin{table}[H]
   \centering
@@ -96,7 +96,7 @@ appendix~\ref{sub:appendix_constructors}.
 Operators are functions that operate on any existing iterable and create a
 new sequence from it. \\
 Table~\ref{tab:api_operators} gives an overview of all available operators.\\
-Code examples, types and more information about the operators delivers the
+Code examples, types and more information about the operators deliver the
 appendix~\ref{sub:appendix_operators}.
 \begin{table}[H]
   \centering
@@ -130,7 +130,7 @@ appendix~\ref{sub:appendix_operators}.
 The operator |pipe|, is unique because it provides no new functionality but is
 pure syntactic sugar. It offers the possibility of combining several operators.
 Lines~\ref{line:api_pipe1}~-~\ref{line:api_pipe2} of listing~\ref{lst:api_pipe}
-show a nesting of multiple operators. Readability suffers very much from this.
+shows nesting of multiple operators. Readability suffers very much from this.
 In comparison, it is easier to read the code
 lines~\ref{line:api_pipe3}~-~\ref{line:api_pipe4}, combining multiple operators
 using |pipe|. 
@@ -192,7 +192,7 @@ and do not necessarily create a new sequence. In other words, terminal
 operations evaluate a sequence.\\ 
 Table~\ref{tab:api_term_ops} gives an overview of all available terminal
 operations.\\
-Code examples and more information about the terminal operations delivers the
+Code examples and more information about the terminal operations deliver the
 appendix~\ref{sub:appendix_terminal_operations}.
 
 \begin{table}[H]
@@ -232,7 +232,7 @@ sequence will return |SequencePrototype|.
 
 \begin{lstlisting}[
   style=ES6,
-  caption=The Prototype of a \lstinline{Sequence},
+  caption=The prototype of a \lstinline{Sequence},
   label={lst:proto_seq_query}
 ]
 import { Sequence, SequencePrototype } from "sequence/sequence.js";
@@ -246,7 +246,7 @@ console.log(seqPrototype === SequencePrototype);
 
 % subsubsection Verify the Prototype (end)
 
-\subsubsection{The operations on the Prototype} % (fold)
+\subsubsection{The Operations on the Prototype} % (fold)
 \label{subsub:The operations on the Prototype}
 \begin{table}[H]
   \centering
@@ -265,11 +265,11 @@ console.log(seqPrototype === SequencePrototype);
 \end{table}
 
 % subsubsection The operations on the Prototype (end)
-\subsubsection{When to use the operations on the Prototype?} % (fold)
+\subsubsection{When to use the Operations on the Prototype?} % (fold)
 \label{subsub:When to use the operations on the prototype?}
 Each operation on the prototype is also available as an operator or terminal
 operation. The prototype offers these functionalities additionally because
-sometimes it has additional advantages - the function |toString| for example,
+sometimes it has additional advantages - the function |toString|, for example,
 converts by convention an object into its string representation. Other
 operations, such as |["=="]|, often make the code more readable. So when to use
 the prototype operations? It depends on the context and code readability!

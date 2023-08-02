@@ -4,8 +4,8 @@ The first part of this section describes what contexts in Haskell are and how
 Haskell wraps values in such contexts. "Maybe" serves as an example of this.
 Implementing this example using JavaScript shows that such contexts are also
 useful in other programming languages.\\
-The second part then explains what monads are and shows how to implement these
-in JavaScript. It also highlights the missing features of JavaScript to adopt
+The second part then explains monads and describes how to implement them with JavaScript.
+It also highlights the missing features of JavaScript to adopt
 this concept exactly from Haskell and describes acceptable workarounds. Thus, it
 is also possible to transform values in a context in JavaScript. The
 last part shows what the monadic operations of the sequence look like.
@@ -27,8 +27,8 @@ For the context |Maybe| two implementations in Haskell co-exist:
 data Maybe a = Nothing | Just a
 \end{lstlisting}
 
-Listing~\ref{lst:maybe_hs} defines this datatype. Why is this useful?
-Imagine you want to create a function |head|, which returns the first value of
+Listing~\ref{lst:maybe_hs} defines the datatype |Maybe|. Why is this useful?
+Imagine you want to create a function |head| which returns the first value of
 a given list. |head| is pretty simple to implement. But wait, what to do when
 the list is empty? In object-oriented languages, one might return |null|. The
 problem with this solution is that the user of |head| must remember that the
@@ -92,7 +92,7 @@ property to port the previous function |safeHead| to JavaScript:
 
 \begin{lstlisting}[
   style=ES6,
-  caption=safeHead implmented in JavaScript,
+  caption=safeHead implemented in JavaScript,
   label={lst:js_safeHead}
 ]
 const safeHead = list => {
@@ -115,7 +115,7 @@ printHead([]);
 
 Using the structural similarity of |Just(value)| and |Nothing|,
 lines~\ref{line:js_safeHead1}-\ref{line:js_safeHead2} evaluate the result of
-|safeHead|. The function |printHead| therefore works for both cases!
+|safeHead|. The function |printHead|, therefore, works for both cases!
 % subsubsection Doing the same in JavaScript (end)
 % subsection Wrapping values in a context (end)
 
@@ -143,7 +143,7 @@ print $ fmap double Nothing
 -- Prints 'Nothing'
 \end{lstlisting}
 
-Similar to |Maybe| also lists describe such a context.
+Similar to |Maybe|, also lists describe such a context.
 Listing~\ref{lst:hs_fmap_list} shows how |fmap| works on lists:
 
 \begin{lstlisting}[
@@ -277,7 +277,7 @@ The |MonadType| specifies the following operations:
 \begin{itemize}
   \item |fmap|: Changing values inside a context is a typical pattern,
     also in JavaScript. Porting |fmap| to JavaScript brings many benefits.
-  \item |pure|: At first sight |pure| is a function that is not needed.
+  \item |pure|: At first sight, |pure| is a function that is not needed.
     However, it quickly became apparent that lifting an element into a context
     is often practical via an abstracted function. 
     \\ This is often the case when using |>>=|.
@@ -315,7 +315,7 @@ work:
 ]
 const xs        = [1, 2, 3];    // array with x values
 const ys        = [4, 5, 6];    // array with y values
-const maybeX    = safeHead(xs); // getting the head of xs, defined by *'Listing~\ref{lst:js_safeHead}'*
+const maybeX    = safeHead(xs); // getting the head of xs *'(\ref{lst:js_safeHead})'*
 const maybeY    = safeHead(ys); // getting the head of ys
 
 const plus      = x => y => x + y; *'\label{line:app_js_maybe1}'*
@@ -340,13 +340,13 @@ the variable |sum| contains the result of the addition. If one of the addends
 was |Nothing| because one list was empty, |app| deals with that, and the whole
 result evaluates to |Nothing|. \\ 
 As said above, this only works because |plus| receives its arguments in a
-curried style. As listing~\ref{lst:curried_fn_in_js}, explains applying |plus|
+curried style. As listing~\ref{lst:curried_fn_in_js} explains, applying |plus|
 to |x| returns a function taking another argument. Calling this function with
 another number returns the sum!
 
 Even if this pattern appears less, it is still useful sometimes. Luckily |and|
 is capable of everything |app| can do. So consider
-listing~\ref{lst:and_js_maybe} which does the same thing using |and|, even
+listing~\ref{lst:and_js_maybe}, which does the same thing using |and|, even
 though it is a bit more to type:
 
 \begin{lstlisting}[
@@ -366,21 +366,21 @@ maybeSum
 
 Line~\ref{line:and_js_maybe1} shows how the function |and| gives access to the
 last element, which is |p|, the function |plus|! |fmap| applies this function
-to |maybeX|. This creates a new funciton which is again in the |Maybe|
+to |maybeX|. This creates a new function which is again in the |Maybe|
 context. Line~\ref{line:and_js_maybe2} does exactly the same - but for the second
 argument. \\ 
-This shows that |and| can emulate the behavior of |app|.
+This shows that |and| can emulate the behaviour of |app|.
 % subsubsection Which operations do not fit JavaScript? (end)
 
 % subsection Monads in JavaScript (end)
 \subsection{Using JSDoc to type Monads} % (fold)
 \label{sub:Using JSDoc to type monads}
 A type system must represent monads to unveil their true power. With some
-limitations, JSDoc can model a monad pretty well.
+limitations, JSDoc can model a monad well.
 
 \subsubsection{The MonadType} % (fold)
 \label{subsub:The MonadType}
-The |Monadtype| combines all the operations described in
+The |MonadType| combines all the operations described in
 section~\ref{sub:Which operations fit JavaScript?} into a single JSDoc type.
 It serves as a structural interface that functions can use to describe their
 parameters or return values.
@@ -394,10 +394,10 @@ parameters or return values.
  * Defines a Monad.
  * @template  _T_
  * @typedef  MonadType
- * @property { <_U_> (bindFn: (_T_) => MonadType<_U_>) => MonadType<_U_> } and
- * @property { <_U_> (f:      (_T_) => _U_)            => MonadType<_U_> } fmap
- * @property {       (_T_)                             => MonadType<_T_> } pure
- * @property {       ()                                => MonadType<_T_> } empty
+ * @property {<_U_>(bindFn:(_T_) => MonadType<_U_>) => MonadType<_U_>} and
+ * @property {<_U_>(f:     (_T_) => _U_)            => MonadType<_U_>} fmap
+ * @property {     (_T_)                            => MonadType<_T_>} pure
+ * @property {     ()                               => MonadType<_T_>} empty
  */
 \end{lstlisting}
 
@@ -408,7 +408,7 @@ work more like static operations. They are accessible using the object but have
 no direct connection to its properties. 
 
 Listing~\ref{lst:monad_type_usage_js} defines a function |keepEven| which
-discards odd values in the context. As parameter, this function accepts every context
+discards odd values in the context. As a parameter, this function accepts every context
 adhering to |MonadType|. Therefore, |keepEven| can operate on every monadic
 object and access all its monadic operations!\\
 The |pure| and |empty| functions are independent of the values inside of the
@@ -477,7 +477,7 @@ console.log(...keepEven(seq));
 // => Logs '0, 2, 4'
 \end{lstlisting}
 The example shows well how one can program very declaratively using monads. You
-do not have to worry about the actual structure of the context, but only about
+do not have to worry about the actual structure of the context but only about
 the logic being correct!
 |keepEven| can also be tested easily: you create a new type that conforms to
 |MonadType|, which has little logic.
@@ -491,8 +491,8 @@ This section covers how to make a context conform to |MonadType| discussed in
 section~\ref{subsub:The MonadType}.\\ 
 This covers following steps:
 \begin{enumerate}
-  \item Creating a prototype for the context. (see section~\ref{subsub:Sequence
-    Prototype} which explains prototypes)
+  \item Creating a prototype for the context (see section~\ref{subsub:Sequence
+    Prototype} which explains prototypes).
   \item Defining the four operations specified by |MonadType| on this
     prototype.
   \item Specify the JSDoc of this context.
@@ -500,7 +500,7 @@ This covers following steps:
 
 \textit{Note:} Defining the monadic operations on a prototype is mostly a good
 idea, since there are often multiple implementations of a type, like it is in
-maybe with |Just| and |Nothing|. This way it becomes possible to share the
+maybe with |Just| and |Nothing|. This way, it becomes possible to share the
 implementations among them.
 
 \subsubsection{Defining the Monadic Operations} % (fold)
@@ -533,11 +533,11 @@ MaybePrototype.fmap = function (mapper) { *'\label{line:monadic_maybe_js4}'*
 \end{lstlisting}
 This code does the following:
 \begin{itemize}
-  \item Line~\ref{line:monadic_maybe_js1} defines |pure| - The given value is
+  \item Line~\ref{line:monadic_maybe_js1} defines |pure| - the given value is
     wrapped by |Just|.
-  \item Line~\ref{line:monadic_maybe_js2} defines |empty| - No value is in this
+  \item Line~\ref{line:monadic_maybe_js2} defines |empty| - no value is in this
     context.
-  \item Line~\ref{line:monadic_maybe_js3} and following define |and| - If a
+  \item Line~\ref{line:monadic_maybe_js3} and following define |and| - if a
     value is present, |and| applies the function |bindFn| to this value and
     returns the result. If there is no value, |and| returns |Nothing| directly.
   \item Line~\ref{line:monadic_maybe_js4} and following define |fmap| - |and|
@@ -546,7 +546,7 @@ This code does the following:
 \end{itemize}
 
 Both |Just(value)| and |Nothing| must provide the respective operations as
-properties. Listing~\ref{lst:proto_maybe_js} now sets the prototype to the two
+properties. Listing~\ref{lst:proto_maybe_js} now sets the prototype to the 
 functions |Just(value)| and |Nothing|.
 
 \begin{lstlisting}[ style=ES6, caption=Setting the prototype of Maybe,
@@ -564,7 +564,7 @@ const Just = x => { *'\label{line:proto_maybe_js2}'*
 
 The definition of |Nothing| on line~\ref{line:proto_maybe_js1} stays exactly
 the same as before. But consider
-line~\ref{line:proto_maybe_js2}-\ref{line:proto_maybe_js3}. These changed,
+line~\ref{line:proto_maybe_js2}-\ref{line:proto_maybe_js3}. These changed
 because not |Just| should become a |MonadType| but |Just(value)|.
 
 To make another object monadic, apply the same pattern to it!
@@ -601,8 +601,8 @@ Listing~\ref{lst:jsdoc_add_maybe} defines the |MonadType| JSDoc for Maybe:
 \end{lstlisting}
 
 What happens here? \\ 
-Line~\ref{line:jsdoc_add_maybe1} and following specify the updated |MaybeType|.
-|MaybeType| is a function, which receives two other functions as parameters
+Line~\ref{line:jsdoc_add_maybe1} and the following specify the updated |MaybeType|.
+|MaybeType| is a function which receives two other functions as parameters
 (line~\ref{line:jsdoc_add_maybe2}). And it is also everything that is specified by
 |MaybeMonadType| (line~\ref{line:jsdoc_add_maybe3})! \\
 This |&| sign allows intersecting two JSDoc type definitions into a new one.\\
@@ -636,7 +636,7 @@ instead of the |MaybeMonadType| (defined in listing~\ref{lst:jsdoc_add_maybe}):
               & *'\colorbox{code-highlight}{MonadType<\_T\_>}  \label{line:monad_type_maybe_directly1}'*
             } MaybeType
  */
-const maybe        = Just(5); // MaybeType
+const maybe        = Just(5);              // MaybeType
 const mappedMaybe  = maybe.fmap(x => 2*x); // MonadType *'\label{line:monad_type_maybe_directly2}'*
 
 // produces a type error
@@ -655,8 +655,8 @@ not a |MonadType|. The workaround would be to add a typecast every time any
 monadic function has been called, like on
 line~\ref{line:monad_type_maybe_directly4}.
 
-For this to work without type casting, JSDoc would have to support higher
-kinded types \cite{baeldung_higher-kinded_2020}, which would type definitions as defined by
+For this to work without type casting, JSDoc would have to support higher-kinded
+types \cite{baeldung_higher-kinded_2020}, which would type definitions as defined by
 listing~\ref{lst:not_working_type}:
 
 \begin{lstlisting}[
@@ -684,22 +684,22 @@ has to conform to |MonadType|. So far, everything works with JSDoc.\\ But
 line~\ref{line:use_template_constraint} does not work anymore because it is not
 possible to abstract over another type using JSDoc.\\
 % subsubsection Limitations of JSDoc (end)
-% subsection Implementing Monadic Operaions in JavaScript (end)
+% subsection Implementing Monadic Operations in JavaScript (end)
 
 \subsection{Making the Sequence Monadic} % (fold)
 \label{sub:Making the Sequence Monadic}
-Section~\ref{sub:Using JSDoc to type monads} defines the function |keepEven|
+Section~\ref{sub:Using JSDoc to type monads} defines the function |keepEven|,
 which accepts any |MonadType| as an argument. Since the sequence is monadic,
 listing~\ref{lst:keep_even_iterable} applies |keepEven| to a sequence without
 defining how to implement the monadic operations on it. This section
 shows the implementation of the monadic operations for the sequence.\\
 The signatures of the operations are analogous to those of maybe. However,
 they do not base on |MaybeMonadType| but on |SequenceMonadType|. Again, the
-carries defines these functions. |Object.setPrototypeOf| then adds it to the
+carriers define these functions. |Object.setPrototypeOf| then adds it to the
 sequence.
 
 Listing~\ref{lst:monadic_ops_sequence} shows the definition of these
-operations - it is straight forward:
+operations - it is straightforward:
 \begin{lstlisting}[
   style=ES6,
   caption=The monadic operations on the Sequence,
@@ -709,7 +709,8 @@ operations - it is straight forward:
  * @template _T_
  * @returns SequenceType<_T_>
  */
-SequencePrototype.empty = () => Sequence(undefined, _ => false, _ => undefined); *'\label{line:monadic_empty_sequence}'*
+SequencePrototype.empty = () => 
+  Sequence(undefined, _ => false, _ => undefined); *'\label{line:monadic_empty_sequence}'*
 
 /**
  * @template _T_

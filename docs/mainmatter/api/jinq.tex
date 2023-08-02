@@ -2,7 +2,7 @@
 \label{sec:API_JINQ}
 Write JINQ queries (JavaScript language integrated queries) for every monadic type.
 \newline
-For further details and explanations consider section \ref{sub:Introducing JINQ}.
+For further details and explanations, consider section \ref{sub:Introducing JINQ}.
 \newline
 To create a monadic type, visit chapter~\ref{chap:Monads in JavaScript}.
 
@@ -17,7 +17,7 @@ JINQ provides the following functions:
     \texttt{from}       & serves as starting point to enter JINQ and specifies a data source \\ \hline 
     \texttt{map}        & maps the current value to a new value \\ \hline 
     \texttt{select}     & alias for \texttt{map} (same functionality) \\ \hline 
-    \texttt{where}      & only keeps the items that fulfill the predicate \\ \hline 
+    \texttt{where}      & only keeps the items that fulfil the predicate \\ \hline
     \texttt{inside}     & maps the current value to a new \texttt{MonadType} \\ \hline 
     \texttt{pairWith}   & combines the underlying data structure with the given data structure as \texttt{PairType} \\ \hline 
     \texttt{result}     & returns the result of this query\\ \hline 
@@ -32,8 +32,8 @@ JINQ provides the following functions:
 
 \subsubsection{Even Numbers}
 \label{subsub:JINQ_Even Numbers}
-Generating a sequence of even numbers using JINQ and a range as data source:
-\newline
+Generating a sequence of even numbers using JINQ and a range as data source:\\
+\\
 \textit{Note:} Since |result| returns a |MonadType|, casting is needed
 for converting with |show|.
 

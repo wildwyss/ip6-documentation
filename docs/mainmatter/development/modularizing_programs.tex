@@ -85,7 +85,7 @@ building large programs consisting of small parts is much easier.
 \subsection{Using these Glues in JavaScript} % (fold)
 \label{sub:Using these Glues in JavaScript}
 
-\subsubsection{Higher Order Functions in JavaScript} % (fold)
+\subsubsection{Higher-Order Functions in JavaScript} % (fold)
 \label{subsub:Higher Order Functions in JavaScript}
 Higher-order functions in JavaScript work similarly as they do in Haskell.
 Transferring listing~\ref{lst:hof_haskell} to JavaScript results in the
@@ -223,7 +223,7 @@ console.log(i);
 \end{lstlisting}
 
 It is impossible to conclude from the length of the list how often a function
-runs. Performing side effects in the loop body can lead to unexpected behavior. 
+runs. Performing side effects in the loop body can lead to unexpected behaviour. 
 
 It is tough to make assumptions about |i|, because:
 \begin{itemize}
@@ -299,7 +299,7 @@ console.log(doubleAll([1, 2, 3, 4]));
 // => Logs '2, 4, 6, 8'
 \end{lstlisting}
 
-The listing~\ref{lst:rec_bef_point} fixes this issue using a function that gets
+Listing~\ref{lst:rec_bef_point} fixes this issue using a function that gets
 the receiver as an argument. However, this is not very convenient. The Sequence
 library provides a more elegant way to solve this:
 
@@ -320,7 +320,7 @@ parameter naming is needed here.
 \subsubsection{Conclusion} % (fold)
 \label{subsub:modularizing_programs_conclusion}
 Higher-order functions and lazy evaluation are powerful glues to compose
-smaller parts into a bigger program. Haskell provides a good reference for
+smaller parts into a more extensive program. Haskell provides a good reference for
 this. In JavaScript, higher-order functions are familiar. However, it
 offers less support for lazy evaluation - it eagerly evaluates arrays and their
 operations. The Sequence library closes this gap because sequences work
