@@ -377,12 +377,12 @@ range:
 const Range = (fstBoundary, sndBoundary = 0, step = 1) => {
   const stepIsNegative = 0 > step;
   const [left, right] = normalize(fstBoundary, sndBoundary, stepIsNegative);
-
+  
   return Sequence(
-    left,                                                // start value
-    value => hasReachedEnd(stepIsNegative, value, right),// while function
-    value => value + step                                // increment function
-    );
+    left,                                                  // start value
+    value => !hasReachedEnd(stepIsNegative, value, right), // while function
+    value => value + step                                  // increment function
+  );
 };
 \end{lstlisting}
 
