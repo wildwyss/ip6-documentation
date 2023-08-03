@@ -143,7 +143,7 @@ elements of |as| and not just its first four.
 % subsubsection Lazy Evaluate Iterables (end)
 The eager evaluation of JavaScript is a significant limitation. Fortunately,
 JavaScript can emulate this laziness using the JS iteration protocols, which
-section ~\ref{sec:Iterables in General} describes. \\ 
+section ~\ref{sec:Iterables in General} describes.
 
 With the use of the Sequence library, it is possible to rewrite the JavaScript
 code of listing~\ref{lst:js_eagerly_eval} lazily:
@@ -174,7 +174,7 @@ This works because the JS iteration protocols process element by element. The
 iterator delivers the next element only if it is requested. If no further
 elements are needed, it just stops iterating! \\
 Iterators, therefore, decouple the termination condition (asking for another
-element) from the loop body (generating/accessing the next element).\\
+element) from the loop body (generating/accessing the next element).
 
 Furthermore, it is even possible to port the initial Haskell laziness
 example defined in listing~\ref{lst:lazy_eval_haskell} to JavaScript:
@@ -280,9 +280,9 @@ Listing~\ref{lst:fn_comp_hs} links the functions |doubleAll| and |sum| to
 create a new function applicable to any list with numerical values. This
 concept makes the code very reusable.\\
 Placing the receiver at the end is another powerful modularization
-tool. Therefore, the sequence library supports this kind of modularization.
+tool. Therefore, the Sequence library supports this kind of modularization.
 Refactoring the initial example from listing~\ref{lst:hof_in_js}, which 
-shows how higher-order functions work in JavaScript results in:
+shows how higher-order functions work in JavaScript, results in the following:
 
 \begin{lstlisting}[
   style=ES6,
@@ -314,7 +314,7 @@ const doubleAll = map(double);
 The code of listing~\ref{lst:rcv_at_end_js} is not only less to type but also
 more accurate when reading because the term |doubleAll = map(double)| says that
 the pre-configured function |map(double)| gets a new name (|doubleAll|). No worrying about
-parameter naming is needed here.
+parameter naming is needed here!
 % subsubsection Placing the Receiver at the End (end)
 
 \subsubsection{Conclusion} % (fold)
