@@ -3,11 +3,12 @@
 In object-oriented languages, the receiver of an operation usually precedes the
 dot. As described in section~\ref{sec:Placing the Receiver at the End}, this
 has some downsides. However, it also brings advantages: The IDE can help you
-find the correct method because of the syntax |receiver.| allows the IDE to list
-all operations of the |receiver|'s type - this is the true power of the dot!
-\cite[Ch. "The Power of the Dot"]{frege_goodness} \\ This chapter shows how
-one can exploit the module system of JavaScript to get similar suggestions from
-the IDE, even when not working with objects.
+find the correct method because the syntax "|receiver.|" allows the IDE to list
+all operations of the receiver's type! \cite[Ch. "The Power of the
+Dot"]{frege_goodness} \\ 
+This chapter shows how one can exploit the module
+system of JavaScript to get similar suggestions from the IDE, even when not
+working with objects!
 
 \section{The JavaScript Module System} % (fold)
 \label{sec:The JavaScript Module System}
@@ -67,9 +68,9 @@ const seq = *'\colorbox{code-highlight}{\_.}'*Sequence(0, i => i < 5, i => i + 1
 console.log(_.show(seq));
 // => Logs '[0,1,2,3,4]'
 \end{lstlisting}
-This allows the developer to access exported symbols of |_| using |_.|. Thanks
-to the |.| (dot) after the module name (|_|), IDEs like IntelliJ IDEA will
-suggest exported members of this module.\\
+This allows the developer to access exported symbols of "|_|" using "|_.|".
+Thanks to the "|.|" (dot) after the module name (|_|), IDEs like IntelliJ IDEA
+will suggest exported members of this module.\\
 Figure~\ref{fig:the_power_of_the_dot_idea_sugg} shows exactly this behaviour:
 
 \begin{figure}[H]
@@ -81,7 +82,7 @@ Figure~\ref{fig:the_power_of_the_dot_idea_sugg} shows exactly this behaviour:
 \end{figure}
 
 This is a way to combine the power of the dot with the advantages of placing
-the receiver at the end described! \\
+the receiver at the end! \\
 For users who know the library well, typing the additional name represents an
 unnecessary extra effort. The good thing about named imports is that every
 export supports them - the library developer does not need to adapt the
@@ -122,7 +123,7 @@ that should have the same interface as the production services that access an
 API. The Namespace Object pattern solves this problem!
 
 Listing~\ref{lst:namespace_object} defines a service with two methods. The
-object |Service| gathers these two methods into a single namespace. This object
+object |service| gathers these two methods into a single namespace. This object
 is the only thing that the module exports.
 
 \begin{lstlisting}[
@@ -130,12 +131,12 @@ is the only thing that the module exports.
   caption=The Namespace Object pattern,
   label={lst:namespace_object}
 ]
-export { Service }
+export { service }
 
 const getAll  = () => { /* <omitted> */ };
 const getById = id => { /* <omitted> */ };
 
-const Service = { getAll, getById };
+const service = { getAll, getById };
 \end{lstlisting}
 
 A user of this service can now import it very easily, as
@@ -146,9 +147,9 @@ listing~\ref{lst:import_namespace_obj} shows:
   caption=Import a Namespace Object,
   label={lst:import_namespace_obj}
 ]
-import { Service } from "./power-of-the-dot.js";
+import { service } from "./power-of-the-dot.js";
 
-const allElements = Service.getAll();
+const allElements = service.getAll();
 \end{lstlisting}
 
 Since this object can follow a defined interface (for example, using JSDoc), it
@@ -157,7 +158,7 @@ can easily be replaced by just changing the import to another implementation.
 
 \subsubsection{Conclusion} % (fold)
 \label{subsub:Power_of_the_dot_Conclusion}
-The module system of JavaScript thus offers several possibilities to couple
+The module system of JavaScript offers several possibilities to couple
 loose functions. While namespace objects can fulfil an interface, the
 flexibility of named imports makes it easier for developers to get started with
 a potentially comprehensive library. \\ 
