@@ -62,8 +62,8 @@ printHead []
 -- Prints '"List was empty!"'
 \end{lstlisting}
 
-The function |printHead| needs to deal explicitly with the case when the passed
-list is empty. When returning |null|, the user has to explicitly deal with
+The function |printHead| is forced to deal explicitly with the case when the passed
+list is empty. When returning |null|, the user must remember to deal with
 the case where there is no first element. Therefore, |Maybe| leads to improved safety.
 
 \subsection{Doing the Same in JavaScript} % (fold)
@@ -114,7 +114,7 @@ printHead([]);
 \end{lstlisting}
 
 Using the structural similarity of |Just(value)| and |Nothing|,
-lines~\ref{line:js_safeHead1}-\ref{line:js_safeHead2} evaluate the result of
+lines~\ref{line:js_safeHead1} to \ref{line:js_safeHead2} evaluate the result of
 |safeHead|. The function |printHead|, therefore, works for both cases!
 % subsubsection Doing the same in JavaScript (end)
 % subsection Wrapping values in a context (end)
@@ -123,13 +123,13 @@ lines~\ref{line:js_safeHead1}-\ref{line:js_safeHead2} evaluate the result of
 \label{sec:Working with values in a context}
 \subsection{Introducing fmap} % (fold)
 \label{sub:Introducing fmap}
-The example with |Maybe| shows how values work in a context. Over time,
+The example with maybe shows how values work in a context. Over time,
 however, it can become tedious to keep making this distinction whether
 it has a value. Therefore, Haskell offers a concept of working with values in a
 context. The simplest way to work with the value using this concept is using
 the function |fmap|. |fmap| knows how to execute a function for the value(s) in
 a context. Listing~\ref{lst:fmap_maybe_hs} shows the usage of |fmap| for
-|Maybe|:
+maybe:
 
 \begin{lstlisting}[
   style=Haskell,
@@ -143,7 +143,7 @@ print $ fmap double Nothing
 -- Prints 'Nothing'
 \end{lstlisting}
 
-Similar to |Maybe|, also lists describe such a context.
+Similar to maybe, also lists describe such a context.
 Listing~\ref{lst:hs_fmap_list} shows how |fmap| works on lists:
 
 \begin{lstlisting}[
@@ -162,13 +162,13 @@ Therefore, |fmap| is just a way to "map values".
 \subsection{Making a Context Monadic} % (fold)
 \label{sub:Making a Context Monadic}
 Haskell defines many other functions analogous to |fmap| to interact with
-values in a context. So-called type classes define these functions. In his book
+values in a context. So-called type-classes define these functions. In his book
 "Programming in Haskell" Hutton describes type-classes like
 \textcquote[p.~31]{hutton_pih_2016}{[...], a class is a collection of types
 that support certain overloaded operations called methods. }\\ 
-Some of these functions are more powerful than |fmap|. The following section
-briefly overviews which operations a context must provide to be considered
-monadic:
+Some of these overloaded methods are more powerful than |fmap|. The following
+section briefly overviews which operations a context must provide to be
+considered monadic:
 
 \begin{itemize}
   \item \textbf{Functor}: A context |f| is a |Functor| when it provides a function
