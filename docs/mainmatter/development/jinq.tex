@@ -4,9 +4,7 @@ Based on the knowledge from the previous sections of this chapter, other
 possibilities analogous to |keepEven| become realizable - i.e., functions that
 handle arbitrary monadic structures. \\ 
 This section introduces such a concept called Language Integrated Queries
-(LINQ), which queries any monadic data structure. It goes into detail
-about the implementation of LINQ in JavaScript and shows how you can easily
-browse lists of JavaScript objects using LINQ.
+(LINQ), which queries any monadic data structure. 
 
 \subsection{Introduction to LINQ} % (fold)
 \label{sub:Introduction to LINQ}
@@ -205,7 +203,7 @@ const pairWith = monad1 => monad2 => {
 // ...
 \end{lstlisting}
 
-|pairWith| takes a second monad. It now forms a new monad with a |Pair| in it!
+|pairWith| takes a second monad. It now forms a new monad with a pair in it!
 But what happens here? Difficult to say because we can not know it! It just
 calls |and| on |monad1| and combines it with |monad2|. \\
 So when combining two sequences, every element of the first sequence gets
@@ -261,7 +259,7 @@ rules and, thus, comes close to a list comprehension.
 
 \subsubsection{Using the JSONMonad to process lists of JavaScript objects} % (fold)
 \label{subsub:Using the JSONMonad to process lists of JavaScript objects}
-The |JSONMonad| gives arrays of JavaScript objects with a monadic API. The
+The |JSONMonad| gives arrays of JavaScript objects a monadic API. The
 |JSONMonad| makes them, therefore, compatible with JINQ. This is especially
 useful when JavaScript objects are created from JSON because they often have
 missing or nullable fields. The monadic operations of |JSONMonad| deal with
@@ -271,7 +269,7 @@ Listing~\ref{lst:jsonmonad_data} dives right into an example defining two
 records that are related to each other. The first one contains data about an
 ancient battle, while the second one contains data about the heroes of the
 battle. The |heroId| connects these two records. The battle had a |winner| and
-a |loser|. Imagine you want to find all names of the heroes of the winner team.
+a |loser|:
 
 \begin{lstlisting}[
   style=ES6,
@@ -296,6 +294,7 @@ const heroes = JSON.parse(`
 `);
 \end{lstlisting}
 
+Now imagine you want to find all names of the heroes of the winner team. \\ 
 Listing~\ref{lst:jsonmonad_example} combines these two data sources using JINQ.
 Line~\ref{line:jsonmonad_example1} wraps the |battleData| with the |JSONMonad|
 to become queryable. |select| then accesses the property |winner| and from

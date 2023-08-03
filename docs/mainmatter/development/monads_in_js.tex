@@ -188,7 +188,7 @@ and additionally provides two functions:
     |pure| "lifts" a value into a context.\\
     |pure| signature: |pure :: Applicative f => a -> f a| \\
 \end{itemize}
-\item \textbf{Monad}: A context |f| is a |Monad| when it is an |Applicative|
+\item \textbf{Monad}: A context |m| is a |Monad| when it is an |Applicative|
   and additionally provides a function |>>=| (pronounced "bind"). |>>=| takes
   another function as an argument which, when applied to the value(s), again
   creates a value in the same context. So that the values are not nested twice
@@ -305,7 +305,7 @@ multiple values wrapped in the same context. This use-case is relatively rare
 in JavaScript because you do not operate as strictly in contexts as in Haskell.
 In addition, the app operator also only works on functions that receive their
 arguments curried. Most functions in JavaScript do not. Using the JavaScript
-|Maybe| as an example, listing~\ref{lst:app_js_maybe} shows how |<*>| would
+maybe as an example, listing~\ref{lst:app_js_maybe} shows how |<*>| would
 work:
 
 \begin{lstlisting}[
@@ -344,8 +344,8 @@ curried style. As listing~\ref{lst:curried_fn_in_js} explains, applying |plus|
 to |x| returns a function taking another argument. Calling this function with
 another number returns the sum!
 
-Even if this pattern appears less, it is still useful sometimes. Luckily |and|
-is capable of everything |app| can do. So consider
+Even if this pattern appears less, it is still useful sometimes. Luckily
+"|and|" is capable of everything |app| can do. So consider
 listing~\ref{lst:and_js_maybe}, which does the same thing using |and|, even
 though it is a bit more to type:
 
@@ -366,8 +366,8 @@ maybeSum
 
 Line~\ref{line:and_js_maybe1} shows how the function |and| gives access to the
 last element, which is |p|, the function |plus|! |fmap| applies this function
-to |maybeX|. This creates a new function which is again in the |Maybe|
-context. Line~\ref{line:and_js_maybe2} does exactly the same - but for the second
+to |maybeX|. This creates a new function which is again in the maybe context.
+Line~\ref{line:and_js_maybe2} does exactly the same - but for the second
 argument. \\ 
 This shows that |and| can emulate the behaviour of |app|.
 % subsubsection Which operations do not fit JavaScript? (end)
@@ -376,7 +376,7 @@ This shows that |and| can emulate the behaviour of |app|.
 \subsection{Using JSDoc to type Monads} % (fold)
 \label{sub:Using JSDoc to type monads}
 A type system must represent monads to unveil their true power. With some
-limitations, JSDoc can model a monad well.
+limitations, JSDoc can model monads in a newly created type called |MonadType|.
 
 \subsubsection{The MonadType} % (fold)
 \label{subsub:The MonadType}
@@ -413,7 +413,7 @@ adhering to |MonadType|. Therefore, |keepEven| can operate on every monadic
 object and access all its monadic operations!\\
 The |pure| and |empty| functions are independent of the values inside of the
 context, but they are still called on the passed monad so that JavaScript can
-find the correct implementation.
+find the correct implementation:
 
 \begin{lstlisting}[
   style=ES6,
@@ -433,7 +433,7 @@ const keepEven = monad =>
    }); 
 \end{lstlisting}
 
-Listing~\ref{lst:keep_even_maybe} shows how |keepEven| can be called with any
+Listing~\ref{lst:keep_even_maybe} shows how |keepEven| can be called with a
 maybe. This works because maybe is a monad! If it contains an odd number,
 |keepEven| discards it. The best aspect is that |Nothing| does not need any
 special treatment - the |and| implementation of maybe knows what to do when a
@@ -487,9 +487,7 @@ the logic being correct!
 
 \subsection{Implementing Monadic Operations in JavaScript} % (fold)
 \label{sub:Implementing Monadic Operations in JavaScript}
-This section covers how to make a context conform to |MonadType| discussed in
-section~\ref{subsub:The MonadType}.\\ 
-This covers following steps:
+Making a context conform to |MonadType| requires the following steps:
 \begin{enumerate}
   \item Creating a prototype for the context (see section~\ref{subsub:Sequence
     Prototype} which explains prototypes).
@@ -547,7 +545,7 @@ This code does the following:
 
 Both |Just(value)| and |Nothing| must provide the respective operations as
 properties. Listing~\ref{lst:proto_maybe_js} now sets the prototype to the 
-functions |Just(value)| and |Nothing|.
+functions |Just(value)| and |Nothing|:
 
 \begin{lstlisting}[ style=ES6, caption=Setting the prototype of Maybe,
   label={lst:proto_maybe_js}
@@ -656,8 +654,8 @@ monadic function has been called, like on
 line~\ref{line:monad_type_maybe_directly4}.
 
 For this to work without type casting, JSDoc would have to support higher-kinded
-types \cite{baeldung_higher-kinded_2020}, which would type definitions as defined by
-listing~\ref{lst:not_working_type}:
+types \cite{baeldung_higher-kinded_2020}, which would allow type definitions as
+defined by listing~\ref{lst:not_working_type}:
 
 \begin{lstlisting}[
   style=ES6,
