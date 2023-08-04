@@ -1,11 +1,10 @@
 \chapter{Effective Testing}
 \label{chap:Effective_Testing}
 This chapter explains the testing strategy of the Sequence library. The start
-shows the instruments already available from the Kolibri Web UI Toolkit and
-how we used them. After that, we focus on the testing table. 
-This is the core of the implemented testing framework during this project,
-and exciting details are covered in depth. The end of the chapter discusses some
-advanced concepts regarding property-based testing.
+shows the instruments already available from the Kolibri Web UI Toolkit and how
+we used them. After that, we focus on the testing table - the core of
+the implemented testing framework during this project. The end of the chapter
+discusses some advanced concepts regarding property-based testing.
 
 \section{Motivation}
 \label{sec:Motivation}
@@ -13,7 +12,7 @@ When implementing a library, testing is an essential task. With the constant
 increase of functionalities, the number of tests also grows. Therefore, it
 brings many benefits to implementing tests in a standardized and generalized
 way. This leads to a robust and leakless testing framework and, thus, a solid
-code base. We called our implementation of the generalization "testing table".
+code base. We called our implementation of this generalization "testing table".
 An explanation in detail follows in section~\ref{sec:Testing Table}. \\
 Such a testing strategy has significant advantages. The following
 non-concluding list shows an excerpt of the most important:
@@ -29,25 +28,24 @@ non-concluding list shows an excerpt of the most important:
 
 The generalization of testing is possible for functions that meet similar
 constraints. This enables to write configurations for such functions under
-test, which the testing framework then checks against these rules. Suppose a
-new particular case, probably a bug, is discovered during the development that
-also affects existing implementations. Then a new test covering this issue is
-added to the rules, which runs automatically against all testing
-configurations!
+test, which the testing framework then checks against certain predefined rules.
+Suppose a new particular case, probably a bug, is discovered during the
+development that also affects existing implementations. Then a new test
+covering this issue is added to the rules, which runs automatically against all
+testing configurations!
 
 \section{Kolibri Testing Framework}
 \label{sec:Kolibri Test Framework}
-This section gives an overview of the Kolibri testing framework, which was
-already part of the toolkit before this project. Therefore, this is not a deep
-dive but only covers certain aspects. We extended the framework with some
-iterable specific functionalities for easier handling of our implementations.
+The Kolibri already provides a testing framework. We extended the framework
+with some iterable specific functionalities for easier testing of our
+implementations.
 
 \subsection{Parts of the Framework}
 \label{sub:Parts of the Framework}
 The test suite is the core element of the testing framework. Typically, a
 test suite includes several tests, whereas a testing framework can consist of
-several suites. Executing the Test suites generates a test report in HTML.
-An example of a summary report shows figure~\ref{fig:test_report}.
+several suites. Executing the test suites generates a test report in HTML.
+An example of such a summary report shows figure~\ref{fig:test_report}:
 
 \begin{figure}[H]
     \centering
@@ -144,7 +142,22 @@ iterableEq: (actual, expected, maxElementsToConsume = 1_000) => { *'\label{line:
      const bothIteratorDone     = actualDone && expectedDone;
      const tooManyIterations    = iterationCount > maxElementsToConsume;
 
-     //... error handling omitted ...
+     if (bothIteratorDone) break;*'\label{line:check_iterable2}'*
+     if (oneIteratorDone) {
+         testPassed = false;
+         message    = '...'
+         break;
+     }
+     if (tooManyIterations) {
+         message    = '...'
+         testPassed = false;
+         break;
+     }
+     if (actualValue !== expectedValue) {
+         testPassed = false;
+         message    = '...'
+         break;
+     } *'\label{line:check_iterable3}'*
 
      iterationCount++;
     }
@@ -153,17 +166,21 @@ iterableEq: (actual, expected, maxElementsToConsume = 1_000) => { *'\label{line:
     messages.push(message);
 }
 \end{lstlisting}
-
+Since an iterable can be endless, |iterableEq| defines a default maximum
+iteration amount on line~\ref{line:signature_iterableEq}
+(|maxElementsToConsume|).  This is handy because it is often the case that an
+iterable runs infinitely when something goes wrong. If an iterable exceeds this
+limit, the test fails.\\
 The implementation checks on line~\ref{line:check_iterable} if both values are
-iterable. If this is the case, each value of the two iterables is compared
-using a |while| loop. On line~\ref{line:write_result_to_summary}, the
+iterable. If this is the case, it compares the iterables using a |while| loop:
+Lines~\ref{line:check_iterable2} to~\ref{line:check_iterable3} check the
+equality for each iteration - if one iterator has fewer elements, it took
+too many iterations or the values at the same position are not equal, the test
+fails. \\ 
+On line~\ref{line:write_result_to_summary}, the
 test stores the result in the summary collection of the corresponding test
 suite.
 \newline
-Since an iterable can be endless, |iterableEq| defines a default maximum
-iteration amount on line~\ref{line:signature_iterableEq}.  This is handy
-because it is often the case that an iterable runs infinitely when something
-goes wrong. If an iterable exceeds this limit, the test fails.
 
 \subsubsection{Assertion for Exceptions}
 \label{subsub:Assertion for Exceptions}
@@ -214,16 +231,15 @@ corresponding error message is stored.
 
 \section{Testing Table}
 \label{sec:Testing Table}
-This section describes the realization of the testing table. It examines the
-architecture of it and how it works for a particular operation. It covers the
-config-based testing approach, which enables generalizing test cases for the
-Sequence library.
+The testing table enables generalizing test cases for operations of the
+Sequence library. Each function under test must provide a configuration for the
+testing framework.
 
 The architecture consists of three main parts:
 \begin{enumerate}
-  \item{A table containing all testing functions}
-  \item{Configuration objects to define test properties}
-  \item{A function |addToTestingTable| includes all tests from the testing
+  \item{a table containing all testing functions}
+  \item{configuration objects to define test properties}
+  \item{a function |addToTestingTable| including all tests from the testing
     table into a given test suite}
 \end{enumerate}
 
@@ -236,9 +252,9 @@ that specifies the test behaviour. Likewise, each has its |TestSuite|.
 In order to test operators and constructors using the testing table, it is
 necessary to implement a test configuration.
 Listing~\ref{lst:config_reduce} shows the testing file of the function |reduce|. 
-Lines~\ref{line:start_test_config}-\ref{line:end_test_config} define the test 
+Lines~\ref{line:start_test_config} to \ref{line:end_test_config} define the test 
 configuration. The testing table does not handle special cases. Those follow 
-later in the same file from line~\ref{line:additional_test_cases} on.
+later in the same file from line~\ref{line:additional_test_cases} on:
 
 \begin{lstlisting}[
   style=ES6, 
@@ -258,7 +274,6 @@ addToTestingTable(testSuite)(*'\label{line:start_test_config}'*
   })
 );*'\label{line:end_test_config}'*
 
-
 testSuite.add("test: special case", assert => {*'\label{line:additional_test_cases}'*
   // Given
   // When
@@ -271,8 +286,8 @@ testSuite.run();
 On line~\ref{line:createTestConfig}, the function |createTestConfig|  sets
 default values of configuration properties to simplifying the code.
 
-The following table~\ref{tab:testing_table} shows which configuration 
-properties are available and the purpose of it:
+The table~\ref{tab:testing_table} shows the available configuration 
+properties and their purpose:
 
 \begin{table}[H]
   \center
@@ -309,8 +324,8 @@ properties are available and the purpose of it:
                       must hold tests against different lists. 
                     & n
                     \\
-    |evalFn|          & An optional function that takes |expected| and the |actual| 
-                      in curried style. The default is |iterableEq|.
+    |evalFn|          & An optional function that compares the |expected| and 
+                      the |actual| values. The default is |iterableEq|.
                     & n 
                     \\
   \end{tabular}
@@ -321,7 +336,7 @@ properties are available and the purpose of it:
 \subsection{The Table}
 \label{sub:The Table}
 The testing table is just an array (table) containing test objects.
-Listing~\ref{lst:testing_table} shows the implementation.
+Listing~\ref{lst:testing_table} shows the implementation:
 
 \begin{lstlisting}[
   style=ES6, 
@@ -347,7 +362,7 @@ An object in the table includes two properties:
 
 Each function of the testing table expects as argument a test configuration
 object of type |SequenceTestConfigType|. Listing~\ref{lst:test_simple} presents
-exemplary the implementation of |testSimple|.
+exemplary the implementation of |testSimple|:
 
 \begin{lstlisting}[
   style=ES6, 
@@ -383,9 +398,9 @@ For this purpose, it executes the following tasks:
       then calls the passed function |evalFn|, comparing the |actual| and
       |expected| values. This gives the possibility to evaluate iterables or
       sequences containing more complex values or if the output of an operation
-      is not an iterable anymore (as, for example, |reduce|). If |evalFn| is
+      is not an iterable anymore (as, for example, with |reduce|). If |evalFn| is
     undefined, the fallback function |iterableEq| is used, comparing two
-  iterables as section~\ref{sub:Additional Assertions} explains.} 
+  iterables which section~\ref{sub:Additional Assertions} explains.} 
 \end{itemize}
 
 The testing table includes test-functions to examine the following behaviours of
@@ -395,7 +410,7 @@ implementations of the Sequence library:
   \item{\textbf{testSimple} checks if a typical case works properly.}
   \item{\textbf{testPurity} checks if an operator makes some side effects.}
   \item{\textbf{testCBNotCalledAfterDone} checks if a given callback of an
-    operator will be called when the Iterable is exhausted.}
+    operator will be called when the iterable is exhausted.}
   \item{\textbf{testPrototype} checks if the |SequencePrototype| is set.}
   \item{\textbf{testInvariants} checks if an invariant holds by applying different parameters.}
   \item{\textbf{testIterateMultipleTimes} checks if an iterable produces the same output twice.}
@@ -412,7 +427,7 @@ example, if an operation has no callback, the check of its side effect is
 useless.
 
 Line~\ref{line:filtering_tests} filters out tests excluded by the
-configuration. 
+configuration:
 \begin{lstlisting}[
   style=ES6, 
   caption=Implementation of addToTestingTable,
