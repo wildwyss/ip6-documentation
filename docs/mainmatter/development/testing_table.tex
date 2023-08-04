@@ -455,7 +455,7 @@ const addToTestingTable = testSuite => config => {
 
 \section{Testing based on Properties}
 \label{sec:Testing based on Properties}
-John Huges and Carl Claessen wrote to following sentence in the paper
+John Huges and Carl Claessen wrote the following sentence in the paper
 "Quickcheck, A Lighweight Tool for Random Testing of Haskell Programms":
 \textit{
 Despite anecdotal evidence that functional programs require somewhat less
@@ -479,7 +479,7 @@ includes a mix of special cases.
 \newline
 Line~\ref{line:reverse_law} in listing~\ref{lst:test_config_reverse} defines
 the invariants of |reverse|. This statement defines that an iterable must be 
-equal to the original when reversed two times.
+equal to the original when reversed two times:
 
 \begin{lstlisting}[
   style=ES6, 
@@ -613,7 +613,7 @@ up. Such occurrences could lead to program errors or unexpected behaviour.
 Consequently, we implemented a test case addressing this scenario and added it
 to the testing table. By adding just one more test, the entire Sequence library
 could be examined for this behaviour, allowing for further improvements and
-finding the same bug in other functions.\\
+finding the same bug in other functions!\\
 Another example concerns the behaviour of operators and operations when dealing
 with empty iterables. When a test configuration provides an invariant,
 it is automatically tested against the empty sequence. This is a powerful way
