@@ -4,24 +4,35 @@
 \label{sub:Findings and Achievements}
 This thesis aimed to develop a functional standard library for the Kolibri Web
 Ui Toolkit in JavaScript. To achieve this, we delved into the iterable
-protocols of JavaScript, leveraging our understanding to construct the concept
-of sequences. The characteristics of Sequences are lazy evaluation and
-immutability, offering a powerful tool for handling any iterable object. By
-decorating sequences, a whole library capable of processing, transforming, and
-creating sequences arose. This library can also process every iterable object,
-such as JavaScript arrays! This was made possible by passing the receiver to
-the function, allowing to take advantage of eta reduction.\\
+protocols of JavaScript, leveraging our understanding to construct a new data
+structure: the sequence. The characteristics of sequences are lazy evaluation
+and immutability, which offer powerful ways of handling iterable objects. Based
+on these findings, the Sequence library emerged. It can process, transform, and
+create sequences by decorating existing iterables. This library does not only
+work with sequences but also with every iterable object, such as JavaScript
+arrays - passing the receiver to the functions enabled this.\\
 The power of eta reduction manifests itself in the pipe function, enabling the
 execution of multiple operations sequentially, dramatically improving code
 readability. With the Sequence library’s compatibility with all iterable
-objects, it became logical to make other existing collections iterable as well.
-As a result, existing Kolibri Toolkit collections, such as pair, stack, and
-tuple, are now iterable and, therefore, compatible with the Sequence library.
-Many examples show how to build new sequences using the sequence library.\\
+objects, it became logical to make other existing data structures iterable as
+well. As a result, existing collections of the Kolibri, such as pair, stack,
+and tuple, are now iterable and, therefore, compatible with the Sequence
+library!\\
 Typing the Sequence library using JSDoc ensures clarity and maintains
-consistency. Despite some challenges, a powerful functional
-standard library for the Kolibri Web UI Toolkit emerged, offering enhanced
-functionality and versatility to JavaScript developers.
+consistency.
+
+The work also shows that monads in JavaScript can be very helpful and enable
+new ways to reason about problems. For example, JINQ enables the processing of
+various data structures that provide a monadic API in a very declarative way.
+The JSON monad makes JINQ compatible with arrays of JavaScript objects, solving
+daily problems that web developers face!
+
+In addition, many examples show the strengths of the standard library. Its
+tools enable easy transfers of Haskell algorithms based on lists
+to JavaScript!\\
+Despite some challenges, a powerful functional standard library for the Kolibri
+Web Ui Toolkit emerged, offering enhanced functionality and versatility to
+JavaScript developers!\\
 \subsection{A Closer Look to Particular Findings}
 \label{sub:A Closer Look to Particular Findings}
 
@@ -42,7 +53,7 @@ and~\ref{lst:comparing_with_haskell} demonstrate:
   label={lst:comparing_with_javascript}
   ]
 -- Creating a list from 0 to 4
-let list = unfoldr (\x -> if x < 5 then Just(x, x + 1) else Nothing) 0
+list = unfoldr (\x -> if x < 5 then Just(x, x + 1) else Nothing) 0
 
 -- mapping the list
 map (\x -> x * 2) list 
@@ -71,10 +82,12 @@ Nevertheless, certain limitations sometimes pose significant problems on the
 solution path. In particular, not all desired behaviours are achievable when
 dealing with the type system: JSDoc is very limited when combining multiple
 types or writing general functions that need types to abstract over another
-type. An illustrative example of this is the combination of a MonadType with an
-Iterable type: When a function returns a MonadType, the valuable information
+type. An illustrative example of this is the combination of a monad with an
+iterable: when a function returns a monad, the valuable information
 that this monad could also be iterable is lost. Resolving such a situation
-requires type-casting.
+requires type-casting.\\ 
+The user test shows that modern IDEs deliver excellent support for JSDoc and
+help the developers get along the way when working with JavaScript.
 \subsubsection{Monadic Structures}
 \label{subsub:Monadic Structures}
 |JINQ| explained in section ~\ref{sec:Query different Data Structures}, is a
@@ -116,7 +129,7 @@ code base. Several points were particularly important during development:
   \item{Good naming}
   \item{Standardized formatting}
   \item{Only necessary exports of functions}
-  \item{Appropriate comments and JSDoc}
+  \item{Appropriate comments and JSDoc, including examples}
   \item{Project organization and structure}
 \end{itemize}
 
