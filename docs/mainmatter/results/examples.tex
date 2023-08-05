@@ -73,12 +73,12 @@ console.log(...take(limit)(fizzbuzz));
 // => Logs '1 2 "fizz" 4 "buzz" ... 11 "fizz" 13 14 "fizzbuzz"'
 \end{lstlisting}
 
-As you observe, the entire setup relies on sequences! We define three
+As you observe, the entire setup relies on sequences. We define three
 distinct endless sequences. A range generates a line of numbers, while |cycle|
 produces an unending repetition for "fizzes" and "buzzes". Memory usage remains
 minimal. Subsequently, |zipWith| merges the individual sequences and yields a
 new sequence. This uncomplicated setup underscores that working with sequences
-is declarative, straightforward, and highly understandable.
+is declarative, straightforward and highly understandable.
 
 Now we are extending the application to add new rules during the runtime:
 
@@ -123,12 +123,12 @@ number and a string. The returned infinite sequence then contains the
 corresponding text at each multiple of the rules number. In the remaining
 places, it contains an empty string. \\ 
 Calling |createSequenceForRule(Rule(3, "fizz"))| thus creates a sequence
-generating |"", "", "fizz", "", "", "fizz", ...| !\\
+generating |"", "", "fizz", "", "", "fizz", ...|.\\
 The function |buildFizzBuzz| reduces all sequences representing a rule to a
 single sequence. 
 Figures~\ref{fig:fizzbuzz_control} and \ref{fig:fizzbuzz_result} demonstrate a
 screenshot of a simple application showing two rules and the resulting sequence.
-The implementation enables adding new rules at runtime!
+The implementation enables adding new rules at runtime.
 
 \begin{figure}[H] \centering \begin{minipage}{.5\textwidth} \centering
 \includegraphics[width=.6\linewidth]{./mainmatter/pictures/fizzbuzz_control.png}
@@ -152,7 +152,7 @@ We want to filter out all participants that have a student ID. As you can see
 in the excerpt of the JSON file in listing~\ref{lst:json_file_devs}, the
 property |switch-edu-id| is not defined for all people. Because the
 |JsonMonad| works in the background with a maybe, such situations can be
-processed without null handling!
+processed without null handling.
 
 \begin{lstlisting}[
   style=json, 

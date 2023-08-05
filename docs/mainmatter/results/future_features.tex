@@ -13,7 +13,7 @@ a logging framework~\cite{wild_ip5_2023}. This would also be useful to include
 in the Sequence library. Especially in case of errors, analyzing debug or
 tracing messages from the involved functions would be helpful. Currently, the
 logging framework is only included in a part of the test framework. But this
-could be extended in a next step.
+could be extended in a further step.
 
 \subsection{Operators and Operations}
 \label{sub:Operators and Operations}
@@ -23,7 +23,7 @@ Following are some possible extensions for the Sequence library:
 \label{subsub:uncons}
 |uncons| is an operation that returns the head and the rest of an iterable in a
 pair. The Sequence library already includes this operation.
-But it does not work on empty sequences! Meaning |uncons| applied to an
+But it does not work on empty sequences. Meaning |uncons| applied to an
 empty iterable fails. Thus, one would have a version, which for example, wraps the
 result in a maybe. |uncons| on an empty list would then return |Nothing|.
 The API documentation page~\cite{hoogle_uncons} describes the function in
@@ -68,8 +68,8 @@ takes a lot of work. To remedy this situation, having error-safe functions like
 In the mathematical context, having a tool for approximations is helpful. A
 constructor for such a case could be the fix point sequence. It allows us to
 find an approximation with a given number of iterations or by providing a value
-of minimal deviation. The function |within| described by
-section~\ref{sub:Numerical Differentiation} already serves a good starting
+of minimal deviation. The function |within| described in 
+section~\ref{sub:Numerical Differentiation} already serves as a good starting
 point.
 
 \subsubsection{Use JINQ to process HTML}
