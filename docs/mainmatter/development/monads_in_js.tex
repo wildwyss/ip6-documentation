@@ -78,7 +78,7 @@ const Just    = x => _f => g => g(x);*'\label{line:maybe_js1}'*
 const Nothing = f => _g => f(undefined);*'\label{line:maybe_js2}'*
 \end{lstlisting}
 
-So |Just| and |Nothing| are only functions! How could it be different in
+So |Just| and |Nothing| are only functions. How could it be different in
 functional programming? \\ 
 Line~\ref{line:maybe_js1} defines the |Just| case:
 |Just| takes a value |x| and two functions while not using the first function
@@ -115,7 +115,7 @@ printHead([]);
 
 Using the structural similarity of |Just(value)| and |Nothing|,
 lines~\ref{line:js_safeHead1} to \ref{line:js_safeHead2} evaluate the result of
-|safeHead|. The function |printHead|, therefore, works for both cases!
+|safeHead|. The function |printHead|, therefore, works for both cases.
 % subsubsection Doing the same in JavaScript (end)
 % subsection Wrapping values in a context (end)
 
@@ -225,7 +225,7 @@ print $ doubleAll $ Just 1
 -- Prints 'Just 2'
 \end{lstlisting}
 Even though a list and a maybe have nothing in common, the same function can be
-applied to both types! \\ 
+applied to both types. \\
 \textit{Note:} Another example that makes use of these abstractions is JINQ,
 which is described in the section~\ref{sec:Query different Data Structures}.
 % subsubsection Why using these constraints? (end)
@@ -329,9 +329,9 @@ sum
 \end{lstlisting}
 Suppose you have two lists from which you want to add the first two elements.
 Of course, these lists can be empty. |safeHead| fetches the first elements
-safely! The function |plus| on line~\ref{line:app_js_maybe1} allows you to sum
+safely. The function |plus| on line~\ref{line:app_js_maybe1} allows you to sum
 up two numbers. However, these two addends are now in a context. So |plus|
-cannot be applied directly to the values. That is when |app| comes into play!
+cannot be applied directly to the values. That is when |app| comes into play.
 |app| expects a parameter in the same context as the original wrapped function.
 Line~\ref{line:app_js_maybe2}, therefore, wraps |plus| in |Just|. So it is
 now also in the maybe context. Line~\ref{line:app_js_maybe3} repeatedly calls
@@ -342,7 +342,7 @@ result evaluates to |Nothing|. \\
 As said above, this only works because |plus| receives its arguments in a
 curried style. As listing~\ref{lst:curried_fn_in_js} explains, applying |plus|
 to |x| returns a function taking another argument. Calling this function with
-another number returns the sum!
+another number returns the sum.
 
 Even if this pattern appears less, it is still useful sometimes. Luckily
 "|and|" is capable of everything |app| can do. So consider
@@ -365,7 +365,7 @@ maybeSum
 \end{lstlisting}
 
 Line~\ref{line:and_js_maybe1} shows how the function |and| gives access to the
-last element, which is |p|, the function |plus|! |fmap| applies this function
+last element, which is |p|, the function |plus|. |fmap| applies this function
 to |maybeX|. This creates a new function which is again in the maybe context.
 Line~\ref{line:and_js_maybe2} does exactly the same - but for the second
 argument. \\ 
@@ -410,7 +410,7 @@ no direct connection to its properties.
 Listing~\ref{lst:monad_type_usage_js} defines a function |keepEven| which
 discards odd values in the context. As a parameter, this function accepts every context
 adhering to |MonadType|. Therefore, |keepEven| can operate on every monadic
-object and access all its monadic operations!\\
+object and access all its monadic operations.\\
 The |pure| and |empty| functions are independent of the values inside of the
 context, but they are still called on the passed monad so that JavaScript can
 find the correct implementation:
@@ -434,7 +434,7 @@ const keepEven = monad =>
 \end{lstlisting}
 
 Listing~\ref{lst:keep_even_maybe} shows how |keepEven| can be called with a
-maybe. This works because maybe is a monad! If it contains an odd number,
+maybe. This works because maybe is a monad. If it contains an odd number,
 |keepEven| discards it. The best aspect is that |Nothing| does not need any
 special treatment - the |and| implementation of maybe knows what to do when a
 |Nothing| appears. So it is not the job of |keepEven| to handle such special

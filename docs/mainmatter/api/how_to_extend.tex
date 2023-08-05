@@ -2,7 +2,7 @@
 \label{sec:How to Extend the Library}
 Since applications are versatile, you can add further functionality
 to the library. This section shows how to extend the Sequence library with
-own functionality!
+own functionality.
 \subsection{Adding a new Operator}
 \label{sub:Adding a new Operator}
 In this scenario, we include |concat| to the Sequence library. |concat| appends
@@ -17,7 +17,7 @@ It is a terminal operation if it takes a sequence and produces a different type
 than a sequence, such as |isEmpty|.
 \newline
 \textit{Note:} It doesn't matter if you want to add a constructor, an operator, or a terminal
-operation to the sequence library - the procedure is always the same! The
+operation to the sequence library - the procedure is always the same. The
 following example can, therefore, also be applied to constructors and terminal
 operations.
 
@@ -95,7 +95,7 @@ import "./concat/concat.js"
 
 \subsubsection{Writing the Tests}
 \label{subsub:Write the Tests}
-The first user of a new operator of the Sequence library is usually a test!
+The first user of a new operator of the Sequence library is usually a test.
 Therefore, we start by writing the tests.\\
 \textit{Note:} Chapter~\ref{chap:Effective_Testing} explains testing of the
 Sequence library in detail. This section therefore does not cover how this
@@ -161,10 +161,10 @@ If so, then everything is fine.
 \subsubsection{Writing the Functionality}
 \label{subsub:Write the Functionality}
 Now you are in a comfortable position to implement your code against tests.
-For this, create a function |concat| in the file |concat.js|!
+For this, create a function |concat| in the file |concat.js|.
 Probably, you can use existing functionalities of the Sequence library for your
 implementation. Sections~\ref{sub:api_Constructors} - \ref{sub:api_Terminal
 Operations} provide a list of all provided functionality of the Sequence
 library.
 \newline
-Again, run the tests and be proud if everything is working!
+Again, run the tests and be proud if everything is working.

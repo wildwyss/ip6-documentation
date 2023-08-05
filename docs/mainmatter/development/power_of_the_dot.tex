@@ -4,11 +4,11 @@ In object-oriented languages, the receiver of an operation usually precedes the
 dot. As described in section~\ref{sec:Placing the Receiver at the End}, this
 has some downsides. However, it also brings advantages: The IDE can help you
 find the correct method because the syntax "|receiver.|" allows the IDE to list
-all operations of the receiver's type! \cite[Ch. "The Power of the
+all operations of the receiver's type. \cite[Ch. "The Power of the
 Dot"]{frege_goodness} \\ 
 This chapter shows how one can exploit the module
 system of JavaScript to get similar suggestions from the IDE, even when not
-working with objects!
+working with objects.
 
 \section{The JavaScript Module System} % (fold)
 \label{sec:The JavaScript Module System}
@@ -82,12 +82,12 @@ Figure~\ref{fig:the_power_of_the_dot_idea_sugg} shows exactly this behaviour:
 \end{figure}
 
 This is a way to combine the power of the dot with the advantages of placing
-the receiver at the end! \\
+the receiver at the end. \\
 For users who know the library well, typing the additional name represents an
 unnecessary extra effort. The good thing about named imports is that every
 export supports them - the library developer does not need to adapt the
 exports. \\
-This leaves it up to the user to import the library named! Named
+This leaves it up to the user to import the library named. Named
 imports, therefore, allow the flexible customization of module names.
 
 Additionally, object destructuring allows using often used symbols without
@@ -120,7 +120,7 @@ functionalities that are only loosely related. What do you do if you want to
 define modules that share a common interface with other modules? Good examples
 of such a use case are services. Often you use dummy services in unit tests
 that should have the same interface as the production services that access an
-API. The Namespace Object pattern solves this problem!
+API. The Namespace Object pattern solves this problem.
 
 Listing~\ref{lst:namespace_object} defines a service with two methods. The
 object |service| gathers these two methods into a single namespace. This object
@@ -163,7 +163,7 @@ loose functions. While namespace objects can fulfil an interface, the
 flexibility of named imports makes it easier for developers to get started with
 a potentially comprehensive library. \\ 
 Both approaches allow the IDE to provide the developer with additional support by
-bringing "the power of the dot" to JavaScript modules!
+bringing "the power of the dot" to JavaScript modules.
 
 % subsubsection Conclusion (end)
 % subsection IDE support through modules (end)

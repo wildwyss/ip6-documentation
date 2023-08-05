@@ -321,7 +321,7 @@ Listing~\ref{lst:impl_within} defines the following implementations:
 \begin{itemize}
   \item |within| calculates recursively the slope of the |parabola| using the
     sequence |diffs| until a satisfying accuracy. Because of the laziness of
-    the sequence, |within| only calculates as many slopes as needed!
+    the sequence, |within| only calculates as many slopes as needed.
   \item At the end, |slopeOfFAtX| calculates the slope with the given parameters.
 \end{itemize}
 
@@ -352,7 +352,7 @@ playing fields, which can arise when the players make their next moves. This
 results in a potentially endless tree. All direct successors of a node are the
 next possible moves for this node's playing field. Since this tree can be huge,
 depending on the game, even infinitely large, only a lazy data structure can
-handle it!\\
+handle it.\\
 The algorithm must estimate whether a playfield is good or bad for a player to
 find the best possible next move. The simplest way to figure this out is to
 look at the playing field and decide if a player has already won. In the case
@@ -380,7 +380,7 @@ turn, it selects the smallest value (the algorithm thus assumes that the
 opponent also selects the best possible move). This found value is assigned to
 the parent node as a result - and chooses the best move on this level according
 to the same scheme. Ultimately, the root has the value with the best possible
-chances of winning!
+chances of winning.
 
 \paragraph{How to evaluate the huge Tree?} The tree of possible moves and possible
 result values can be huge. So the algorithm must have a way to limit the tree
@@ -777,7 +777,7 @@ adapt an algorithm developed for functional programming languages in
 JavaScript.\\
 Of course, copying the algorithm is impossible because JavaScript misses some
 language features like pattern matching. Nevertheless, the essential concepts
-and logic of the algorithm can be adopted directly! \\
+and logic of the algorithm can be adopted directly. \\
 It is also exciting how JSDoc allows constructing straightforward talking types
 like |Player| or |Stone| (listing~\ref{lst:tictactoe_types}).\\
 To extend the algorithm, for example, to improve the static evaluation to

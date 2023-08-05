@@ -106,8 +106,8 @@ const keepEvenJINQ = monad =>
     .result();
 \end{lstlisting}
 
-|keepEvenJINQ| is not only shorter but also more readable! It becomes clear
-within moments what this function does, as it reads almost like prose!\\
+|keepEvenJINQ| is not only shorter but also more readable. It becomes clear
+within moments what this function does, as it reads almost like prose.\\
 This is the power of these abstractions - types must only follow a
 minimal API to be compatible with JINQ. Additionally, they are very readable.
 
@@ -128,8 +128,8 @@ next operation executed on the builder operates on this monad. |result| then
 returns the monad created based on the builder.
 
 \textit{Note:} None of the functions change the parameter |monad| - therefore,
-JINQ is immutable! This allows reusing an intermediate state of the JINQ
-builder!
+JINQ is immutable. This allows reusing an intermediate state of the JINQ
+builder.
 
 \begin{lstlisting}[
   style=ES6,
@@ -173,7 +173,7 @@ const where = monad => predicate => {
 \end{lstlisting}
 
 You may have already guessed it - the implementation of |where| is almost
-precisely the implementation of |keepEven|! It is more general because the
+precisely the implementation of |keepEven|. It is more general because the
 predicate |x % 2 === 0| is outsourced to a function called |predicate|. See
 line~\ref{line:jinq_where_impl1} in listing~\ref{lst:jinq_where_impl}: |and|
 keeps a value matching the predicate using |monad.pure| or discards it
@@ -203,15 +203,15 @@ const pairWith = monad1 => monad2 => {
 // ...
 \end{lstlisting}
 
-|pairWith| takes a second monad. It now forms a new monad with a pair in it!
-But what happens here? Difficult to say because we can not know it! It just
+|pairWith| takes a second monad. It now forms a new monad with a pair in it.
+But what happens here? Difficult to say because we can not know it. It just
 calls |and| on |monad1| and combines it with |monad2|. \\
 So when combining two sequences, every element of the first sequence gets
 paired up with every element of the second sequence. One could argue that this
 will take too much memory and could be more efficient. But let us step back and
 think about section~\ref{subsub:Lazy Evaluate Iterables}, which discusses the laziness of sequences. |monad1|
-(a sequence in the current example) is evaluated lazily! Therefore, never all
-combinations will be materialized in memory at once!
+(a sequence in the current example) is evaluated lazily. Therefore, never all
+combinations will be materialized in memory at once.
 % subsubsection How does JINQ work? (end)
 
 \subsubsection{Creating Sequences using JINQ} % (fold)
@@ -326,12 +326,12 @@ console.log(...outstandingHeroNames);
 \label{subsub:JINQ_Conclusion}
 Monadic APIs allow the building of very general abstractions that can handle a
 wide variety of data types, even if they seem to have nothing in common at
-first glance - such as a sequence or a maybe! JINQ showcases an excellent
+first glance - such as a sequence or a maybe. JINQ showcases an excellent
 instance of such a general abstraction - its operations only compose generic
 monadic functions. Nevertheless, JINQs operations have very expressive names
-describing their purpose, making it easy to use JINQ with different data types!
+describing their purpose, making it easy to use JINQ with different data types.
 That is truly beautiful and quite rare: general concepts with specific
-names!\\ 
+names.\\
 JINQ shows its versatility through the possibility of creating new lists based
 on declarative rules and using the |JSONMonad|.
 % subsubsection Conclusion (end)

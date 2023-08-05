@@ -32,7 +32,7 @@ test, which the testing framework then checks against certain predefined rules.
 Suppose a new particular case, probably a bug, is discovered during the
 development that also affects existing implementations. Then a new test
 covering this issue is added to the rules, which runs automatically against all
-testing configurations!
+testing configurations.
 
 \section{Kolibri Testing Framework}
 \label{sec:Kolibri Test Framework}
@@ -573,7 +573,7 @@ also exists in the Sequence library. As |<>|, |mconcat| is also
 associative and a concatenation with the neutral element (the empty list)
 has no influence on the result.\\ 
 With the previously shown implementation of the invariant based testing, it
-becomes possible to test these laws for |mconcat|!
+becomes possible to test these laws for |mconcat|.
 Listing~\ref{lst:mconcat_invariant} shows the implementation of these
 invariants in JavaScript:
 
@@ -613,7 +613,7 @@ up. Such occurrences could lead to program errors or unexpected behaviour.
 Consequently, we implemented a test case addressing this scenario and added it
 to the testing table. By adding just one more test, the entire Sequence library
 could be examined for this behaviour, allowing for further improvements and
-finding the same bug in other functions!\\
+finding the same bug in other functions.\\
 Another example concerns the behaviour of operators and operations when dealing
 with empty iterables. When a test configuration provides an invariant,
 it is automatically tested against the empty sequence. This is a powerful way
@@ -627,7 +627,7 @@ unexpected side effects, promoting a more reliable program execution.
 When implementing large code bases, having a solid test framework is crucial.
 Structured extension of the test suite during development leads to extensive
 core functionality testing. Thus, the core of the library becomes even more
-robust when the code base grows!
+robust when the code base grows.
 \newline
 The standardization and generalization of tests using a testing table imply that
 writing tests for new functionalities takes less time and ensures better

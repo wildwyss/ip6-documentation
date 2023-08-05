@@ -167,9 +167,9 @@ console.log(bs);
 \end{lstlisting}
 The first output is the same as in listing ~\ref{lst:js_eagerly_eval} - the
 first four elements of the array |as| have been multiplied by 2. However, the
-second output differs: the array |bs| now contains only four elements! So |map|
-applied the passed function only to four initial array elements! This fact
-proves that transforming arrays using the Sequence library happens lazily!\\
+second output differs: the array |bs| now contains only four elements. So |map|
+applied the passed function only to four initial array elements. This fact
+proves that transforming arrays using the Sequence library happens lazily.\\
 This works because the JS iteration protocols process element by element. The
 iterator delivers the next element only if it is requested. If no further
 elements are needed, it just stops iterating! \\

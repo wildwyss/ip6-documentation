@@ -45,7 +45,7 @@ mainly consists of two parts:\\
     iteration protocols and can therefore be lazily evaluated. In addition, the
     Sequence library provides various operations on a sequence to transform and
     evaluate it. These operations work on sequences and any data structure that
-    implements the iteration protocols! Thus, among other things, JavaScript
+    implements the iteration protocols. Thus, among other things, JavaScript
     arrays can also be lazily evaluated and transformed using the Sequence
     library.\\
     Operations performed on sequences are static functions that do not belong
@@ -59,7 +59,7 @@ mainly consists of two parts:\\
         \item The implementations can be divided into different modules.
       \end{enumerate}
   Passing an iterable to such an operation does not change the underlying
-  iterable but only decorates it! The operation returns a new sequence with the
+  iterable but only decorates it. The operation returns a new sequence with the
   same API, which calls when consumed, the underlying iterable.
 
 \item \textbf{Monadic API in JavaScript:} The knowledge gained from the
@@ -70,7 +70,7 @@ mainly consists of two parts:\\
   |MonadType| to be compatible with such a function. \\ 
   The sequence already implements this type completely. Since the Sequence
   library allows converting any iterable into a sequence, these operations are
-  available for all iterable objects! To show the versatility of the
+  available for all iterable objects. To show the versatility of the
   |MonadType|, an implementation for the already existing |MaybeType| was
   also added. The definition of the monad in JavaScript allows the
   implementation of language-integrated queries
