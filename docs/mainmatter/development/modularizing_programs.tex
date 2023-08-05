@@ -172,7 +172,7 @@ applied the passed function only to four initial array elements. This fact
 proves that transforming arrays using the Sequence library happens lazily.\\
 This works because the JS iteration protocols process element by element. The
 iterator delivers the next element only if it is requested. If no further
-elements are needed, it just stops iterating! \\
+elements are needed, it just stops iterating.\\
 Iterators, therefore, decouple the termination condition (asking for another
 element) from the loop body (generating/accessing the next element).
 
@@ -314,7 +314,7 @@ const doubleAll = map(double);
 The code of listing~\ref{lst:rcv_at_end_js} is not only less to type but also
 more accurate when reading because the term |doubleAll = map(double)| says that
 the pre-configured function |map(double)| gets a new name (|doubleAll|). No worrying about
-parameter naming is needed here!
+parameter naming is needed here.
 % subsubsection Placing the Receiver at the End (end)
 
 \subsubsection{Conclusion} % (fold)

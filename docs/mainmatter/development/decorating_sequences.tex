@@ -266,7 +266,7 @@ The advantage of this implementation is that partially processed iterators can
 be further utilized while maintaining their current state without
 reinitializing the state with a new iteration.
 Operators can only process objects that implement |copy|.
-Other iterable objects are not processable any more, which is a significant
+Other iterable objects are not processable anymore, which is a significant
 drawback.
 
 \subsubsection{Scenario 2: Placing the State inside the Iterator}
@@ -278,7 +278,7 @@ expected output straight away. The distinction lies in the fact that the object
 does not need to be copyable. Each call to |[Symbol.iterator]| creates a new
 state. Apart from the iterator, this iterable is immutable. Another advantage
 is that all Sequence library operators can handle any object conforming to the
-JS iteration protocols!
+JS iteration protocols.
 
 \begin{lstlisting}[
   style=ES6, 

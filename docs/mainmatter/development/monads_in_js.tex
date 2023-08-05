@@ -438,7 +438,7 @@ maybe. This works because maybe is a monad. If it contains an odd number,
 |keepEven| discards it. The best aspect is that |Nothing| does not need any
 special treatment - the |and| implementation of maybe knows what to do when a
 |Nothing| appears. So it is not the job of |keepEven| to handle such special
-cases!
+cases.
 
 \begin{lstlisting}[
   style=ES6,
@@ -463,7 +463,7 @@ evalMaybe(keepEven(maybe3));
 // => Logs 'There was no value!'
 \end{lstlisting}
 
-The same works for a sequence - only because it is a monad! |keepEven| discards
+The same works for a sequence - only because it is a monad. |keepEven| discards
 every odd number of this sequence:
 
 \begin{lstlisting}[
@@ -478,7 +478,7 @@ console.log(...keepEven(seq));
 \end{lstlisting}
 The example shows well how one can program very declaratively using monads. You
 do not have to worry about the actual structure of the context but only about
-the logic being correct!
+the logic being correct.
 |keepEven| can also be tested easily: you create a new type that conforms to
 |MonadType|, which has little logic.
 
@@ -565,7 +565,7 @@ the same as before. But consider
 line~\ref{line:proto_maybe_js2}-\ref{line:proto_maybe_js3}. These changed
 because not |Just| should become a |MonadType| but |Just(value)|.
 
-To make another object monadic, apply the same pattern to it!
+To make another object monadic, apply the same pattern to it.
 % subsubsection Defining the Monadic Operations (end)
 
 \subsubsection{Specifying the JSDoc} % (fold)
@@ -602,7 +602,7 @@ What happens here? \\
 Line~\ref{line:jsdoc_add_maybe1} and the following specify the updated |MaybeType|.
 |MaybeType| is a function which receives two other functions as parameters
 (line~\ref{line:jsdoc_add_maybe2}). And it is also everything that is specified by
-|MaybeMonadType| (line~\ref{line:jsdoc_add_maybe3})! \\
+|MaybeMonadType| (line~\ref{line:jsdoc_add_maybe3}). \\
 This |&| sign allows intersecting two JSDoc type definitions into a new one.\\
 
 Using such an intersection type brings the advantage of splitting up type
