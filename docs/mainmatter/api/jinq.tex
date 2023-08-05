@@ -1,6 +1,7 @@
 \section{JINQ} % (fold)
 \label{sec:API_JINQ}
-Write JINQ queries (JavaScript language integrated queries) for every monadic type.
+JINQ (JavaScript language integrated queries) enables you to query any monadic
+type using the same syntax!
 \newline
 For further details and explanations, consider section \ref{sub:Introducing JINQ}.
 \newline
@@ -35,7 +36,7 @@ JINQ provides the following functions:
 Generating a sequence of even numbers using JINQ and a range as data source:\\
 \\
 \textit{Note:} Since |result| returns a |MonadType|, casting is needed
-for converting with |show|.
+to pass it to |show|.
 
 \begin{lstlisting}[
   style=ES6, 
@@ -58,7 +59,8 @@ console.log(_.show(/** @type SequenceType */ result));
 
 \subsubsection{Pythagorean Triple}
 \label{subsub:JINQ_Pythagorean Triple}
-Searching for all pythagorean triples~\cite{pythagorean_triple} between 1 and 10.
+Listing~\ref{lst:triple} searches for all pythagorean
+triples~\cite{pythagorean_triple} between 1 and 10:
 
 \begin{lstlisting}[
   style=ES6, 

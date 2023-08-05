@@ -5,11 +5,11 @@ could also be improved or extended. This section describes those extensions.
 
 \subsection{Extensions to Maybe} % (fold)
 \label{sub:Extensions to Maybe}
-The data structure |Maybe| introduced in section~\ref{sec:Wrapping values in a
-context}, was already part of the Kolibri before this project work. Now the
-prototype of |Maybe| also supports monadic operations.\\
+The data structure maybe introduced in section~\ref{sec:Wrapping values in a
+context}, was already part of the Kolibri before this project work. Now its
+prototype of maybe also supports monadic operations!\\
 Listing~\ref{lst:monadic_ops_maybe_in_action} shows these monadic operations of
-|Maybe| in action:
+maybe in action:
 
 \begin{lstlisting}[
   style=ES6,
@@ -51,8 +51,8 @@ evalMaybe(nothing.empty()); // => Logs 'There was no value!', Same as Nothing
 
 \subsection{Extensions to Pair} % (fold)
 \label{sub:Extensions to Pair}
-Section~\ref{sec:Iterables Everywhere} describes the |Pair| as an immutable
-data structure. To access its values simpler, it is now iterable.
+Section~\ref{sec:Iterables Everywhere} describes the pair as an immutable
+data structure. To access its values simpler, it is now iterable!
 Listing~\ref{lst:api_it_pair} shows these advantages:
 
 \begin{lstlisting}[
@@ -67,7 +67,7 @@ console.log(...pair);
 // => Logs '1, 2'
 \end{lstlisting}
 
-Since the |Pair| is iterable, it is also compatible with all operations defined
+Since the pair is iterable, it is also compatible with all operations defined
 for sequences:
 
 \begin{lstlisting}[

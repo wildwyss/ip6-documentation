@@ -10,7 +10,7 @@ and how to import this library into your own project.
 The module |sequence/sequence.js| exports the whole Sequence library. The
 easiest way to use it is through named imports. As
 listing~\ref{lst:named_imports_seq_lib_example} shows, this approach allows
-using the dot notation, which enables the IDE to support the development with
+using the dot notation, which enables the IDE to support the developer with
 auto-completion. Developers who have been using the library longer can import
 individual functions directly.
 \begin{lstlisting}[
@@ -38,7 +38,7 @@ Section~\ref{subsub:Lazy Evaluate Iterables} describes the benefits of lazy
 evaluation, which allows working with sequences consisting of infinite
 elements. When working with such sequences, pay attention to only evaluating
 parts of the sequence because evaluating endless values would take forever.
-Functions of the sequence library, which will process the whole sequence, are
+Functions of the Sequence library, which will process the whole sequence, are
 therefore marked with a \lstinline{$} symbol in the name. These functions are
 only applicable to sequences with a finite number of elements. \\
 Listing~\ref{lst:api_endl_seq_eval} shows an example of that:
@@ -61,7 +61,7 @@ console.log(...reversed);
 
 Line~\ref{line:api_endl_seq_eval1} creates a sequence |seq| which contains
 infinite elements. Evaluating this would go on forever. Therefore,
-Line~\ref{line:api_endl_seq_eval2} uses the function |_.take(5)| which only
+line~\ref{line:api_endl_seq_eval2} uses the function |_.take(5)| which only
 evaluates |5| elements.
 
 % subsubsection Conventions (end)
@@ -80,7 +80,7 @@ appendix~\ref{sec:appendix_ctor}.
     \texttt{nil} & This constant represents a sequence containing no values. \\ \hline
     \texttt{PureSequence} & Creates a sequence which contains just the given value. \\ \hline
     \texttt{Range} & Generates a sequence of numbers. \cite{wild_ip5_2023} \\ \hline
-    \texttt{repeat} & Returns a sequence that will repeatedly yield the value of \texttt{arg} when iterated over. \texttt{repeat} will never be exhausted. \\ \hline
+    \texttt{repeat} & \texttt{repeat(arg)} creates an infinite sequence that will repeatedly yield the value of \texttt{arg} when iterated over. \\ \hline
     \texttt{replicate} & \texttt{replicate(n)(x)} creates a sequence of length \texttt{n} with \texttt{x} the value of every element. \\ \hline
     \texttt{Sequence} & Creates a new sequence based on a start \texttt{value}, \texttt{whileFunction} and \texttt{incrementFunction}. \\ \hline
     \texttt{StackSequence} & Creates a \texttt{SequenceType} on top of the given \texttt{stack}. \\ \hline
@@ -96,29 +96,29 @@ appendix~\ref{sec:appendix_ctor}.
 Operators are functions that operate on any existing iterable and create a
 new sequence from it. \\
 Table~\ref{tab:api_operators} gives an overview of all available operators.\\
-Code examples, types and more information about the operators deliver the
+Code examples, types and more information about the operators delivers the
 appendix~\ref{sec:appendix_operators}.
 \begin{table}[H]
   \centering
   \begin{tabularx}{\textwidth}{| l | X |} \hline
     \textbf{Name} & \textbf{Description} \\ \hline
-    \texttt{bind} & Applies the given function to each element of the \texttt{Iterable} and flattens it afterward. Note This operation adds a monadic API to the \texttt{SequenceType}. \\ \hline 
-    \texttt{catMaybes} & The catMaybes function takes an \texttt{Iterable} of \texttt{MaybeType}s and returns a \texttt{SequenceType} of all the Just's values. \\ \hline 
-    \texttt{concat} & Adds the second \texttt{Iterable} to the first iterables end. \\ \hline 
-    \texttt{cons} & Adds the given element to the front of an \texttt{Iterable}. \\ \hline 
-    \texttt{cycle} & Ties a finite \texttt{Iterable} into a circular one, or equivalently, the infinite repetition of the original \texttt{Iterable}. \\ \hline 
+    \texttt{bind} & Applies the given function to each element of the iterable and flattens it afterward. Note: this operation adds a monadic API to the \texttt{SequenceType}. \\ \hline 
+    \texttt{catMaybes} & The catMaybes function takes an iterable of maybes and returns a sequence of all the Just's values. \\ \hline 
+    \texttt{concat} & Adds the second iterable to the first iterables end. \\ \hline 
+    \texttt{cons} & Adds the given element to the front of an iterable. \\ \hline 
+    \texttt{cycle} & Ties a finite iterable into a circular one, or equivalently, the infinite repetition of the original iterable. \\ \hline 
     \texttt{drop} & Jumps over so many elements. \\ \hline 
     \texttt{dropWhile} & Discards all elements until the first element does not satisfy the predicate any more. \\ \hline 
     \texttt{map} & Transforms each element using the given function. \\ \hline 
-    \texttt{mconcat} & Flatten an \texttt{Iterable} of iterables. \\ \hline 
-    \texttt{pipe} & Transforms the given \texttt{Iterable} using the passed operators. \\ \hline 
+    \texttt{mconcat} & Flatten an iterable of iterables. \\ \hline 
+    \texttt{pipe} & Transforms the given iterable using the passed operators. \\ \hline 
     \texttt{rejectAll} & Only keeps elements which do not fulfil the given predicate. \\ \hline 
     \texttt{retainAll} & Only keeps elements which fulfil the given predicate. \\ \hline 
-    \texttt{reverse\$} & Processes the \texttt{Iterable} backwards. \\ \hline 
-    \texttt{snoc} & Adds the given element to the end of the \texttt{Iterable}. It is the opposite of \texttt{cons}.\\ \hline 
+    \texttt{reverse\$} & Processes the iterable backwards. \\ \hline 
+    \texttt{snoc} & Adds the given element to the end of the iterable. It is the opposite of \texttt{cons}.\\ \hline 
     \texttt{take} & Stop after so many elements. \\ \hline 
     \texttt{takeWhile} & Proceeds with the iteration until the predicate becomes true. \\ \hline 
-    \texttt{zip} & Zip takes two iterables and returns an \texttt{Iterable} of corresponding pairs. \\ \hline 
+    \texttt{zip} & Zip takes two iterables and returns an iterable of corresponding pairs. \\ \hline 
     \texttt{zipWith} & Generalises \texttt{zip} by zipping with the function given as the first argument. \\ \hline 
   \end{tabularx}
   \caption{The available operators in the Sequence library}
@@ -129,10 +129,10 @@ appendix~\ref{sec:appendix_operators}.
 \label{subsub:Using the pipe Operator}
 The operator |pipe|, is unique because it provides no new functionality but is
 pure syntactic sugar. It offers the possibility of combining several operators.
-Lines~\ref{line:api_pipe1}~-~\ref{line:api_pipe2} of listing~\ref{lst:api_pipe}
-shows nesting of multiple operators. Readability suffers very much from this.
+Lines~\ref{line:api_pipe1}~to~\ref{line:api_pipe2} of listing~\ref{lst:api_pipe}
+show nesting of multiple operators. Readability suffers very much from this.
 In comparison, it is easier to read the code
-lines~\ref{line:api_pipe3}~-~\ref{line:api_pipe4}, combining multiple operators
+lines~\ref{line:api_pipe3}~to~\ref{line:api_pipe4}, combining multiple operators
 using |pipe|. 
 \begin{lstlisting}[
   style=ES6,
@@ -192,7 +192,7 @@ and do not necessarily create a new sequence. In other words, terminal
 operations evaluate a sequence.\\ 
 Table~\ref{tab:api_term_ops} gives an overview of all available terminal
 operations.\\
-Code examples and more information about the terminal operations deliver the
+Code examples and more information about the terminal operations delivers the
 appendix~\ref{sec:appendix_terminal_operations}.
 
 \begin{table}[H]
@@ -204,13 +204,13 @@ appendix~\ref{sec:appendix_terminal_operations}.
     \texttt{forEach\$} & Executes the callback for each element. \\ \hline 
     \texttt{head} & Return the next value without consuming it. \texttt{undefined} when there is no value. \\ \hline 
     \texttt{isEmpty} & Returns \texttt{true}, if the iterables head is undefined. \\ \hline 
-    \texttt{max\$} & Returns the largest element of a \textbf{non-empty} \texttt{Iterable}. \\ \hline 
-    \texttt{safeMax\$} & Returns the largest element of an \texttt{Iterable}. \\ \hline 
-    \texttt{min\$} & Returns the smallest element of a \textbf{non-empty} \texttt{Iterable}. \\ \hline 
-    \texttt{safeMin\$} & Returns the smallest element of an \texttt{Iterable}. \\ \hline 
+    \texttt{max\$} & Returns the largest element of a \textbf{non-empty} iterable. \\ \hline 
+    \texttt{safeMax\$} & Returns the largest element of an iterable. \\ \hline 
+    \texttt{min\$} & Returns the smallest element of a \textbf{non-empty} iterable. \\ \hline 
+    \texttt{safeMin\$} & Returns the smallest element of an iterable. \\ \hline 
     \texttt{foldl\$} & Performs a reduction on the elements, using the provided start value and an accumulation function, and returns the reduced value. \\ \hline 
-    \texttt{show} & Transforms the passed \texttt{Iterable} to a \texttt{String}. \\ \hline 
-    \texttt{uncons} & Removes the first element of this \texttt{Iterable}. \\ \hline 
+    \texttt{show} & Transforms the passed iterable to a string. \\ \hline 
+    \texttt{uncons} & Removes the first element of this iterable. \\ \hline 
   \end{tabularx}
   \caption{The available constructors of the Sequence library}
   \label{tab:api_term_ops}
@@ -222,13 +222,13 @@ appendix~\ref{sec:appendix_terminal_operations}.
 The prototype of the sequence provides some operations as well. This improves
 code readability in some situations. The monadic operations are also available
 on the prototype of the sequence. Thus, it is compatible with all functions
-that expect a monad as a parameter.
+that expect a monad as a parameter!
 
 \subsubsection{Verify the Prototype} % (fold)
 \label{subsub:Verify the Prototype}
 Listing~\ref{lst:proto_seq_query} shows how to query the prototype of any
-object using the function |Object.getPrototypeOf|. Applying this to any
-sequence will return |SequencePrototype|.
+object using the function |Object.getPrototypeOf|. Applying this to a
+sequence will return |SequencePrototype|:
 
 \begin{lstlisting}[
   style=ES6,

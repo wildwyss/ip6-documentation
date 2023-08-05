@@ -25,37 +25,37 @@ Following are some possible extensions for the Sequence library:
 pair. The Sequence library already includes this operation.
 But it does not work on empty sequences! Meaning |uncons| applied to an
 empty iterable fails. Thus, one would have a version, which for example, wraps the
-result in a |MaybeType|. |uncons| on an empty list would then return |Nothing|.
+result in a maybe. |uncons| on an empty list would then return |Nothing|.
 The API documentation page~\cite{hoogle_uncons} describes the function in
 detail.
 
 \subsubsection{tail}
 \label{subsub:tail}
 |tail|~\cite{hoogle_tail} is a useful function that removes the first element
-of an |Iterable| and returns the rest of it. By implementing |tail|, one has to
+of an iterable and returns the rest of it. By implementing |tail|, one has to
 pay attention to empty or single-valued iterables, which do not have a tail. An
-option could be to return a |MaybeType|. |Nothing|, if the list has one or zero
+option could be to return a maybe. |Nothing|, if the list has one or zero
 elements, and |Just| including the result otherwise.
 
 \subsubsection{unfoldr}
 \label{subsub:unfoldr}
 |unfoldr| is a powerful concept for creating lists in Haskell. It would
-supplement the options to create new sequences besides the |Sequence|
-constructor. In Haskell, it works using a |Maybe|. |unfoldr| creates a list that returns 
-a |Pair| wrapped in |Just| with the value of the current iteration and the next
+supplement the options to create new sequences besides the constructor |Sequence|. 
+In Haskell, it works using a |Maybe|. |unfoldr| creates a list that returns a
+pair wrapped in |Just| with the value of the current iteration and the next
 element. If the stop condition is fulfilled, |unfoldr| returns |Nothing|. For
 further information, look at the documentation on ~\cite{hoogle_unfoldr}.
 
 \subsubsection{iterate}
 \label{subsub:iterate}
 |iterate| takes two arguments. The first argument is a function, and the second
-is a start value. It generates an infinite |Iterable| of repeated applications of
+is a start value. It generates an infinite iterable of repeated applications of
 the function to the calculated value. You will find more information about
 |iterate| on hoogle~\cite{hoogle_iterate}.
 
 \subsection{JINQ Functions}
 \label{sub:JINQ Functions}
-It is possible to get errors when working with |JINQ| and JSON Monad by grabbing
+It is possible to get errors when working with |JINQ| and |JSONMonad| by grabbing
 not present properties. That means if a function in |select| accesses a property
 which is not defined, it will throw an error. This kind of null-case handling
 takes a lot of work. To remedy this situation, having error-safe functions like

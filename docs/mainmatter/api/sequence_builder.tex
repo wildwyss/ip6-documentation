@@ -1,8 +1,8 @@
 \section{Sequence Builder}
 \label{sec:Sequence Builder}
-A mutable builder for a |SequenceType|.
+A mutable builder to create sequences.
 \newline
-|SequenceBuilder| allows the creation of a |SequenceType| by generating elements individually 
+|SequenceBuilder| allows the creation of a sequence by generating elements individually 
 and adding them to the |SequenceBuilder| (without the call stack overhead when doing so
 with |cons|).\\
 \\
@@ -17,8 +17,8 @@ Sequences with more than 1000 elements when adding them individually.
   \centering
   \begin{tabularx}{\textwidth}{| l | X |} \hline
     \textbf{Name}    & \textbf{Description} \\ \hline
-    \texttt{prepend} & adds one or more elements to the beginning of the sequence\\ \hline 
-    \texttt{append}  & adds one or more elements to the end of the sequence\\ \hline 
+    \texttt{prepend} & adds one or more elements or a sequence to the beginning of the sequence\\ \hline 
+    \texttt{append}  & adds one or more elements or a sequence to the end of the sequence\\ \hline 
     \texttt{build}   & builds a sequence containing the previously passed elements \\ \hline 
    \end{tabularx}
   \caption{SequenceBuilder functions}
@@ -27,7 +27,7 @@ Sequences with more than 1000 elements when adding them individually.
 
 \subsection{Examples}
 \label{sub:sb_Examples}
-Creating a sequence from different values and iterables:
+Listing~\ref{lst:sb_example} creates a sequence from different values and iterables:
 
 \begin{lstlisting}[
   style=ES6, 

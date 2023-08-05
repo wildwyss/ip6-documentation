@@ -21,11 +21,11 @@ the detection of difficulties and shows where the API still has room for
 improvement. 
 
 The findings are based on the questionnaire evaluation and the code of three
-participants who handed in their solutions. This chapter lists all the
+participants who handed in their solutions. This section lists all the
 improvements the user test pointed out. In addition, it concludes the general
 impression collected by the user test.
 Appendix~\ref{chap:app_user_test_results} contains all the user test questions
-and their answers.
+and their corresponding answers.
 % subsection Introduction (end)
 
 \subsection{Findings for the Sequence library} % (fold)
@@ -47,7 +47,7 @@ library:
     correctly displaying type information for curried functions.
     Therefore, the already often used JSDoc annotation |@haskell|, which
     describes the type signature of a function as in Haskell, is added
-    everywhere.
+    to every artefact of the Sequence library.
 \end{itemize}
 The following are great ideas but are beyond the scope of this project to
 implement:
@@ -65,7 +65,7 @@ when working with lists. So the Sequence library brings much-needed functions.
 (\ref{sub:ut_q2}) \\ 
 Figure~\ref{fig:usertest_q1} concludes the overall opinion about the Sequence
 library very well. It shows that most users think that it can be an
-advantage in their next project.
+advantage in their next project!
 \begin{figure}[H]
   \centering
 \begin{tikzpicture}
@@ -132,10 +132,11 @@ implement. Find detailed information about it in section~\ref{sub:JINQ
 Functions}, explaining future features of JINQ.
 \begin{itemize}
   \item \textbf{Error handling}: Several people had trouble with null values,
-    mainly when calling a  function on a non-existent object
-    property in a |select| or a |where| (text answer~\ref{sub:ut_q13}, and
-    handed in solution). In the discussion, the idea came up to
-    provide functions like |notNull|, |safeWhere| or |safeMap| to catch this.
+    mainly when calling a function on a non-existent object
+    property in the |select| and the |where| functions (text
+    answer~\ref{sub:ut_q13}, and handed in solution). In the discussion, the
+    idea came up to provide functions like |notNull|, |safeWhere| or |safeMap|
+    to catch this.
 \end{itemize}
 % subsubsection Findings and Improvements (end)
 
@@ -187,7 +188,7 @@ coordinates{(9,4) (3,3) (0,2) (1,1)};
 \label{sub:General Findings}
 The questionnaire concludes with general questions. The closing asks how
 effectively IDEs support JSDoc and whether the testers find this useful. Most
-participants used IntelliJ or WebStorm for testing (\ref{sub:ut_q15}).
+participants used IntelliJ or WebStorm for this user test (\ref{sub:ut_q15}).
 Figure~\ref{fig:usertest_q3} shows that the IDE was an excellent help for this
 test. Thus, It makes sense to write a detailed JSDoc. With the right IDEs, code
 navigation, code completion, etc., work very well.
@@ -233,9 +234,8 @@ test."}
 This user test shows that the features this library brings are beneficial. In
 addition, it offers some improvement points of the API. Implementing the
 documented hints improves the quality and usability of this library even more.
-We are delighted with the result. Of course, we are especially pleased with the
-text responses - many further underline the positive attitude towards this
-library. 
+We are delighted with the result and especially pleased with the text responses
+- many further underline the positive attitude towards this library. 
 
 % subsection Conclusion (end)
 % section User Test Evaluation (end)

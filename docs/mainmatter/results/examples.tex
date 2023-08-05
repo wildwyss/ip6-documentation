@@ -1,7 +1,7 @@
 \section{Examples} % (fold)
 \label{sec:Examples}
 This section shows some examples implemented with the
-Sequence library to demonstrate the variable usage.
+Sequence library to demonstrate its variable usage.
 The following covers easy-to-understand and more sophisticated
 examples. Consult the listed sources to understand the applications
 thoroughly if something is unclear.
@@ -10,7 +10,7 @@ thoroughly if something is unclear.
 \label{sub:Fibonacci Sequence}
 This is an example of a specialized sequence constructor.
 Listing~\ref{lst:fibonacci_sequence} shows the implementation of the Fibonacci 
-sequence~\cite[p.~36]{math_diskrete_2011}. 
+sequence~\cite[p.~36]{math_diskrete_2011}:
 \begin{lstlisting}[
   style=ES6, 
   caption=FibonacciSequence implementation,
@@ -35,10 +35,11 @@ const incrFn  = ([fst, snd]) => Pair(snd)(fst + snd);
 const FibonacciSequence = 
                     map(pair => pair(snd))(Sequence(start, whileFn, incrFn));
 \end{lstlisting}
-The |FibonacciSequence| generates the Fibonacci sequence using the |Sequence|
-and |Pair| constructor. The incrementation function produces a pair containing
-the last returned value and the value to be returned.  The |map| function then
-extracts the current Fibonacci number from the pair returned by the sequence.
+The |FibonacciSequence| constructor generates the Fibonacci sequence using the
+|Sequence| and |Pair| constructors. The incrementation function produces a pair
+containing the last returned value and the value to be returned.  The |map|
+function then extracts the current Fibonacci number from the pair returned by
+the sequence.
 
 \subsection{Fizz Buzz}
 \label{sub:Fizz Buzz}
@@ -49,13 +50,11 @@ is divisible by both 3 and 5, they say "FizzBuzz". This game also serves as a
 programming task.
 \newline
 Frege Goodness~\cite{frege_goodness} includes a detailed explanation of the
-game. Listing~\ref{lst:fizz_buzz} shows a part of the implementation with the
-Sequence library.
+game. 
 
-First, let us look at the simplest form in listing~\ref{lst:simple_fizzbuzz}. 
-The fizzes and buzzes are combined in a
-sequence. 
-The sequence returns a number if neither a fizz nor a buzz occurs.
+First, let us look at the game's simplest form in listing~\ref{lst:simple_fizzbuzz}. 
+The fizzes and buzzes are combined in a sequence. 
+The sequence returns a number if neither a fizz nor a buzz occurs:
 
 \begin{lstlisting}[
   style=ES6, 
@@ -74,14 +73,12 @@ console.log(...take(limit)(fizzbuzz));
 // => Logs '1 2 "fizz" 4 "buzz" ... 11 "fizz" 13 14 "fizzbuzz"'
 \end{lstlisting}
 
-As you observe, the entire setup relies on the sequence. We define three
+As you observe, the entire setup relies on sequences! We define three
 distinct endless sequences. A range generates a line of numbers, while |cycle|
 produces an unending repetition for "fizzes" and "buzzes". Memory usage remains
-minimal. Subsequently, the individual sequences merge through |zipWith|, yielding
-a new sequence. This uncomplicated setup underscores that working with
-sequences is declarative, straightforward, and highly understandable.
-\\
-
+minimal. Subsequently, |zipWith| merges the individual sequences and yields a
+new sequence. This uncomplicated setup underscores that working with sequences
+is declarative, straightforward, and highly understandable.
 
 Now we are extending the application to add new rules during the runtime:
 
@@ -122,14 +119,16 @@ const buildFizzBuzz = () => {
 Listing~\ref{lst:fizz_buzz} shows two functions, |createSequenceForRule|, and
 |buildFizzBuzz|. \\ 
 |createSequenceForRule| is called with an argument |rule| representing a
-|Number| and a |String|. The returned infinite sequence then contains the
-corresponding text at each multiple of the |rule|s |Number|. In the remaining
-places, it contains an empty |String|. \\ 
+number and a string. The returned infinite sequence then contains the
+corresponding text at each multiple of the rules number. In the remaining
+places, it contains an empty string. \\ 
+Calling |createSequenceForRule(Rule(3, "fizz"))| thus creates a sequence
+generating |"", "", "fizz", "", "", "fizz", ...| !\\
 The function |buildFizzBuzz| reduces all sequences representing a rule to a
 single sequence. 
 Figures~\ref{fig:fizzbuzz_control} and \ref{fig:fizzbuzz_result} demonstrate a
 screenshot of a simple application showing two rules and the resulting sequence.
-The implementation enables adding new rules at runtime. 
+The implementation enables adding new rules at runtime!
 
 \begin{figure}[H] \centering \begin{minipage}{.5\textwidth} \centering
 \includegraphics[width=.6\linewidth]{./mainmatter/pictures/fizzbuzz_control.png}
@@ -151,9 +150,9 @@ The following examples use |JINQ| to browse and process JSON files.
 \label{subsub:Find all Students}
 We want to filter out all participants that have a student ID. As you can see
 in the excerpt of the JSON file in listing~\ref{lst:json_file_devs}, the
-property |switch-edu-id| is not defined for all persons. Because the
-|JsonMonad| works in the background with |MaybeType|, such situations can be
-processed without null handling.
+property |switch-edu-id| is not defined for all people. Because the
+|JsonMonad| works in the background with a maybe, such situations can be
+processed without null handling!
 
 \begin{lstlisting}[
   style=json, 
@@ -254,7 +253,7 @@ const sophiasProgrammingLanguages = (devs, languages) =>
 \subsection{Numerical Differentiation}
 \label{sub:Numerical Differentiation}
 This example shows a mathematical use case, the numerical differentiation using
-sequences.
+sequences:
 
 \begin{lstlisting}[
   style=ES6, 
@@ -336,8 +335,8 @@ This algorithm allows for building a computer-controlled opponent for a
 turn-based game. Hughes explains how the algorithm uses laziness and
 higher-order functions to be modular and extensible in his paper.~\cite[p.
 16]{hughes_why_1989}. As chapter~\ref{chap:Modularizing Programs} describes, the
-Sequence library supports these two concepts, thus allowing the algorithm to 
-port to JavaScript.
+Sequence library supports these two concepts, thus allowing to port the
+algorithm to JavaScript.
 
 \subsubsection{How does the Algorithm work?} % (fold)
 \label{subsub:How does the Algorithm work?}
@@ -353,8 +352,7 @@ playing fields, which can arise when the players make their next moves. This
 results in a potentially endless tree. All direct successors of a node are the
 next possible moves for this node's playing field. Since this tree can be huge,
 depending on the game, even infinitely large, only a lazy data structure can
-handle it!
-
+handle it!\\
 The algorithm must estimate whether a playfield is good or bad for a player to
 find the best possible next move. The simplest way to figure this out is to
 look at the playing field and decide if a player has already won. In the case
@@ -366,7 +364,7 @@ cases, to 0.\\
 The |evalFunction| is mapped over the tree (where higher-order functions come
 into play) - each node is assigned its static value, saying how promising the
 playfield of this node is. This results in a new tree with the value of
-|evalFunction| assigned instead of all possible fields.\\
+|evalFunction| assigned to the nodes instead of all possible fields.\\
 
 \paragraph{What is the best Move?}
 The tree's root is the current playing field - the algorithm cannot know from
@@ -377,11 +375,11 @@ lowest calculated nodes are then propagated upwards to the root.
 
 The function |maximize| goes through to the lowest precalculated level. It
 evaluates the board there: when it is the computer's turn, it selects the board with
-the highest value assigned (safest chance of winning). If the opponent's turn,
-it selects the smallest value (the algorithm thus assumes that the opponent
-also selects the best possible move). This found value is assigned to the
-parent node as a result - and chooses the best move on this level according to
-the same scheme. Ultimately, the root has the value with the best possible
+the highest value assigned (safest chance of winning). If it is the opponent's
+turn, it selects the smallest value (the algorithm thus assumes that the
+opponent also selects the best possible move). This found value is assigned to
+the parent node as a result - and chooses the best move on this level according
+to the same scheme. Ultimately, the root has the value with the best possible
 chances of winning!
 
 \paragraph{How to evaluate the huge Tree?} The tree of possible moves and possible
@@ -758,7 +756,7 @@ const nextBoard = lookahead => inFields => {
 \label{sec:ttt_result}
 One advantage of JavaScript is that it works hand in hand with websites and
 HTML. A website with a UI (like figure~\ref{img:ttt_playfield}) can now use the
-algorithm.\\
+algorithm:\\
 
 \begin{figure}[H]
     \centering
@@ -779,7 +777,7 @@ adapt an algorithm developed for functional programming languages in
 JavaScript.\\
 Of course, copying the algorithm is impossible because JavaScript misses some
 language features like pattern matching. Nevertheless, the essential concepts
-and logic of the algorithm can be adopted directly. \\
+and logic of the algorithm can be adopted directly! \\
 It is also exciting how JSDoc allows constructing straightforward talking types
 like |Player| or |Stone| (listing~\ref{lst:tictactoe_types}).\\
 To extend the algorithm, for example, to improve the static evaluation to

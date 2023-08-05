@@ -1,11 +1,12 @@
 \section{How to Extend the Library}
 \label{sec:How to Extend the Library}
 Since applications are versatile, you can add further functionality
-to the library. This section shows how to extend the Sequence library.
+to the library. This section shows how to extend the Sequence library with
+own functionality!
 \subsection{Adding a new Operator}
 \label{sub:Adding a new Operator}
-In this scenario, we include |concat| to the Sequence library. |concat| is the
-operation that appends one iterable to another.
+In this scenario, we include |concat| to the Sequence library. |concat| appends
+one iterable to another.
 
 \subsubsection{Kind of the Operation}
 \label{subsub:Kind of the Operation}
@@ -16,7 +17,7 @@ It is a terminal operation if it takes a sequence and produces a different type
 than a sequence, such as |isEmpty|.
 \newline
 \textit{Note:} It doesn't matter if you want to add a constructor, an operator, or a terminal
-operation to the sequence library - the procedure is always the same. The
+operation to the sequence library - the procedure is always the same! The
 following example can, therefore, also be applied to constructors and terminal
 operations.
 
@@ -26,7 +27,7 @@ Each operation of the Sequence library consists of two files: a test file and
 an implementation file. Therefore, we create a |concat.js| and a
 |concatTest.js| file in a new folder |concat| in the existing folder
 |operators|. This helps keep overview and finding desired files faster.
-Figure~\ref{fig:concat_dir} shows the relevant directories.
+Figure~\ref{fig:concat_dir} shows the relevant directories:
 
 \begin{figure}[H]
 \dirtree{%
@@ -97,7 +98,7 @@ import "./concat/concat.js"
 The first user of a new operator of the Sequence library is usually a test!
 Therefore, we start by writing the tests.\\
 \textit{Note:} Chapter~\ref{chap:Effective_Testing} explains testing of the
-Sequence library in detail. This sections therefore does not cover how this
+Sequence library in detail. This section therefore does not cover how this
 exactly works.
 \newline
 Let us start with the imports. A test needs the following dependencies:
@@ -107,14 +108,15 @@ Let us start with the imports. A test needs the following dependencies:
   \item{addToTestingTable}
   \item{createTestConfig}
 \end{itemize}
-Now you are ready to create a test config and, optionally, some special cases.
-Creating a test config requires the following steps:
+Now you are ready to create a test configuration and, optionally, some
+additional tests to assure the correctness of special cases. Creating a test
+configuration requires the following steps:
 
 \begin{itemize}
   \item{Create a |TestSuite| with a meaningful name corresponding to the function you are implementing.}
   \item{|createTestConfig| expects an object of type |SequenceTestConfigType|. Have a look
     to this type or to section~\ref{sub:Configuring the Testing Table} to get the information about the available properties. }
-      \item{If necessary, add some further test cases using the same TestSuite.}
+      \item{If necessary, add some further test cases using the same test suite.}
   \item{Run the |TestSuite| by calling the |run()| function at the end of the file. }
 \end{itemize}
 
@@ -165,4 +167,4 @@ implementation. Sections~\ref{sub:api_Constructors} - \ref{sub:api_Terminal
 Operations} provide a list of all provided functionality of the Sequence
 library.
 \newline
-Again, run the tests and be proud if everything is running!
+Again, run the tests and be proud if everything is working!
