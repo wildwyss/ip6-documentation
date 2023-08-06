@@ -90,10 +90,17 @@ The user test shows that modern IDEs deliver excellent support for JSDoc and
 help the developers get along the way when working with JavaScript.
 \subsubsection{Monadic Structures}
 \label{subsub:Monadic Structures}
-|JINQ| explained in section ~\ref{sec:Query different Data Structures}, is a
-concept based on monadic types. This shows that implementing such concepts in
-JavaScript is also possible and valuable, which opens numerous possibilities
-for extensions that act on monadic types in JavaScript.
+With the |MonadType|, the standard library offers a type that defines a monadic
+interface. Any data structures can now implement this type and are thus
+compatible with all functions that can handle monadic types. The standard
+library thus lays essential foundations for implementing monads in JavaScript.
+Nevertheless, proper sleights and typecasting are required to circumvent the
+limitations of JSDoc.\\
+JINQ is an example that already uses this type and shows the power of such
+abstractions. As examples from section~\ref{sub:results JINQ} show, JINQ can
+traverse JSON structures and assemble new lists, which are two completely
+different tasks. In both cases, the resulting code is straightforward to
+understand.
 
 \subsubsection{Testing}
 \label{subsub:Testing}

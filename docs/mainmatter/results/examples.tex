@@ -144,7 +144,11 @@ The implementation enables adding new rules at runtime.
 
 \subsection{JINQ}
 \label{sub:results JINQ}
-The following examples use |JINQ| to browse and process JSON files.
+The following examples use JINQ to browse and process JSON files and to create
+new sequences based on rules. At first glance, these two topics seem to have
+nothing in common. However, as the following examples show, JINQ allows both
+and therefore brings a general way to create and manipulate various data
+structures.
 
 \subsubsection{Find all Students}
 \label{subsub:Find all Students}
@@ -250,6 +254,31 @@ const sophiasProgrammingLanguages = (devs, languages) =>
       .result  ();
 \end{lstlisting}
 
+\subsubsection{Pythagorean Triple}
+\label{subsub:JINQ_Pythagorean Triple}
+Listing~\ref{lst:triple} creates a new sequence containing the pythagorean
+triples~\cite{pythagorean_triple} between 1 and 10:
+\begin{lstlisting}[
+  style=ES6, 
+  caption=The Pythagorean Triple between 1 and 10,
+  label={lst:triple}
+  ]
+import { Range, show } from "./src/sequence/sequence.js"
+import { from }        from "./src/jinq/jinq.js";
+
+const range = Range(1, 10);
+
+const result =
+  from(range)
+    .pairWith(range)
+    .pairWith(range)
+    .where ( ([ [a,b], c ]) => a * a + b * b === c * c)
+    .select( ([ [a,b], c ]) => `[${a}, ${b}, ${c}]`)
+    .result();
+
+console.log(show(/** @type SequenceType */ result));
+// => Logs '[[3, 4, 5],[4, 3, 5],[6, 8, 10],[8, 6, 10]]
+\end{lstlisting}
 \subsection{Numerical Differentiation}
 \label{sub:Numerical Differentiation}
 This example shows a mathematical use case, the numerical differentiation using
