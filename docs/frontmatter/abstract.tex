@@ -8,31 +8,31 @@ lists. Additionally, its powerful type system can express
 constructs (called type classes) that enable the definition of abstract
 operations usable with many different types.\\ 
 This project, therefore, investigated how to port various functionalities of
-the Haskell standard library for lists to JavaScript. Furthermore, the focus
-was to figure out how to model type classes analogous to Haskell using "JSDoc",
-the optional type system of JavaScript. The solutions and
+the Haskell standard library to JavaScript. Furthermore, the focus was to
+figure out how to model type classes analogous to Haskell using "JSDoc", the
+optional type system of JavaScript. The solutions and
 findings of this project will become part of the existing zero-dependency Web
 UI Toolkit "Kolibri". \\
 Since Haskell is a functional programming language, it uses many concepts that
-could be more familiar in JavaScript. However, JavaScript supports some of them,
+are unfamiliar with JavaScript. However, JavaScript supports some of them,
 which have been used where possible. Using them allows the writing
 of robust, well-testable, and reusable code. Unit and user tests ensured the
 correctness and usability of the artefacts. \\
 JavaScript defines iteration protocols to process data structures element by
 element. This project exploited these protocols to define a new data structure
-called "sequence" and operations to transform and process it. These operations
-are compatible with any data structure that complies with the iteration
-protocols. All functions evaluate their input lazily and do not mutate it.\\
-Using JSDoc, the type class monad could be defined. Limitations lie, however,
-in the missing name overloading in JavaScript, the missing type safety, and the
-missing higher-kinded types in JSDoc.\\
+called "sequence" and operations to transform and process it. These artefacts
+form the "Sequence library". Operations of the Sequence library are compatible
+with any data structure that complies with the iteration protocols.
+All functions evaluate their input lazily and do not mutate it.\\
+Using JSDoc, the type class monad could be defined. However, limitations lie in
+the missing name overloading in JavaScript, the reduced type safety, and the
+lack of higher-kinded types in JSDoc. \\
 Based on these findings, JINQ emerged, capable of uniformly querying any data
 structures implementing the type class monad.\\
 In his paper "Why Functional Programming Matters", John Hughes shows how
 functional programming enables developers to write reusable and modular
 code. He explains this with several example programs.
 The results of this project allow the implementation of the programs showcased
-in Hughes' paper. Additionally, JINQ shows that JSDoc allows to define
-monads in JavaScript. Thus, this project reveals that JavaScript can
-effectively implement and utilize many concepts known from functional
-programming.
+in Hughes' paper. Additionally, JINQ demonstrates the power of monads in
+JavaScript. Thus, this project reveals that JavaScript can effectively
+implement and utilize many concepts known from functional programming.

@@ -3,7 +3,7 @@
 \subsection{Findings and Achievements}
 \label{sub:Findings and Achievements}
 This thesis aimed to develop a functional standard library for the Kolibri Web
-Ui Toolkit in JavaScript. To achieve this, we delved into the iterable
+UI Toolkit in JavaScript. To achieve this, we delved into the iterable
 protocols of JavaScript, leveraging our understanding to construct a new data
 structure: the sequence. The characteristics of sequences are lazy evaluation
 and immutability, which offer powerful ways of handling iterable objects. Based
@@ -39,7 +39,7 @@ JavaScript developers.\\
 \subsubsection{Similarity to Haskell}
 \label{subsub:Similarity to Haskell}
 As Haskell is a well-established and widely used functional language, it serves
-as a great role model for solutions to problems when making decisions. \\
+as a great role model for solving problems and making decisions. \\
 However, it is essential to note that some remarkable language concepts of
 Haskell do not exist in JavaScript, making it harder to translate code directly
 from one language to the other.\\
@@ -90,10 +90,17 @@ The user test shows that modern IDEs deliver excellent support for JSDoc and
 help the developers get along the way when working with JavaScript.
 \subsubsection{Monadic Structures}
 \label{subsub:Monadic Structures}
-|JINQ| explained in section ~\ref{sec:Query different Data Structures}, is a
-concept based on monadic types. This shows that implementing such concepts in
-JavaScript is also possible and valuable, which opens numerous possibilities
-for extensions that act on monadic types in JavaScript.
+With the |MonadType|, the standard library offers a type that defines a monadic
+interface. Any data structures can now implement this type and are thus
+compatible with all functions that can handle monadic types. The standard
+library thus lays essential foundations for implementing monads in JavaScript.
+Nevertheless, proper sleights and typecasting are required to circumvent the
+limitations of JSDoc.\\
+JINQ is an example that already uses this type and shows the power of such
+abstractions. As examples from section~\ref{sub:results JINQ} show, JINQ can
+traverse JSON structures and assemble new lists, which are two completely
+different tasks. In both cases, the resulting code is straightforward to
+understand.
 
 \subsubsection{Testing}
 \label{subsub:Testing}
